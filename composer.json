@@ -14,7 +14,7 @@
     "require": {
         "php": "^7.2",
         "denisyukphp/tmpfile": "^2.0",
-        "symfony/filesystem": "^4.4",
+        "symfony/filesystem": "^5.0",
         "symfony/process": "^5.0"
     },
     "autoload": {
