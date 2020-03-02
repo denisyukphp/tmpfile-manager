@@ -1,0 +1,25 @@
+{
+    "name": "denisyukphp/tmpfile-manager",
+    "description": "Temp files manager",
+    "keywords": ["tmpfile", "tempnam", "temp", "tmp", "file", "manager"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksandr Denisyuk",
+            "email": "a@denisyuk.by",
+            "homepage": "https://denisyuk.by",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "denisyukphp/tmpfile": "^2.0",
+        "symfony/filesystem": "^4.4",
+        "symfony/process": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TmpFileManager\\": "src/"
+        }
+    }
+}
