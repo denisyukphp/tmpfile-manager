@@ -7,6 +7,13 @@ use Symfony\Component\Process\Process;
 
 class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
+    private $executable;
+
+    public function __construct(string $executable = 'find')
+    {
+        $this->executable = $executable;
+    }
+
     public function __invoke(ConfigInterface $config): void
     {
         $dir = $config->getTemporaryDirectory();
@@ -30,7 +37,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $minutes = $this->convertSecondsToMinutes($lifetime);
 
         $process = new Process([
-            'find', $dir,
+            $this->executable, $dir,
             '-name', ($prefix . '*'),
             '-type', 'f',
             '-amin', ('+' . $minutes),
