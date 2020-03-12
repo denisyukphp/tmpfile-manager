@@ -20,9 +20,9 @@ final class TmpFileManager
     ;
 
     public function __construct(
-        ContainerInterface $container = null,
-        TmpFileHandlerInterface $tmpFileHandler = null,
-        ConfigInterface $config = null
+        ?ContainerInterface $container = null,
+        ?TmpFileHandlerInterface $tmpFileHandler = null,
+        ?ConfigInterface $config = null
     ) {
         $this->container = $container ?? new Container();
         $this->tmpFileHandler = $tmpFileHandler ?? new TmpFileHandler(new Filesystem());
@@ -47,6 +47,18 @@ final class TmpFileManager
 
         if ($this->config->getGarbageCollectionProbability()) {
             $garbageCollectionHandler($this->config);
+        }
+    }
+
+    /**
+     * @param TmpFile[] $tmpFiles
+     */
+    private function initCloseOpenedResourcesHandler(array $tmpFiles): void
+    {
+        $closeOpenedResourcesHandler = $this->config->getCloseOpenedResourcesHandler();
+
+        if ($this->config->getCheckUnclosedResources()) {
+            $closeOpenedResourcesHandler($tmpFiles);
         }
     }
 
@@ -155,12 +167,7 @@ final class TmpFileManager
             return;
         }
 
-        $checkUnclosedResources = $this->config->getCheckUnclosedResources();
-        $closeOpenedResourcesHandler = $this->config->getCloseOpenedResourcesHandler();
-
-        if ($checkUnclosedResources) {
-            $closeOpenedResourcesHandler($tmpFiles);
-        }
+        $this->initCloseOpenedResourcesHandler($tmpFiles);
 
         foreach ($tmpFiles as $tmpFile) {
             $this->removeTmpFile($tmpFile);
