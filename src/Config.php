@@ -66,7 +66,7 @@ class Config implements ConfigInterface
     public function getCheckUnclosedResources(): bool
     {
         if (!$this->checkUnclosedResources) {
-            $this->checkUnclosedResources = true;
+            $this->checkUnclosedResources = false;
         }
 
         return $this->checkUnclosedResources;
