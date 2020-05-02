@@ -3,63 +3,73 @@
 namespace TmpFileManager;
 
 use TmpFile\TmpFile;
-use TmpFileManager\DeferredPurgeHandler\NullDeferredPurgeHandler;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeEvent;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionEvent;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
+use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourceEvent;
+use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourceListener;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class TmpFileManager
 {
     /**
+     * @var ConfigInterface $config
      * @var ContainerInterface $container
      * @var TmpFileHandlerInterface $tmpFileHandler
-     * @var ConfigInterface $config
+     * @var EventDispatcherInterface $eventDispatcher
      */
     private
+        $config,
         $container,
         $tmpFileHandler,
-        $config
+        $eventDispatcher
     ;
 
     public function __construct(
+        ?ConfigInterface $config = null,
         ?ContainerInterface $container = null,
         ?TmpFileHandlerInterface $tmpFileHandler = null,
-        ?ConfigInterface $config = null
+        ?EventDispatcherInterface $eventDispatcher = null
     ) {
+        $this->config = $config ?? new Config(new ConfigBuilder());
         $this->container = $container ?? new Container();
         $this->tmpFileHandler = $tmpFileHandler ?? new TmpFileHandler(new Filesystem());
-        $this->config = $config ?? new Config(new ConfigBuilder());
+        $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
 
-        $this->initDeferredPurgeHandler();
-        $this->initGarbageCollectionHandler();
+        $this->addEventListeners();
+
+        $this->eventDispatcher->dispatch(new DeferredPurgeEvent($this));
+        $this->eventDispatcher->dispatch(new GarbageCollectionEvent($this->config));
     }
 
-    private function initDeferredPurgeHandler(): void
+    private function addEventListeners(): void
     {
-        $deferredPurgeHandler = $this->config->getDeferredPurgeHandler();
-
-        if (!$deferredPurgeHandler instanceof NullDeferredPurgeHandler) {
-            $deferredPurgeHandler($this);
-        }
+        $this->eventDispatcher->addListener(DeferredPurgeEvent::class, new DeferredPurgeListener());
+        $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
+        $this->eventDispatcher->addListener(CloseOpenedResourceEvent::class, new CloseOpenedResourceListener());
     }
 
-    private function initGarbageCollectionHandler(): void
+    public function getConfig(): ConfigInterface
     {
-        $garbageCollectionHandler = $this->config->getGarbageCollectionHandler();
-
-        if ($this->config->getGarbageCollectionProbability()) {
-            $garbageCollectionHandler($this->config);
-        }
+        return $this->config;
     }
 
-    /**
-     * @param TmpFile[] $tmpFiles
-     */
-    private function initCloseOpenedResourcesHandler(array $tmpFiles): void
+    public function getContainer(): ContainerInterface
     {
-        $closeOpenedResourcesHandler = $this->config->getCloseOpenedResourcesHandler();
+        return $this->container;
+    }
 
-        if ($this->config->getCheckUnclosedResources()) {
-            $closeOpenedResourcesHandler($tmpFiles);
-        }
+    public function getTmpFileHandler(): TmpFileHandlerInterface
+    {
+        return $this->tmpFileHandler;
+    }
+
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
     }
 
     /**
@@ -144,7 +154,7 @@ final class TmpFileManager
      *
      * @throws TmpFileIOException
      */
-    private function removeTmpFile(TmpFile $tmpFile): void
+    public function removeTmpFile(TmpFile $tmpFile): void
     {
         if ($this->container->hasTmpFile($tmpFile)) {
             $this->container->removeTmpFile($tmpFile);
@@ -167,7 +177,7 @@ final class TmpFileManager
             return;
         }
 
-        $this->initCloseOpenedResourcesHandler($tmpFiles);
+        $this->eventDispatcher->dispatch(new CloseOpenedResourceEvent($this->config, $tmpFiles));
 
         foreach ($tmpFiles as $tmpFile) {
             $this->removeTmpFile($tmpFile);
