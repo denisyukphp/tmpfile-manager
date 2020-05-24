@@ -39,13 +39,13 @@ final class TmpFileManager
         $this->tmpFileHandler = $tmpFileHandler ?? new TmpFileHandler(new Filesystem());
         $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
 
-        $this->initEventListeners();
+        $this->addEventListeners();
 
         $this->eventDispatcher->dispatch(new DeferredPurgeEvent($this));
         $this->eventDispatcher->dispatch(new GarbageCollectionEvent($this->config));
     }
 
-    private function initEventListeners(): void
+    private function addEventListeners(): void
     {
         $this->eventDispatcher->addListener(DeferredPurgeEvent::class, new DeferredPurgeListener());
         $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
