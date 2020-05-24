@@ -65,7 +65,7 @@ class Config implements ConfigInterface
 
     public function getCheckUnclosedResources(): bool
     {
-        if (!$this->checkUnclosedResources) {
+        if (is_null($this->checkUnclosedResources)) {
             $this->checkUnclosedResources = false;
         }
 
@@ -83,7 +83,7 @@ class Config implements ConfigInterface
 
     public function getGarbageCollectionProbability(): int
     {
-        if (!$this->garageCollectionProbability) {
+        if (is_null($this->garageCollectionProbability)) {
             $this->garageCollectionProbability = 0;
         }
 
@@ -92,7 +92,7 @@ class Config implements ConfigInterface
 
     public function getGarbageCollectionDivisor(): int
     {
-        if (!$this->garageCollectionDivisor) {
+        if (is_null($this->garageCollectionDivisor)) {
             $this->garageCollectionDivisor = 100;
         }
 
@@ -101,7 +101,7 @@ class Config implements ConfigInterface
 
     public function getGarbageCollectionLifetime(): int
     {
-        if (!$this->garageCollectionLifetime) {
+        if (is_null($this->garageCollectionLifetime)) {
             $this->garageCollectionLifetime = 3600;
         }
 
