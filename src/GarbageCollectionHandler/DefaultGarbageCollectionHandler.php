@@ -45,7 +45,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
             '-delete',
         ]);
 
-        $process->start();
+        $process->run();
     }
 
     private function convertSecondsToMinutes(int $seconds): int
