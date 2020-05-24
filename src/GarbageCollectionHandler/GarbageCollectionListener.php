@@ -6,10 +6,12 @@ class GarbageCollectionListener
 {
     public function __invoke(GarbageCollectionEvent $garbageCollectionEvent): void
     {
-        $garbageCollectionHandler = $garbageCollectionEvent->getConfig()->getGarbageCollectionHandler();
+        $config = $garbageCollectionEvent->getConfig();
 
-        if ($garbageCollectionEvent->getConfig()->getGarbageCollectionProbability()) {
-            $garbageCollectionHandler($garbageCollectionEvent->getConfig());
+        $garbageCollectionHandler = $config->getGarbageCollectionHandler();
+
+        if ($config->getGarbageCollectionProbability()) {
+            $garbageCollectionHandler($config);
         }
     }
 }
