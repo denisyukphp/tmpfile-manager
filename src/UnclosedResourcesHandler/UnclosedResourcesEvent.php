@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager\CloseOpenedResourcesHandler;
+namespace TmpFileManager\UnclosedResourcesHandler;
 
 use TmpFile\TmpFile;
 use TmpFileManager\ConfigInterface;

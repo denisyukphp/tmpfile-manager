@@ -3,7 +3,7 @@
 namespace TmpFileManager;
 
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 interface ConfigInterface
