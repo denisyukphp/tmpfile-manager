@@ -11,6 +11,7 @@ class ConfigBuilder
     private
         $temporaryDirectory,
         $tmpFilePrefix,
+        $autoRemove,
         $deferredPurgeHandler,
         $checkUnclosedResources,
         $closeOpenedResourcesHandler,
@@ -42,6 +43,18 @@ class ConfigBuilder
     public function getTmpFilePrefix(): ?string
     {
         return $this->tmpFilePrefix;
+    }
+
+    public function setAutoRemove(bool $autoRemove): self
+    {
+        $this->autoRemove = $autoRemove;
+
+        return $this;
+    }
+
+    public function getAutoRemove(): ?bool
+    {
+        return $this->autoRemove;
     }
 
     public function setDeferredPurgeHandler(DeferredPurgeHandlerInterface $deferredPurgeHandler): self

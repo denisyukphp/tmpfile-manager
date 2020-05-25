@@ -10,7 +10,7 @@ class GarbageCollectionListener
 
         $garbageCollectionHandler = $config->getGarbageCollectionHandler();
 
-        if ($config->getGarbageCollectionProbability()) {
+        if ($config->getAutoRemove()) {
             $garbageCollectionHandler($config);
         }
     }

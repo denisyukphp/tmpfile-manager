@@ -12,6 +12,8 @@ interface ConfigInterface
 
     public function getTmpFilePrefix(): string;
 
+    public function getAutoRemove(): bool;
+
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface;
 
     public function getCheckUnclosedResources(): bool;

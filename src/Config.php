@@ -14,6 +14,7 @@ class Config implements ConfigInterface
     private
         $temporaryDirectory,
         $tmpFilePrefix,
+        $autoRemove,
         $deferredPurgeHandler,
         $checkUnclosedResources,
         $closeOpenedResourcesHandler,
@@ -27,6 +28,7 @@ class Config implements ConfigInterface
     {
         $this->temporaryDirectory = $configBuilder->getTemporaryDirectory();
         $this->tmpFilePrefix = $configBuilder->getTmpFilePrefix();
+        $this->autoRemove = $configBuilder->getAutoRemove();
         $this->deferredPurgeHandler = $configBuilder->getDeferredPurgeHandler();
         $this->checkUnclosedResources = $configBuilder->getCheckUnclosedResources();
         $this->closeOpenedResourcesHandler = $configBuilder->getCloseOpenedResourcesHandler();
@@ -52,6 +54,15 @@ class Config implements ConfigInterface
         }
 
         return $this->tmpFilePrefix;
+    }
+
+    public function getAutoRemove(): bool
+    {
+        if (is_null($this->autoRemove)) {
+            $this->autoRemove = true;
+        }
+
+        return $this->autoRemove;
     }
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface
