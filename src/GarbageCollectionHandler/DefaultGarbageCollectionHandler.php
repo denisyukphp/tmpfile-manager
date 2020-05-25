@@ -7,7 +7,24 @@ use Symfony\Component\Process\Process;
 
 class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    private $executable;
+    /**
+     * @var string $executable
+     * @var string $dir
+     * @var string $prefix
+     * @var int $probability
+     * @var int $divisor
+     * @var int $lifetime
+     * @var int $delay
+     */
+    private
+        $executable,
+        $dir,
+        $prefix,
+        $probability,
+        $divisor,
+        $lifetime,
+        $delay
+    ;
 
     public function __construct(string $executable = 'find')
     {
@@ -16,29 +33,34 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
 
     public function __invoke(ConfigInterface $config): void
     {
-        $dir = $config->getTmpFileDirectory();
-        $prefix = $config->getTmpFilePrefix();
-        $probability = $config->getGarbageCollectionProbability();
-        $divisor = $config->getGarbageCollectionDivisor();
-        $lifetime = $config->getGarbageCollectionLifetime();
+        $this->dir = $config->getTmpFileDirectory();
+        $this->prefix = $config->getTmpFilePrefix();
+        $this->probability = $config->getGarbageCollectionProbability();
+        $this->divisor = $config->getGarbageCollectionDivisor();
+        $this->lifetime = $config->getGarbageCollectionLifetime();
+        $this->delay = $config->getGarbageCollectionDelay();
 
-        if ($this->isChance($probability, $divisor)) {
-            $this->process($dir, $prefix, $lifetime);
+        if (!$this->isChance()) {
+            return;
         }
+
+        $this->handle();
     }
 
-    private function isChance(int $probability, int $divisor): bool
+    private function isChance(): bool
     {
-        return $probability == rand($probability, $divisor);
+        return $this->probability == rand($this->probability, $this->divisor);
     }
 
-    private function process(string $dir, string $prefix, int $lifetime): void
+    private function handle(): void
     {
-        $minutes = $this->convertSecondsToMinutes($lifetime);
+        sleep($this->delay);
+
+        $minutes = $this->convertSecondsToMinutes($this->lifetime);
 
         $process = new Process([
-            $this->executable, $dir,
-            '-name', ($prefix . '*'),
+            $this->executable, $this->dir,
+            '-name', ($this->prefix . '*'),
             '-type', 'f',
             '-amin', ('+' . $minutes),
             '-maxdepth', 1,
