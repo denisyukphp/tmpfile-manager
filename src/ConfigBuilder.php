@@ -4,8 +4,8 @@ namespace TmpFileManager;
 
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 use TmpFileManager\DeferredPurgeHandler\DefaultDeferredPurgeHandler;
-use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesHandlerInterface;
-use TmpFileManager\CloseOpenedResourcesHandler\DefaultUnclosedResourcesHandler;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFileManager\UnclosedResourcesHandler\DefaultUnclosedResourcesHandler;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 use TmpFileManager\GarbageCollectionHandler\DefaultGarbageCollectionHandler;
 

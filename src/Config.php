@@ -3,7 +3,7 @@
 namespace TmpFileManager;
 
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class Config implements ConfigInterface
@@ -30,7 +30,7 @@ class Config implements ConfigInterface
         $this->deferredPurgeHandler = $configBuilder->getDeferredPurgeHandler();
         $this->checkUnclosedResources = $configBuilder->isCheckUnclosedResources();
         $this->unclosedResourcesHandler = $configBuilder->getUnclosedResourcesHandler();
-        $this->garbageCollectionProbability = $configBuilder->getGarbageCollectionDelay();
+        $this->garbageCollectionProbability = $configBuilder->getGarbageCollectionProbability();
         $this->garbageCollectionDivisor = $configBuilder->getGarbageCollectionDivisor();
         $this->garbageCollectionLifetime = $configBuilder->getGarbageCollectionLifetime();
         $this->garbageCollectionDelay = $configBuilder->getGarbageCollectionDelay();
