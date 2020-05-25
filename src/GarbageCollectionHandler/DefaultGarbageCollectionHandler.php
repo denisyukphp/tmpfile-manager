@@ -16,7 +16,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
 
     public function __invoke(ConfigInterface $config): void
     {
-        $dir = $config->getTemporaryDirectory();
+        $dir = $config->getTmpFileDirectory();
         $prefix = $config->getTmpFilePrefix();
         $probability = $config->getGarbageCollectionProbability();
         $divisor = $config->getGarbageCollectionDivisor();

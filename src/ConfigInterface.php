@@ -3,28 +3,30 @@
 namespace TmpFileManager;
 
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourcesHandlerInterface;
+use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 interface ConfigInterface
 {
-    public function getTemporaryDirectory(): string;
+    public function getTmpFileDirectory(): string;
 
     public function getTmpFilePrefix(): string;
 
-    public function getAutoRemove(): bool;
+    public function isDeferredAutoPurge(): bool;
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface;
 
-    public function getCheckUnclosedResources(): bool;
+    public function isCheckUnclosedResources(): bool;
 
-    public function getCloseOpenedResourcesHandler(): CloseOpenedResourcesHandlerInterface;
+    public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface;
 
     public function getGarbageCollectionProbability(): int;
 
     public function getGarbageCollectionDivisor(): int;
 
     public function getGarbageCollectionLifetime(): int;
+
+    public function getGarbageCollectionDelay(): int;
 
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface;
 }

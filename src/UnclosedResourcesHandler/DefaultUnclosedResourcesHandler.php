@@ -4,7 +4,7 @@ namespace TmpFileManager\CloseOpenedResourcesHandler;
 
 use TmpFile\TmpFile;
 
-class DefaultCloseOpenedResourcesHandler implements CloseOpenedResourcesHandlerInterface
+class DefaultUnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
     /**
      * @param TmpFile[] $tmpFiles

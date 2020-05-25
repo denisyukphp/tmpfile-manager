@@ -7,26 +7,25 @@ use TmpFileManager\DeferredPurgeHandler\DeferredPurgeEvent;
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionEvent;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
-use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourceEvent;
-use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourceListener;
+use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesEvent;
+use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesListener;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class TmpFileManager
 {
-    /**
-     * @var ConfigInterface $config
-     * @var ContainerInterface $container
-     * @var TmpFileHandlerInterface $tmpFileHandler
-     * @var EventDispatcherInterface $eventDispatcher
-     */
-    private
-        $config,
-        $container,
-        $tmpFileHandler,
-        $eventDispatcher
-    ;
+    /** @var ConfigInterface $config */
+    private $config;
+
+    /** @var ContainerInterface */
+    private $container;
+
+    /** @var TmpFileHandlerInterface */
+    private $tmpFileHandler;
+
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
 
     public function __construct(
         ?ConfigInterface $config = null,
@@ -48,8 +47,8 @@ final class TmpFileManager
     private function addEventListeners(): void
     {
         $this->eventDispatcher->addListener(DeferredPurgeEvent::class, new DeferredPurgeListener());
+        $this->eventDispatcher->addListener(UnclosedResourcesEvent::class, new UnclosedResourcesListener());
         $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
-        $this->eventDispatcher->addListener(CloseOpenedResourceEvent::class, new CloseOpenedResourceListener());
     }
 
     public function getConfig(): ConfigInterface
@@ -80,10 +79,10 @@ final class TmpFileManager
      */
     public function createTmpFile(): TmpFile
     {
-        $temporaryDirectory = $this->config->getTemporaryDirectory();
+        $tmpFileDirectory = $this->config->getTmpFileDirectory();
         $tmpFilePrefix = $this->config->getTmpFilePrefix();
 
-        $filename = $this->tmpFileHandler->getTmpFileName($temporaryDirectory, $tmpFilePrefix);
+        $filename = $this->tmpFileHandler->getTmpFileName($tmpFileDirectory, $tmpFilePrefix);
 
         try {
             $tmpFile = $this->makeTmpFile($filename);
@@ -177,7 +176,7 @@ final class TmpFileManager
             return;
         }
 
-        $this->eventDispatcher->dispatch(new CloseOpenedResourceEvent($this->config, $tmpFiles));
+        $this->eventDispatcher->dispatch(new UnclosedResourcesEvent($this->config, $tmpFiles));
 
         foreach ($tmpFiles as $tmpFile) {
             $this->removeTmpFile($tmpFile);

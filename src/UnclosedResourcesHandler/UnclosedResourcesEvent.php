@@ -6,7 +6,7 @@ use TmpFile\TmpFile;
 use TmpFileManager\ConfigInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class CloseOpenedResourceEvent extends Event
+class UnclosedResourcesEvent extends Event
 {
     private $config;
 

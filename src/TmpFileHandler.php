@@ -16,17 +16,17 @@ class TmpFileHandler implements TmpFileHandlerInterface
     }
 
     /**
-     * @param string $temporaryDirectory
+     * @param string $tmpFileDirectory
      * @param string $fileNamePrefix
      *
      * @return string
      *
      * @throws TmpFileIOException
      */
-    public function getTmpFileName(string $temporaryDirectory, string $fileNamePrefix): string
+    public function getTmpFileName(string $tmpFileDirectory, string $fileNamePrefix): string
     {
         try {
-            return $this->filesystem->tempnam($temporaryDirectory, $fileNamePrefix);
+            return $this->filesystem->tempnam($tmpFileDirectory, $fileNamePrefix);
         } catch (IOException $e) {
             throw new TmpFileIOException(
                 $e->getMessage()

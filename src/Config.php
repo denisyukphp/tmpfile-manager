@@ -3,128 +3,92 @@
 namespace TmpFileManager;
 
 use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\DeferredPurgeHandler\DefaultDeferredPurgeHandler;
-use TmpFileManager\CloseOpenedResourcesHandler\CloseOpenedResourcesHandlerInterface;
-use TmpFileManager\CloseOpenedResourcesHandler\DefaultCloseOpenedResourcesHandler;
+use TmpFileManager\CloseOpenedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
-use TmpFileManager\GarbageCollectionHandler\DefaultGarbageCollectionHandler;
 
 class Config implements ConfigInterface
 {
     private
-        $temporaryDirectory,
+        $tmpFileDirectory,
         $tmpFilePrefix,
-        $autoRemove,
+        $deferredAutoPurge,
         $deferredPurgeHandler,
         $checkUnclosedResources,
-        $closeOpenedResourcesHandler,
-        $garageCollectionProbability,
-        $garageCollectionDivisor,
-        $garageCollectionLifetime,
-        $garageCollectionHandler
+        $unclosedResourcesHandler,
+        $garbageCollectionProbability,
+        $garbageCollectionDivisor,
+        $garbageCollectionLifetime,
+        $garbageCollectionDelay,
+        $garbageCollectionHandler
     ;
 
     public function __construct(ConfigBuilder $configBuilder)
     {
-        $this->temporaryDirectory = $configBuilder->getTemporaryDirectory();
+        $this->tmpFileDirectory = $configBuilder->getTmpFileDirectory();
         $this->tmpFilePrefix = $configBuilder->getTmpFilePrefix();
-        $this->autoRemove = $configBuilder->getAutoRemove();
+        $this->deferredAutoPurge = $configBuilder->isDeferredAutoPurge();
         $this->deferredPurgeHandler = $configBuilder->getDeferredPurgeHandler();
-        $this->checkUnclosedResources = $configBuilder->getCheckUnclosedResources();
-        $this->closeOpenedResourcesHandler = $configBuilder->getCloseOpenedResourcesHandler();
-        $this->garageCollectionProbability = $configBuilder->getGarageCollectionProbability();
-        $this->garageCollectionDivisor = $configBuilder->getGarbageCollectionDivisor();
-        $this->garageCollectionLifetime = $configBuilder->getGarbageCollectionLifetime();
-        $this->garageCollectionHandler = $configBuilder->getGarbageCollectionHandler();
+        $this->checkUnclosedResources = $configBuilder->isCheckUnclosedResources();
+        $this->unclosedResourcesHandler = $configBuilder->getUnclosedResourcesHandler();
+        $this->garbageCollectionProbability = $configBuilder->getGarbageCollectionDelay();
+        $this->garbageCollectionDivisor = $configBuilder->getGarbageCollectionDivisor();
+        $this->garbageCollectionLifetime = $configBuilder->getGarbageCollectionLifetime();
+        $this->garbageCollectionDelay = $configBuilder->getGarbageCollectionDelay();
+        $this->garbageCollectionHandler = $configBuilder->getGarbageCollectionHandler();
     }
 
-    public function getTemporaryDirectory(): string
+    public function getTmpFileDirectory(): string
     {
-        if (!$this->temporaryDirectory) {
-            $this->temporaryDirectory = sys_get_temp_dir();
-        }
-
-        return $this->temporaryDirectory;
+        return $this->tmpFileDirectory;
     }
 
     public function getTmpFilePrefix(): string
     {
-        if (!$this->tmpFilePrefix) {
-            $this->tmpFilePrefix = 'php';
-        }
-
         return $this->tmpFilePrefix;
     }
 
-    public function getAutoRemove(): bool
+    public function isDeferredAutoPurge(): bool
     {
-        if (is_null($this->autoRemove)) {
-            $this->autoRemove = true;
-        }
-
-        return $this->autoRemove;
+        return $this->deferredAutoPurge;
     }
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface
     {
-        if (!$this->deferredPurgeHandler) {
-            $this->deferredPurgeHandler = new DefaultDeferredPurgeHandler();
-        }
-
         return $this->deferredPurgeHandler;
     }
 
-    public function getCheckUnclosedResources(): bool
+    public function isCheckUnclosedResources(): bool
     {
-        if (is_null($this->checkUnclosedResources)) {
-            $this->checkUnclosedResources = false;
-        }
-
         return $this->checkUnclosedResources;
     }
 
-    public function getCloseOpenedResourcesHandler(): CloseOpenedResourcesHandlerInterface
+    public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface
     {
-        if (!$this->closeOpenedResourcesHandler) {
-            $this->closeOpenedResourcesHandler = new DefaultCloseOpenedResourcesHandler();
-        }
-
-        return $this->closeOpenedResourcesHandler;
+        return $this->unclosedResourcesHandler;
     }
 
     public function getGarbageCollectionProbability(): int
     {
-        if (is_null($this->garageCollectionProbability)) {
-            $this->garageCollectionProbability = 0;
-        }
-
-        return $this->garageCollectionProbability;
+        return $this->garbageCollectionProbability;
     }
 
     public function getGarbageCollectionDivisor(): int
     {
-        if (is_null($this->garageCollectionDivisor)) {
-            $this->garageCollectionDivisor = 100;
-        }
-
-        return $this->garageCollectionDivisor;
+        return $this->garbageCollectionDivisor;
     }
 
     public function getGarbageCollectionLifetime(): int
     {
-        if (is_null($this->garageCollectionLifetime)) {
-            $this->garageCollectionLifetime = 3600;
-        }
+        return $this->garbageCollectionLifetime;
+    }
 
-        return $this->garageCollectionLifetime;
+    public function getGarbageCollectionDelay(): int
+    {
+        return $this->garbageCollectionDelay;
     }
 
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface
     {
-        if (!$this->garageCollectionHandler) {
-            $this->garageCollectionHandler = new DefaultGarbageCollectionHandler();
-        }
-
-        return $this->garageCollectionHandler;
+        return $this->garbageCollectionHandler;
     }
 }
