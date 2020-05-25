@@ -9,7 +9,7 @@ use TmpFileManager\TmpFileHandlerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 
-class TmpFileManagerTest extends TestCase
+class TmpFileManagerDefaultTest extends TestCase
 {
     /** @var TmpFileManager */
     protected $tmpFileManager;
@@ -18,7 +18,6 @@ class TmpFileManagerTest extends TestCase
     {
         $config = (new ConfigBuilder())
             ->setTmpFilePrefix('test')
-            ->setDeferredAutoPurge(false)
             ->build()
         ;
 
