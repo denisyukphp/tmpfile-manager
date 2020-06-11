@@ -6,12 +6,14 @@ class DeferredPurgeListener
 {
     public function __invoke(DeferredPurgeEvent $deferredPurgeEvent): void
     {
-        $config = $deferredPurgeEvent->getTmpFileManager()->getConfig();
+        $tmpFileManager = $deferredPurgeEvent->getTmpFileManager();
+
+        $config = $deferredPurgeEvent->getConfig();
 
         $deferredPurgeHandler = $config->getDeferredPurgeHandler();
 
         if ($config->getDeferredAutoPurge()) {
-            $deferredPurgeHandler($deferredPurgeEvent->getTmpFileManager());
+            $deferredPurgeHandler($tmpFileManager);
         }
     }
 }

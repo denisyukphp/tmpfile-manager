@@ -2,20 +2,29 @@
 
 namespace TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
+use TmpFileManager\ConfigInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class DeferredPurgeEvent extends Event
 {
     private $tmpFileManager;
 
-    public function __construct(TmpFileManager $tmpFileManager)
+    private $config;
+
+    public function __construct(TmpFileManagerInterface $tmpFileManager, ConfigInterface $config)
     {
         $this->tmpFileManager = $tmpFileManager;
+        $this->config = $config;
     }
 
-    public function getTmpFileManager(): TmpFileManager
+    public function getTmpFileManager(): TmpFileManagerInterface
     {
         return $this->tmpFileManager;
+    }
+
+    public function getConfig(): ConfigInterface
+    {
+        return $this->config;
     }
 }

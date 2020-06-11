@@ -13,27 +13,20 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-final class TmpFileManager
+final class TmpFileManager implements TmpFileManagerInterface
 {
     /**
-     * @var ConfigInterface
+     * @var ConfigInterface $config
+     * @var ContainerInterface $container
+     * @var TmpFileHandlerInterface $tmpFileHandler
+     * @var EventDispatcherInterface $eventDispatcher
      */
-    private $config;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var TmpFileHandlerInterface
-     */
-    private $tmpFileHandler;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private
+        $config,
+        $container,
+        $tmpFileHandler,
+        $eventDispatcher
+    ;
 
     public function __construct(
         ?ConfigInterface $config = null,
@@ -48,7 +41,7 @@ final class TmpFileManager
 
         $this->addEventListeners();
 
-        $this->eventDispatcher->dispatch(new DeferredPurgeEvent($this));
+        $this->eventDispatcher->dispatch(new DeferredPurgeEvent($this, $this->config));
         $this->eventDispatcher->dispatch(new GarbageCollectionEvent($this->config));
     }
 
@@ -57,26 +50,6 @@ final class TmpFileManager
         $this->eventDispatcher->addListener(DeferredPurgeEvent::class, new DeferredPurgeListener());
         $this->eventDispatcher->addListener(UnclosedResourcesEvent::class, new UnclosedResourcesListener());
         $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
-    }
-
-    public function getConfig(): ConfigInterface
-    {
-        return $this->config;
-    }
-
-    public function getContainer(): ContainerInterface
-    {
-        return $this->container;
-    }
-
-    public function getTmpFileHandler(): TmpFileHandlerInterface
-    {
-        return $this->tmpFileHandler;
-    }
-
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
     }
 
     /**

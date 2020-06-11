@@ -2,9 +2,9 @@
 
 namespace TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
 
 interface DeferredPurgeHandlerInterface
 {
-    public function __invoke(TmpFileManager $tmpFileManager): void;
+    public function __invoke(TmpFileManagerInterface $tmpFileManager): void;
 }

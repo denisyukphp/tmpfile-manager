@@ -3,10 +3,6 @@
 use TmpFile\TmpFile;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\ConfigBuilder;
-use TmpFileManager\ConfigInterface;
-use TmpFileManager\ContainerInterface;
-use TmpFileManager\TmpFileHandlerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 
 class TmpFileManagerDefaultTest extends TestCase
@@ -22,14 +18,6 @@ class TmpFileManagerDefaultTest extends TestCase
         ;
 
         $this->tmpFileManager = new TmpFileManager($config);
-    }
-
-    public function testGetters()
-    {
-        $this->assertInstanceOf(ConfigInterface::class, $this->tmpFileManager->getConfig());
-        $this->assertInstanceOf(ContainerInterface::class, $this->tmpFileManager->getContainer());
-        $this->assertInstanceOf(TmpFileHandlerInterface::class, $this->tmpFileManager->getTmpFileHandler());
-        $this->assertInstanceOf(EventDispatcherInterface::class, $this->tmpFileManager->getEventDispatcher());
     }
 
     public function testCreateTmpFile(): TmpFile
