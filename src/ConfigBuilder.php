@@ -25,6 +25,21 @@ class ConfigBuilder
         $garbageCollectionHandler
     ;
 
+    public function __construct()
+    {
+        $this->tmpFileDirectory = sys_get_temp_dir();
+        $this->tmpFilePrefix = 'php';
+        $this->deferredAutoPurge = true;
+        $this->deferredPurgeHandler = new DefaultDeferredPurgeHandler();
+        $this->checkUnclosedResources = false;
+        $this->unclosedResourcesHandler = new DefaultUnclosedResourcesHandler();
+        $this->garbageCollectionProbability = 0;
+        $this->garbageCollectionDivisor = 100;
+        $this->garbageCollectionLifetime = 3600;
+        $this->garbageCollectionDelay = 0;
+        $this->garbageCollectionHandler = new DefaultGarbageCollectionHandler();
+    }
+
     public function setTmpFileDirectory(string $tmpFileDirectory): self
     {
         $this->tmpFileDirectory = $tmpFileDirectory;
@@ -34,10 +49,6 @@ class ConfigBuilder
 
     public function getTmpFileDirectory(): string
     {
-        if (!$this->tmpFileDirectory) {
-            $this->tmpFileDirectory = sys_get_temp_dir();
-        }
-
         return $this->tmpFileDirectory;
     }
 
@@ -50,10 +61,6 @@ class ConfigBuilder
 
     public function getTmpFilePrefix(): string
     {
-        if (!$this->tmpFilePrefix) {
-            $this->tmpFilePrefix = 'php';
-        }
-
         return $this->tmpFilePrefix;
     }
 
@@ -64,12 +71,8 @@ class ConfigBuilder
         return $this;
     }
 
-    public function isDeferredAutoPurge(): bool
+    public function getDeferredAutoPurge(): bool
     {
-        if (is_null($this->deferredAutoPurge)) {
-            $this->deferredAutoPurge = true;
-        }
-
         return $this->deferredAutoPurge;
     }
 
@@ -82,10 +85,6 @@ class ConfigBuilder
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface
     {
-        if (!$this->deferredPurgeHandler) {
-            $this->deferredPurgeHandler = new DefaultDeferredPurgeHandler();
-        }
-
         return $this->deferredPurgeHandler;
     }
 
@@ -96,12 +95,8 @@ class ConfigBuilder
         return $this;
     }
 
-    public function isCheckUnclosedResources(): bool
+    public function getCheckUnclosedResources(): bool
     {
-        if (is_null($this->checkUnclosedResources)) {
-            $this->checkUnclosedResources = false;
-        }
-
         return $this->checkUnclosedResources;
     }
 
@@ -114,10 +109,6 @@ class ConfigBuilder
 
     public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface
     {
-        if (!$this->unclosedResourcesHandler) {
-            $this->unclosedResourcesHandler = new DefaultUnclosedResourcesHandler();
-        }
-
         return $this->unclosedResourcesHandler;
     }
 
@@ -130,10 +121,6 @@ class ConfigBuilder
 
     public function getGarbageCollectionProbability(): int
     {
-        if (is_null($this->garbageCollectionProbability)) {
-            $this->garbageCollectionProbability = 0;
-        }
-
         return $this->garbageCollectionProbability;
     }
 
@@ -146,10 +133,6 @@ class ConfigBuilder
 
     public function getGarbageCollectionDivisor(): int
     {
-        if (is_null($this->garbageCollectionDivisor)) {
-            $this->garbageCollectionDivisor = 100;
-        }
-
         return $this->garbageCollectionDivisor;
     }
 
@@ -162,10 +145,6 @@ class ConfigBuilder
 
     public function getGarbageCollectionLifetime(): int
     {
-        if (is_null($this->garbageCollectionLifetime)) {
-            $this->garbageCollectionLifetime = 3600;
-        }
-
         return $this->garbageCollectionLifetime;
     }
 
@@ -178,10 +157,6 @@ class ConfigBuilder
 
     public function getGarbageCollectionDelay(): int
     {
-        if (is_null($this->garbageCollectionDelay)) {
-            $this->garbageCollectionDelay = 0;
-        }
-
         return $this->garbageCollectionDelay;
     }
 
@@ -194,10 +169,6 @@ class ConfigBuilder
 
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface
     {
-        if (!$this->garbageCollectionHandler) {
-            $this->garbageCollectionHandler = new DefaultGarbageCollectionHandler();
-        }
-
         return $this->garbageCollectionHandler;
     }
 

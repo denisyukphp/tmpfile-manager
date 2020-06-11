@@ -8,87 +8,65 @@ use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class Config implements ConfigInterface
 {
-    private
-        $tmpFileDirectory,
-        $tmpFilePrefix,
-        $deferredAutoPurge,
-        $deferredPurgeHandler,
-        $checkUnclosedResources,
-        $unclosedResourcesHandler,
-        $garbageCollectionProbability,
-        $garbageCollectionDivisor,
-        $garbageCollectionLifetime,
-        $garbageCollectionDelay,
-        $garbageCollectionHandler
-    ;
+    private $configBuilder;
 
     public function __construct(ConfigBuilder $configBuilder)
     {
-        $this->tmpFileDirectory = $configBuilder->getTmpFileDirectory();
-        $this->tmpFilePrefix = $configBuilder->getTmpFilePrefix();
-        $this->deferredAutoPurge = $configBuilder->isDeferredAutoPurge();
-        $this->deferredPurgeHandler = $configBuilder->getDeferredPurgeHandler();
-        $this->checkUnclosedResources = $configBuilder->isCheckUnclosedResources();
-        $this->unclosedResourcesHandler = $configBuilder->getUnclosedResourcesHandler();
-        $this->garbageCollectionProbability = $configBuilder->getGarbageCollectionProbability();
-        $this->garbageCollectionDivisor = $configBuilder->getGarbageCollectionDivisor();
-        $this->garbageCollectionLifetime = $configBuilder->getGarbageCollectionLifetime();
-        $this->garbageCollectionDelay = $configBuilder->getGarbageCollectionDelay();
-        $this->garbageCollectionHandler = $configBuilder->getGarbageCollectionHandler();
+        $this->configBuilder = $configBuilder;
     }
 
     public function getTmpFileDirectory(): string
     {
-        return $this->tmpFileDirectory;
+        return $this->configBuilder->getTmpFileDirectory();
     }
 
     public function getTmpFilePrefix(): string
     {
-        return $this->tmpFilePrefix;
+        return $this->configBuilder->getTmpFilePrefix();
     }
 
-    public function isDeferredAutoPurge(): bool
+    public function getDeferredAutoPurge(): bool
     {
-        return $this->deferredAutoPurge;
+        return $this->configBuilder->getDeferredAutoPurge();
     }
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface
     {
-        return $this->deferredPurgeHandler;
+        return $this->configBuilder->getDeferredPurgeHandler();
     }
 
-    public function isCheckUnclosedResources(): bool
+    public function getCheckUnclosedResources(): bool
     {
-        return $this->checkUnclosedResources;
+        return $this->configBuilder->getCheckUnclosedResources();
     }
 
     public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface
     {
-        return $this->unclosedResourcesHandler;
+        return $this->configBuilder->getUnclosedResourcesHandler();
     }
 
     public function getGarbageCollectionProbability(): int
     {
-        return $this->garbageCollectionProbability;
+        return $this->configBuilder->getGarbageCollectionProbability();
     }
 
     public function getGarbageCollectionDivisor(): int
     {
-        return $this->garbageCollectionDivisor;
+        return $this->configBuilder->getGarbageCollectionDivisor();
     }
 
     public function getGarbageCollectionLifetime(): int
     {
-        return $this->garbageCollectionLifetime;
+        return $this->configBuilder->getGarbageCollectionLifetime();
     }
 
     public function getGarbageCollectionDelay(): int
     {
-        return $this->garbageCollectionDelay;
+        return $this->configBuilder->getGarbageCollectionDelay();
     }
 
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface
     {
-        return $this->garbageCollectionHandler;
+        return $this->configBuilder->getGarbageCollectionHandler();
     }
 }

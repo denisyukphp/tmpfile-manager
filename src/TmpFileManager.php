@@ -15,16 +15,24 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 final class TmpFileManager
 {
-    /** @var ConfigInterface $config */
+    /**
+     * @var ConfigInterface
+     */
     private $config;
 
-    /** @var ContainerInterface */
+    /**
+     * @var ContainerInterface
+     */
     private $container;
 
-    /** @var TmpFileHandlerInterface */
+    /**
+     * @var TmpFileHandlerInterface
+     */
     private $tmpFileHandler;
 
-    /** @var EventDispatcherInterface */
+    /**
+     * @var EventDispatcherInterface
+     */
     private $eventDispatcher;
 
     public function __construct(
