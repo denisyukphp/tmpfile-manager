@@ -2,13 +2,13 @@
 
 namespace TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
 
 class DeferredPurgeCallback
 {
     private $tmpFileManager;
 
-    public function __construct(TmpFileManager $tmpFileManager)
+    public function __construct(TmpFileManagerInterface $tmpFileManager)
     {
         $this->tmpFileManager = $tmpFileManager;
     }

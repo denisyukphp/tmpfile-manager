@@ -2,11 +2,11 @@
 
 namespace TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
 
 class DefaultDeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
-    public function __invoke(TmpFileManager $tmpFileManager): void
+    public function __invoke(TmpFileManagerInterface $tmpFileManager): void
     {
         $callback = new DeferredPurgeCallback($tmpFileManager);
 
