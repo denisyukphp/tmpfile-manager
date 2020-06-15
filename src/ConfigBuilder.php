@@ -1,13 +1,13 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\DeferredPurgeHandler\DefaultDeferredPurgeHandler;
-use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
-use TmpFileManager\UnclosedResourcesHandler\DefaultUnclosedResourcesHandler;
-use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
-use TmpFileManager\GarbageCollectionHandler\DefaultGarbageCollectionHandler;
+use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
+use Bulletproof\TmpFileManager\DeferredPurgeHandler\DefaultDeferredPurgeHandler;
+use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
+use Bulletproof\TmpFileManager\UnclosedResourcesHandler\DefaultUnclosedResourcesHandler;
+use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use Bulletproof\TmpFileManager\GarbageCollectionHandler\DefaultGarbageCollectionHandler;
 
 class ConfigBuilder
 {

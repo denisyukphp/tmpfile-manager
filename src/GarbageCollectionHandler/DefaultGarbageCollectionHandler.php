@@ -1,21 +1,12 @@
 <?php
 
-namespace TmpFileManager\GarbageCollectionHandler;
+namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
 
-use TmpFileManager\ConfigInterface;
+use Bulletproof\TmpFileManager\ConfigInterface;
 use Symfony\Component\Process\Process;
 
 class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    /**
-     * @var string $executable
-     * @var string $dir
-     * @var string $prefix
-     * @var int $probability
-     * @var int $divisor
-     * @var int $lifetime
-     * @var int $delay
-     */
     private
         $executable,
         $dir,

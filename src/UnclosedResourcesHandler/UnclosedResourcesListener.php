@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager\UnclosedResourcesHandler;
+namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
 
 class UnclosedResourcesListener
 {

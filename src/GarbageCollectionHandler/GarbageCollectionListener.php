@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager\GarbageCollectionHandler;
+namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
 
 class GarbageCollectionListener
 {

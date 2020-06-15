@@ -1,9 +1,9 @@
-# TmpFileManager\TmpFileManager
+# TmpFileManager
 
 [![Build Status](https://travis-ci.org/denisyukphp/tmpfile-manager.svg?branch=master)](https://travis-ci.org/denisyukphp/tmpfile-manager) [![Total Downloads](https://poser.pugx.org/denisyukphp/tmpfile-manager/downloads)](https://packagist.org/packages/denisyukphp/tmpfile-manager) [![License](https://poser.pugx.org/denisyukphp/tmpfile-manager/license)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
 
 ```
-composer require denisyukphp/tmpfile-manager ^2
+composer require denisyukphp/tmpfile-manager
 ```
 
 This package requires PHP 7.1 or later.
@@ -13,14 +13,12 @@ This package requires PHP 7.1 or later.
 ```php
 <?php
 
-use TmpFile\TmpFile;
-use TmpFileManager\Config;
-use TmpFileManager\ConfigBuilder;
-use TmpFileManager\TmpFileManager;
+use Bulletproof\TmpFile\TmpFileInterface;
+use Bulletproof\TmpFileManager\ConfigBuilder;
+use Bulletproof\TmpFileManager\TmpFileManager;
 
-/** @var Config $config */
 $config = (new ConfigBuilder())
-    ->setTmpFileDirectory('/tmp')
+    ->setTmpFileDirectory(sys_get_temp_dir())
     ->setTmpFilePrefix('php')
     ->setCheckUnclosedResources(true)
     ->build()
@@ -29,7 +27,7 @@ $config = (new ConfigBuilder())
 $tmpFileManager = new TmpFileManager($config);
 
 for ($i = 0; $i < 10; $i++) {
-    /** @var TmpFile $tmpFile */
+    /** @var TmpFileInterface $tmpFile */
     $tmpFile = $tmpFileManager->createTmpFile();
 
     $fh = fopen($tmpFile, 'r+');
@@ -39,7 +37,7 @@ for ($i = 0; $i < 10; $i++) {
     // ...
 }
 
-$tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+$tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
     file_put_contents($tmpFile, 'Meow!');
 
     rename($tmpFile, '/path/to/meow.txt');

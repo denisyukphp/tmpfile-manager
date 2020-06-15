@@ -1,14 +1,15 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
-use TmpFileManager\DeferredPurgeHandler\DeferredPurgeEvent;
-use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
-use TmpFileManager\GarbageCollectionHandler\GarbageCollectionEvent;
-use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
-use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesEvent;
-use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
+use Bulletproof\TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
+use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeEvent;
+use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
+use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionEvent;
+use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
+use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesEvent;
+use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -16,23 +17,30 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 final class TmpFileManager implements TmpFileManagerInterface
 {
     /**
-     * @var ConfigInterface $config
-     * @var ContainerInterface $container
-     * @var TmpFileHandlerInterface $tmpFileHandler
-     * @var EventDispatcherInterface $eventDispatcher
+     * @var ConfigInterface
      */
-    private
-        $config,
-        $container,
-        $tmpFileHandler,
-        $eventDispatcher
-    ;
+    private $config;
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var TmpFileHandlerInterface
+     */
+    private $tmpFileHandler;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     public function __construct(
-        ?ConfigInterface $config = null,
-        ?ContainerInterface $container = null,
-        ?TmpFileHandlerInterface $tmpFileHandler = null,
-        ?EventDispatcherInterface $eventDispatcher = null
+        ConfigInterface $config = null,
+        ContainerInterface $container = null,
+        TmpFileHandlerInterface $tmpFileHandler = null,
+        EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->config = $config ?? new Config(new ConfigBuilder());
         $this->container = $container ?? new Container();
@@ -53,17 +61,17 @@ final class TmpFileManager implements TmpFileManagerInterface
     }
 
     /**
-     * @return TmpFile
+     * @return TmpFileInterface
      *
      * @throws TmpFileIOException
      * @throws TmpFileCreateException
      */
-    public function createTmpFile(): TmpFile
+    public function createTmpFile(): TmpFileInterface
     {
-        $tmpFileDirectory = $this->config->getTmpFileDirectory();
-        $tmpFilePrefix = $this->config->getTmpFilePrefix();
+        $dir = $this->config->getTmpFileDirectory();
+        $prefix = $this->config->getTmpFilePrefix();
 
-        $filename = $this->tmpFileHandler->getTmpFileName($tmpFileDirectory, $tmpFilePrefix);
+        $filename = $this->tmpFileHandler->getTmpFileName($dir, $prefix);
 
         try {
             $tmpFile = $this->makeTmpFile($filename);
@@ -81,15 +89,15 @@ final class TmpFileManager implements TmpFileManagerInterface
     /**
      * @param string $realPath
      *
-     * @return TmpFile
+     * @return TmpFileInterface
      *
      * @throws \ReflectionException
      */
-    private function makeTmpFile(string $realPath): TmpFile
+    private function makeTmpFile(string $realPath): TmpFileInterface
     {
         $tmpFileReflection = new \ReflectionClass(TmpFile::class);
 
-        /** @var TmpFile $tmpFile */
+        /** @var TmpFileInterface $tmpFile */
         $tmpFile = $tmpFileReflection->newInstanceWithoutConstructor();
 
         $filename = $tmpFileReflection->getProperty('filename');
@@ -117,9 +125,9 @@ final class TmpFileManager implements TmpFileManagerInterface
         try {
             $result = $callback($tmpFile);
 
-            if ($result instanceof TmpFile) {
+            if ($result instanceof TmpFileInterface) {
                 throw new TmpFileContextCallbackException(
-                    sprintf("You can't return %s object from context callback function", TmpFile::class)
+                    sprintf("You can't return object like %s from context callback function", TmpFileInterface::class)
                 );
             }
 
@@ -130,11 +138,11 @@ final class TmpFileManager implements TmpFileManagerInterface
     }
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @throws TmpFileIOException
      */
-    public function removeTmpFile(TmpFile $tmpFile): void
+    public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         if ($this->container->hasTmpFile($tmpFile)) {
             $this->container->removeTmpFile($tmpFile);

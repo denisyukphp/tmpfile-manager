@@ -1,13 +1,13 @@
 <?php
 
-namespace TmpFileManager\UnclosedResourcesHandler;
+namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 
 interface UnclosedResourcesHandlerInterface
 {
     /**
-     * @param TmpFile[] $tmpFiles
+     * @param TmpFileInterface[] $tmpFiles
      */
     public function __invoke(array $tmpFiles): void;
 }

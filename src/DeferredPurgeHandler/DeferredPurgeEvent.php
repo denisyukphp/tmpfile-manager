@@ -1,9 +1,9 @@
 <?php
 
-namespace TmpFileManager\DeferredPurgeHandler;
+namespace Bulletproof\TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManagerInterface;
-use TmpFileManager\ConfigInterface;
+use Bulletproof\TmpFileManager\TmpFileManagerInterface;
+use Bulletproof\TmpFileManager\ConfigInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class DeferredPurgeEvent extends Event

@@ -1,8 +1,8 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 
@@ -16,17 +16,17 @@ class TmpFileHandler implements TmpFileHandlerInterface
     }
 
     /**
-     * @param string $tmpFileDirectory
-     * @param string $fileNamePrefix
+     * @param string $dir
+     * @param string $prefix
      *
      * @return string
      *
      * @throws TmpFileIOException
      */
-    public function getTmpFileName(string $tmpFileDirectory, string $fileNamePrefix): string
+    public function getTmpFileName(string $dir, string $prefix): string
     {
         try {
-            return $this->filesystem->tempnam($tmpFileDirectory, $fileNamePrefix);
+            return $this->filesystem->tempnam($dir, $prefix);
         } catch (IOException $e) {
             throw new TmpFileIOException(
                 $e->getMessage()
@@ -35,13 +35,13 @@ class TmpFileHandler implements TmpFileHandlerInterface
     }
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @return bool
      *
      * @throws TmpFileIOException
      */
-    public function existsTmpFile(TmpFile $tmpFile): bool
+    public function existsTmpFile(TmpFileInterface $tmpFile): bool
     {
         try {
             return $this->filesystem->exists($tmpFile);
@@ -53,11 +53,11 @@ class TmpFileHandler implements TmpFileHandlerInterface
     }
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @throws TmpFileIOException
      */
-    public function removeTmpFile(TmpFile $tmpFile): void
+    public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         try {
             $this->filesystem->remove($tmpFile);

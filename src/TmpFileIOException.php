@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
 class TmpFileIOException extends \RuntimeException
 {

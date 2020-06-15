@@ -1,34 +1,34 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 
 interface TmpFileHandlerInterface
 {
     /**
-     * @param string $temporaryDirectory
-     * @param string $fileNamePrefix
+     * @param string $dir
+     * @param string $prefix
      *
      * @return string
      *
      * @throws TmpFileIOException
      */
-    public function getTmpFileName(string $temporaryDirectory, string $fileNamePrefix): string;
+    public function getTmpFileName(string $dir, string $prefix): string;
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @return bool
      *
      * @throws TmpFileIOException
      */
-    public function existsTmpFile(TmpFile $tmpFile): bool;
+    public function existsTmpFile(TmpFileInterface $tmpFile): bool;
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @throws TmpFileIOException
      */
-    public function removeTmpFile(TmpFile $tmpFile): void;
+    public function removeTmpFile(TmpFileInterface $tmpFile): void;
 }

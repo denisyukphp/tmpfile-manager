@@ -1,8 +1,8 @@
 <?php
 
-namespace TmpFileManager\DeferredPurgeHandler;
+namespace Bulletproof\TmpFileManager\DeferredPurgeHandler;
 
-use TmpFileManager\TmpFileManagerInterface;
+use Bulletproof\TmpFileManager\TmpFileManagerInterface;
 
 class DefaultDeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {

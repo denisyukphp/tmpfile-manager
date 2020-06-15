@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager\DeferredPurgeHandler;
+namespace Bulletproof\TmpFileManager\DeferredPurgeHandler;
 
 class DeferredPurgeListener
 {

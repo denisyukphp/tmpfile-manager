@@ -1,21 +1,23 @@
 <?php
 
-namespace TmpFileManager\UnclosedResourcesHandler;
+namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
 
-use TmpFile\TmpFile;
-use TmpFileManager\ConfigInterface;
+use Bulletproof\TmpFile\TmpFileInterface;
+use Bulletproof\TmpFileManager\ConfigInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class UnclosedResourcesEvent extends Event
 {
     private $config;
 
-    /** @var TmpFile[] */
+    /**
+     * @var TmpFileInterface[]
+     */
     private $tmpFiles;
 
     /**
      * @param ConfigInterface $config
-     * @param TmpFile[] $tmpFiles
+     * @param TmpFileInterface[] $tmpFiles
      */
     public function __construct(ConfigInterface $config, array $tmpFiles)
     {
@@ -29,7 +31,7 @@ class UnclosedResourcesEvent extends Event
     }
 
     /**
-     * @return TmpFile[]
+     * @return TmpFileInterface[]
      */
     public function getTmpFiles(): array
     {

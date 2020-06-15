@@ -1,18 +1,18 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 
 interface TmpFileManagerInterface
 {
     /**
-     * @return TmpFile
+     * @return TmpFileInterface
      *
      * @throws TmpFileIOException
      * @throws TmpFileCreateException
      */
-    public function createTmpFile(): TmpFile;
+    public function createTmpFile(): TmpFileInterface;
 
     /**
      * @param callable $callback
@@ -26,11 +26,11 @@ interface TmpFileManagerInterface
     public function createTmpFileContext(callable $callback);
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @throws TmpFileIOException
      */
-    public function removeTmpFile(TmpFile $tmpFile): void;
+    public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
     /**
      * @throws TmpFileIOException

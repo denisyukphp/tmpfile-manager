@@ -1,19 +1,19 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 
 interface ContainerInterface
 {
-    public function addTmpFile(TmpFile $tmpFile): void;
+    public function addTmpFile(TmpFileInterface $tmpFile): void;
 
-    public function hasTmpFile(TmpFile $tmpFile): bool;
+    public function hasTmpFile(TmpFileInterface $tmpFile): bool;
 
-    public function removeTmpFile(TmpFile $tmpFile): void;
+    public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
     /**
-     * @return TmpFile[]
+     * @return TmpFileInterface[]
      */
     public function getTmpFiles(): array;
 

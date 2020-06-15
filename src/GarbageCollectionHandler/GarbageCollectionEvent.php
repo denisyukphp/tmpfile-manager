@@ -1,8 +1,8 @@
 <?php
 
-namespace TmpFileManager\GarbageCollectionHandler;
+namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
 
-use TmpFileManager\ConfigInterface;
+use Bulletproof\TmpFileManager\ConfigInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class GarbageCollectionEvent extends Event

@@ -1,8 +1,8 @@
 <?php
 
-namespace TmpFileManager;
+namespace Bulletproof\TmpFileManager;
 
-use TmpFile\TmpFile;
+use Bulletproof\TmpFile\TmpFileInterface;
 
 class Container implements ContainerInterface
 {
@@ -13,23 +13,23 @@ class Container implements ContainerInterface
         $this->tmpFiles = new \SplObjectStorage();
     }
 
-    public function addTmpFile(TmpFile $tmpFile): void
+    public function addTmpFile(TmpFileInterface $tmpFile): void
     {
         $this->tmpFiles->attach($tmpFile);
     }
 
-    public function hasTmpFile(TmpFile $tmpFile): bool
+    public function hasTmpFile(TmpFileInterface $tmpFile): bool
     {
         return $this->tmpFiles->contains($tmpFile);
     }
 
-    public function removeTmpFile(TmpFile $tmpFile): void
+    public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         $this->tmpFiles->detach($tmpFile);
     }
 
     /**
-     * @return TmpFile[]
+     * @return TmpFileInterface[]
      */
     public function getTmpFiles(): array
     {

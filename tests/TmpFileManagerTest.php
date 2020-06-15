@@ -1,26 +1,26 @@
 <?php
 
-use TmpFile\TmpFile;
-use TmpFileManager\TmpFileManager;
-use TmpFileManager\ConfigBuilder;
+namespace Bulletproof\TmpFileManager\Tests;
+
+use Bulletproof\TmpFile\TmpFileInterface;
+use Bulletproof\TmpFileManager\TmpFileManager;
+use Bulletproof\TmpFileManager\TmpFileManagerInterface;
+use Bulletproof\TmpFileManager\TmpFileContextCallbackException;
 use PHPUnit\Framework\TestCase;
 
-class TmpFileManagerDefaultTest extends TestCase
+class TmpFileManagerTest extends TestCase
 {
-    /** @var TmpFileManager */
+    /**
+     * @var TmpFileManagerInterface
+     */
     protected $tmpFileManager;
 
     public function setUp()
     {
-        $config = (new ConfigBuilder())
-            ->setTmpFilePrefix('test')
-            ->build()
-        ;
-
-        $this->tmpFileManager = new TmpFileManager($config);
+        $this->tmpFileManager = new TmpFileManager();
     }
 
-    public function testCreateTmpFile(): TmpFile
+    public function testCreateTmpFile(): TmpFileInterface
     {
         $tmpFile = $this->tmpFileManager->createTmpFile();
 
@@ -31,24 +31,23 @@ class TmpFileManagerDefaultTest extends TestCase
 
     public function testCreateTmpFileContext(): void
     {
-        $this->tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+        $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             $this->assertFileExists($tmpFile);
         });
     }
 
-    /**
-     * @expectedException \TmpFileManager\TmpFileContextCallbackException
-     */
     public function testCreateTmpFileContextException(): void
     {
-        $this->tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+        $this->expectException(TmpFileContextCallbackException::class);
+
+        $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             return $tmpFile;
         });
     }
 
     public function testCreateTmpFileContextNotExists(): void
     {
-        $splFileInfo = $this->tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+        $splFileInfo = $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             return new \SplFileInfo($tmpFile);
         });
 
@@ -56,11 +55,11 @@ class TmpFileManagerDefaultTest extends TestCase
     }
 
     /**
-     * @param TmpFile $tmpFile
+     * @param TmpFileInterface $tmpFile
      *
      * @depends testCreateTmpFile
      */
-    public function testRemoveTmpFile(TmpFile $tmpFile): void
+    public function testRemoveTmpFile(TmpFileInterface $tmpFile): void
     {
         $this->tmpFileManager->removeTmpFile($tmpFile);
 
