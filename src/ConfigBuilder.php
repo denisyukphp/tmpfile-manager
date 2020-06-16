@@ -21,7 +21,7 @@ class ConfigBuilder
         $garbageCollectionProbability,
         $garbageCollectionDivisor,
         $garbageCollectionLifetime,
-        $garbageCollectionDelay,
+        $garbageCollectionCallback,
         $garbageCollectionHandler
     ;
 
@@ -36,7 +36,7 @@ class ConfigBuilder
         $this->garbageCollectionProbability = 0;
         $this->garbageCollectionDivisor = 100;
         $this->garbageCollectionLifetime = 3600;
-        $this->garbageCollectionDelay = 0;
+        $this->garbageCollectionCallback = null;
         $this->garbageCollectionHandler = new DefaultGarbageCollectionHandler();
     }
 
@@ -148,16 +148,16 @@ class ConfigBuilder
         return $this->garbageCollectionLifetime;
     }
 
-    public function setGarbageCollectionDelay(int $garbageCollectionDelay): self
+    public function setGarbageCollectionCallback(callable $garbageCollectionCallback): self
     {
-        $this->garbageCollectionDelay = $garbageCollectionDelay;
+        $this->garbageCollectionCallback = $garbageCollectionCallback;
 
         return $this;
     }
 
-    public function getGarbageCollectionDelay(): int
+    public function getGarbageCollectionCallback(): ?callable
     {
-        return $this->garbageCollectionDelay;
+        return $this->garbageCollectionCallback;
     }
 
     public function setGarbageCollectionHandler(GarbageCollectionHandlerInterface $garbageCollectionHandler): self

@@ -60,9 +60,9 @@ class Config implements ConfigInterface
         return $this->configBuilder->getGarbageCollectionLifetime();
     }
 
-    public function getGarbageCollectionDelay(): int
+    public function getGarbageCollectionCallback(): ?callable
     {
-        return $this->configBuilder->getGarbageCollectionDelay();
+        return $this->configBuilder->getGarbageCollectionCallback();
     }
 
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface

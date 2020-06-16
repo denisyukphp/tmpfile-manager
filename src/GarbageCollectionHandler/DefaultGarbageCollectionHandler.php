@@ -14,6 +14,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
      * @var int $probability
      * @var int $divisor
      * @var int $lifetime
+     * @var callable $callback
      */
     private
         $executable,
@@ -21,7 +22,8 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $prefix,
         $probability,
         $divisor,
-        $lifetime
+        $lifetime,
+        $callback
     ;
 
     public function __construct(string $executable = 'find')
@@ -29,19 +31,20 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $this->executable = $executable;
     }
 
-    public function __invoke(ConfigInterface $config, callable $callback = null): void
+    public function __invoke(ConfigInterface $config): void
     {
         $this->dir = $config->getTmpFileDirectory();
         $this->prefix = $config->getTmpFilePrefix();
         $this->probability = $config->getGarbageCollectionProbability();
         $this->divisor = $config->getGarbageCollectionDivisor();
         $this->lifetime = $config->getGarbageCollectionLifetime();
+        $this->callback = $config->getGarbageCollectionCallback();
 
         if (!$this->isChance()) {
             return;
         }
 
-        $this->handle($callback);
+        $this->handle();
     }
 
     private function isChance(): bool
@@ -49,7 +52,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         return $this->probability == rand($this->probability, $this->divisor);
     }
 
-    private function handle(callable $callback = null): void
+    private function handle(): void
     {
         $minutes = $this->convertSecondsToMinutes($this->lifetime);
 
@@ -62,7 +65,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
             '-delete',
         ]);
 
-        $process->run($callback);
+        $process->run($this->callback);
     }
 
     private function convertSecondsToMinutes(int $seconds): int
