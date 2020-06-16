@@ -4,7 +4,7 @@ namespace Bulletproof\TmpFileManager\DeferredPurgeHandler;
 
 use Bulletproof\TmpFileManager\TmpFileManagerInterface;
 
-class DefaultDeferredPurgeHandler implements DeferredPurgeHandlerInterface
+class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
     public function __invoke(TmpFileManagerInterface $tmpFileManager): void
     {

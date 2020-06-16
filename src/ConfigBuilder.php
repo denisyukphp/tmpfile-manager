@@ -3,11 +3,11 @@
 namespace Bulletproof\TmpFileManager;
 
 use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DefaultDeferredPurgeHandler;
+use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandler;
 use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\DefaultUnclosedResourcesHandler;
+use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler;
 use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\DefaultGarbageCollectionHandler;
+use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
 
 class ConfigBuilder
 {
@@ -30,14 +30,14 @@ class ConfigBuilder
         $this->tmpFileDirectory = sys_get_temp_dir();
         $this->tmpFilePrefix = 'php';
         $this->deferredAutoPurge = true;
-        $this->deferredPurgeHandler = new DefaultDeferredPurgeHandler();
+        $this->deferredPurgeHandler = new DeferredPurgeHandler();
         $this->checkUnclosedResources = false;
-        $this->unclosedResourcesHandler = new DefaultUnclosedResourcesHandler();
+        $this->unclosedResourcesHandler = new UnclosedResourcesHandler();
         $this->garbageCollectionProbability = 0;
         $this->garbageCollectionDivisor = 100;
         $this->garbageCollectionLifetime = 3600;
         $this->garbageCollectionCallback = null;
-        $this->garbageCollectionHandler = new DefaultGarbageCollectionHandler();
+        $this->garbageCollectionHandler = new GarbageCollectionHandler();
     }
 
     public function setTmpFileDirectory(string $tmpFileDirectory): self

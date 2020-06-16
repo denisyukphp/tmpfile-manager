@@ -5,7 +5,7 @@ namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
 use Bulletproof\TmpFileManager\ConfigInterface;
 use Symfony\Component\Process\Process;
 
-class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterface
+class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
     /**
      * @var string $executable

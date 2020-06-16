@@ -4,7 +4,7 @@ namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
 
 use Bulletproof\TmpFile\TmpFileInterface;
 
-class DefaultUnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
+class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
     /**
      * @param TmpFileInterface[] $tmpFiles
