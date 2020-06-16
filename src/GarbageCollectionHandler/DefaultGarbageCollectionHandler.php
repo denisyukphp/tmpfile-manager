@@ -7,6 +7,15 @@ use Symfony\Component\Process\Process;
 
 class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
+    /**
+     * @var string $executable
+     * @var string $dir
+     * @var string $prefix
+     * @var int $probability
+     * @var int $divisor
+     * @var int $lifetime
+     * @var int $delay
+     */
     private
         $executable,
         $dir,
@@ -22,7 +31,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $this->executable = $executable;
     }
 
-    public function __invoke(ConfigInterface $config): void
+    public function __invoke(ConfigInterface $config, callable $callback = null): void
     {
         $this->dir = $config->getTmpFileDirectory();
         $this->prefix = $config->getTmpFilePrefix();
@@ -35,7 +44,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
             return;
         }
 
-        $this->handle();
+        $this->handle($callback);
     }
 
     private function isChance(): bool
@@ -43,7 +52,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         return $this->probability == rand($this->probability, $this->divisor);
     }
 
-    private function handle(): void
+    private function handle(callable $callback = null): void
     {
         sleep($this->delay);
 
@@ -58,7 +67,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
             '-delete',
         ]);
 
-        $process->run();
+        $process->run($callback);
     }
 
     private function convertSecondsToMinutes(int $seconds): int
