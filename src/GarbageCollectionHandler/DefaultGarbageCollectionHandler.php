@@ -14,7 +14,6 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
      * @var int $probability
      * @var int $divisor
      * @var int $lifetime
-     * @var int $delay
      */
     private
         $executable,
@@ -22,8 +21,7 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $prefix,
         $probability,
         $divisor,
-        $lifetime,
-        $delay
+        $lifetime
     ;
 
     public function __construct(string $executable = 'find')
@@ -38,7 +36,6 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
         $this->probability = $config->getGarbageCollectionProbability();
         $this->divisor = $config->getGarbageCollectionDivisor();
         $this->lifetime = $config->getGarbageCollectionLifetime();
-        $this->delay = $config->getGarbageCollectionDelay();
 
         if (!$this->isChance()) {
             return;
@@ -54,8 +51,6 @@ class DefaultGarbageCollectionHandler implements GarbageCollectionHandlerInterfa
 
     private function handle(callable $callback = null): void
     {
-        sleep($this->delay);
-
         $minutes = $this->convertSecondsToMinutes($this->lifetime);
 
         $process = new Process([
