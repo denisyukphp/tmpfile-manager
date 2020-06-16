@@ -13,7 +13,7 @@ class TmpFileManagerTest extends TestCase
     /**
      * @var TmpFileManagerInterface
      */
-    protected $tmpFileManager;
+    private $tmpFileManager;
 
     public function setUp()
     {
@@ -29,14 +29,14 @@ class TmpFileManagerTest extends TestCase
         return $tmpFile;
     }
 
-    public function testCreateTmpFileContext(): void
+    public function testCreateTmpFileContext()
     {
         $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             $this->assertFileExists($tmpFile);
         });
     }
 
-    public function testCreateTmpFileContextException(): void
+    public function testCreateTmpFileContextException()
     {
         $this->expectException(TmpFileContextCallbackException::class);
 
@@ -45,7 +45,7 @@ class TmpFileManagerTest extends TestCase
         });
     }
 
-    public function testCreateTmpFileContextNotExists(): void
+    public function testCreateTmpFileContextNotExists()
     {
         $splFileInfo = $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             return new \SplFileInfo($tmpFile);
@@ -55,11 +55,11 @@ class TmpFileManagerTest extends TestCase
     }
 
     /**
-     * @param TmpFileInterface $tmpFile
-     *
      * @depends testCreateTmpFile
+     *
+     * @param TmpFileInterface $tmpFile
      */
-    public function testRemoveTmpFile(TmpFileInterface $tmpFile): void
+    public function testRemoveTmpFile(TmpFileInterface $tmpFile)
     {
         $this->tmpFileManager->removeTmpFile($tmpFile);
 
