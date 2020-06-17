@@ -12,11 +12,11 @@ interface ConfigInterface
 
     public function getTmpFilePrefix(): string;
 
-    public function getDeferredAutoPurge(): bool;
+    public function getDeferredPurge(): bool;
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface;
 
-    public function getCheckUnclosedResources(): bool;
+    public function getUnclosedResourcesCheck(): bool;
 
     public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface;
 

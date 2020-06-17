@@ -12,7 +12,7 @@ class DeferredPurgeListener
 
         $deferredPurgeHandler = $config->getDeferredPurgeHandler();
 
-        if ($config->getDeferredAutoPurge()) {
+        if ($config->getDeferredPurge()) {
             $deferredPurgeHandler($tmpFileManager);
         }
     }

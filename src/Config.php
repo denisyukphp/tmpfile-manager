@@ -25,9 +25,9 @@ class Config implements ConfigInterface
         return $this->configBuilder->getTmpFilePrefix();
     }
 
-    public function getDeferredAutoPurge(): bool
+    public function getDeferredPurge(): bool
     {
-        return $this->configBuilder->getDeferredAutoPurge();
+        return $this->configBuilder->getDeferredPurge();
     }
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface
@@ -35,9 +35,9 @@ class Config implements ConfigInterface
         return $this->configBuilder->getDeferredPurgeHandler();
     }
 
-    public function getCheckUnclosedResources(): bool
+    public function getUnclosedResourcesCheck(): bool
     {
-        return $this->configBuilder->getCheckUnclosedResources();
+        return $this->configBuilder->getUnclosedResourcesCheck();
     }
 
     public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface

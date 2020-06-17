@@ -14,9 +14,9 @@ class ConfigBuilder
     private
         $tmpFileDirectory,
         $tmpFilePrefix,
-        $deferredAutoPurge,
+        $deferredPurge,
         $deferredPurgeHandler,
-        $checkUnclosedResources,
+        $unclosedResourcesCheck,
         $unclosedResourcesHandler,
         $garbageCollectionProbability,
         $garbageCollectionDivisor,
@@ -29,9 +29,9 @@ class ConfigBuilder
     {
         $this->tmpFileDirectory = sys_get_temp_dir();
         $this->tmpFilePrefix = 'php';
-        $this->deferredAutoPurge = true;
+        $this->deferredPurge = true;
         $this->deferredPurgeHandler = new DeferredPurgeHandler();
-        $this->checkUnclosedResources = false;
+        $this->unclosedResourcesCheck = false;
         $this->unclosedResourcesHandler = new UnclosedResourcesHandler();
         $this->garbageCollectionProbability = 0;
         $this->garbageCollectionDivisor = 100;
@@ -64,16 +64,16 @@ class ConfigBuilder
         return $this->tmpFilePrefix;
     }
 
-    public function setDeferredAutoPurge(bool $deferredAutoPurge): self
+    public function setDeferredPurge(bool $deferredPurge): self
     {
-        $this->deferredAutoPurge = $deferredAutoPurge;
+        $this->deferredPurge = $deferredPurge;
 
         return $this;
     }
 
-    public function getDeferredAutoPurge(): bool
+    public function getDeferredPurge(): bool
     {
-        return $this->deferredAutoPurge;
+        return $this->deferredPurge;
     }
 
     public function setDeferredPurgeHandler(DeferredPurgeHandlerInterface $deferredPurgeHandler): self
@@ -88,16 +88,16 @@ class ConfigBuilder
         return $this->deferredPurgeHandler;
     }
 
-    public function setCheckUnclosedResources(bool $checkUnclosedResources): self
+    public function setUnclosedResourcesCheck(bool $unclosedResourcesCheck): self
     {
-        $this->checkUnclosedResources = $checkUnclosedResources;
+        $this->unclosedResourcesCheck = $unclosedResourcesCheck;
 
         return $this;
     }
 
-    public function getCheckUnclosedResources(): bool
+    public function getUnclosedResourcesCheck(): bool
     {
-        return $this->checkUnclosedResources;
+        return $this->unclosedResourcesCheck;
     }
 
     public function setUnclosedResourcesHandler(UnclosedResourcesHandlerInterface $unclosedResourcesHandler): self
