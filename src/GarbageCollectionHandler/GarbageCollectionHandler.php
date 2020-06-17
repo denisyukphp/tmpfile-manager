@@ -14,7 +14,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
      * @var int $probability
      * @var int $divisor
      * @var int $lifetime
-     * @var callable $callback
+     * @var null|callable $callback
      */
     private
         $executable,
