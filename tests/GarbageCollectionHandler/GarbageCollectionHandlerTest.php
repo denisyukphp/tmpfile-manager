@@ -9,7 +9,7 @@ use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler
 use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 use PHPUnit\Framework\TestCase;
 
-class DefaultGarbageCollectionHandlerTest extends TestCase
+class GarbageCollectionHandlerTest extends TestCase
 {
     private function getConfigBuilder(): ConfigBuilder
     {

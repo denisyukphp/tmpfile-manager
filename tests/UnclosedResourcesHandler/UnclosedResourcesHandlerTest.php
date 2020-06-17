@@ -7,7 +7,7 @@ use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler
 use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use PHPUnit\Framework\TestCase;
 
-class DefaultUnclosedResourcesHandlerTest extends TestCase
+class UnclosedResourcesHandlerTest extends TestCase
 {
     public function testCheck()
     {
