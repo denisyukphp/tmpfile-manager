@@ -8,40 +8,22 @@ composer require denisyukphp/tmpfile-manager
 
 This package requires PHP 7.1 or later.
 
-## Quick usage
+## Quick start
 
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\ConfigBuilder;
+use Bulletproof\TmpFile\TmpFile;
 use Bulletproof\TmpFileManager\TmpFileManager;
 
-$config = (new ConfigBuilder())
-    ->setTmpFileDirectory(sys_get_temp_dir())
-    ->setTmpFilePrefix('php')
-    ->setCheckUnclosedResources(true)
-    ->build()
-;
+$tmpFileManager = new TmpFileManager();
 
-$tmpFileManager = new TmpFileManager($config);
+/** @var TmpFile $tmpFile */
+$tmpFile = $tmpFileManager->createTmpFile();
 
-for ($i = 0; $i < 10; $i++) {
-    /** @var TmpFileInterface $tmpFile */
-    $tmpFile = $tmpFileManager->createTmpFile();
-
-    $fh = fopen($tmpFile, 'r+');
-
-    fwrite($fh, random_bytes(1024));
-
-    // ...
-}
-
-$tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-    file_put_contents($tmpFile, 'Meow!');
-
-    rename($tmpFile, '/path/to/meow.txt');
+$tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+    // temp file will be removed after finished callback
 });
-```
 
-You can read more about temp file on [Habr](https://habr.com/ru/post/320078/).
+$tmpFileManager->purge();
+```

@@ -29,9 +29,9 @@ class ConfigBuilderTest extends TestCase
 
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setTmpFileDirectory(sys_get_temp_dir()));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setTmpFilePrefix('php'));
-        $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setDeferredAutoPurge(true));
+        $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setDeferredPurge(true));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setDeferredPurgeHandler(new DeferredPurgeHandler()));
-        $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setCheckUnclosedResources(false));
+        $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setUnclosedResourcesCheck(false));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setUnclosedResourcesHandler(new UnclosedResourcesHandler()));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionProbability(0));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionDivisor(100));
@@ -51,9 +51,9 @@ class ConfigBuilderTest extends TestCase
     {
         $this->assertEquals(sys_get_temp_dir(), $configBuilder->getTmpFileDirectory());
         $this->assertEquals('php', $configBuilder->getTmpFilePrefix());
-        $this->assertEquals(true, $configBuilder->getDeferredAutoPurge());
+        $this->assertEquals(true, $configBuilder->getDeferredPurge());
         $this->assertEquals(new DeferredPurgeHandler(), $configBuilder->getDeferredPurgeHandler());
-        $this->assertEquals(false, $configBuilder->getCheckUnclosedResources());
+        $this->assertEquals(false, $configBuilder->getUnclosedResourcesCheck());
         $this->assertEquals(new UnclosedResourcesHandler(), $configBuilder->getUnclosedResourcesHandler());
         $this->assertEquals(0, $configBuilder->getGarbageCollectionProbability());
         $this->assertEquals(100, $configBuilder->getGarbageCollectionDivisor());

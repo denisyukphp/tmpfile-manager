@@ -16,8 +16,8 @@ class ConfigTest extends TestCase
 
         $this->assertIsString($config->getTmpFileDirectory());
         $this->assertIsString($config->getTmpFilePrefix());
-        $this->assertIsBool($config->getDeferredAutoPurge());
-        $this->assertIsBool($config->getCheckUnclosedResources());
+        $this->assertIsBool($config->getDeferredPurge());
+        $this->assertIsBool($config->getUnclosedResourcesCheck());
         $this->assertIsInt($config->getGarbageCollectionProbability());
         $this->assertIsInt($config->getGarbageCollectionDivisor());
         $this->assertIsInt($config->getGarbageCollectionLifetime());
