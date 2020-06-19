@@ -26,7 +26,5 @@ interface ConfigInterface
 
     public function getGarbageCollectionLifetime(): int;
 
-    public function getGarbageCollectionCallback(): ?callable;
-
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface;
 }

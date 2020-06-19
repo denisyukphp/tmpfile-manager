@@ -14,7 +14,6 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
      * @var int $probability
      * @var int $divisor
      * @var int $lifetime
-     * @var null|callable $callback
      */
     private
         $executable,
@@ -22,8 +21,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
         $prefix,
         $probability,
         $divisor,
-        $lifetime,
-        $callback
+        $lifetime
     ;
 
     public function __construct(string $executable = 'find')
@@ -38,7 +36,6 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
         $this->probability = $config->getGarbageCollectionProbability();
         $this->divisor = $config->getGarbageCollectionDivisor();
         $this->lifetime = $config->getGarbageCollectionLifetime();
-        $this->callback = $config->getGarbageCollectionCallback();
 
         if (!$this->isChance()) {
             return;
@@ -65,7 +62,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
             '-delete',
         ]);
 
-        $process->run($this->callback);
+        $process->run();
     }
 
     private function convertSecondsToMinutes(int $seconds): int
