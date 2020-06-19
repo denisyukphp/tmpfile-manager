@@ -11,18 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigBuilderTest extends TestCase
 {
-    /**
-     * @var callable
-     */
-    private $garbageCollectionCallback;
-
-    public function setUp()
-    {
-        $this->garbageCollectionCallback = function () {
-            return true;
-        };
-    }
-
     public function testSetters()
     {
         $configBuilder = new ConfigBuilder();
@@ -36,7 +24,6 @@ class ConfigBuilderTest extends TestCase
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionProbability(0));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionDivisor(100));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionLifetime(3600));
-        $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionCallback($this->garbageCollectionCallback));
         $this->assertInstanceOf(ConfigBuilder::class, $configBuilder->setGarbageCollectionHandler(new GarbageCollectionHandler()));
 
         return $configBuilder;
@@ -58,7 +45,6 @@ class ConfigBuilderTest extends TestCase
         $this->assertEquals(0, $configBuilder->getGarbageCollectionProbability());
         $this->assertEquals(100, $configBuilder->getGarbageCollectionDivisor());
         $this->assertEquals(3600, $configBuilder->getGarbageCollectionLifetime());
-        $this->assertEquals($this->garbageCollectionCallback, $configBuilder->getGarbageCollectionCallback());
         $this->assertEquals(new GarbageCollectionHandler(), $configBuilder->getGarbageCollectionHandler());
     }
 

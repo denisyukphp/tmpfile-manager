@@ -21,7 +21,6 @@ class ConfigTest extends TestCase
         $this->assertIsInt($config->getGarbageCollectionProbability());
         $this->assertIsInt($config->getGarbageCollectionDivisor());
         $this->assertIsInt($config->getGarbageCollectionLifetime());
-        $this->assertNull($config->getGarbageCollectionCallback());
         $this->assertInstanceOf(DeferredPurgeHandlerInterface::class, $config->getDeferredPurgeHandler());
         $this->assertInstanceOf(UnclosedResourcesHandlerInterface::class, $config->getUnclosedResourcesHandler());
         $this->assertInstanceOf(GarbageCollectionHandlerInterface::class, $config->getGarbageCollectionHandler());

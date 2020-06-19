@@ -5,11 +5,9 @@ namespace Bulletproof\TmpFileManager\Tests\GarbageCollectionHandler;
 use Bulletproof\TmpFile\TmpFileInterface;
 use Bulletproof\TmpFileManager\TmpFileManager;
 use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 use PHPUnit\Framework\TestCase;
 
-class GarbageCollectionHandlerTest extends TestCase
+class GarbageCollectionUseCaseTest extends TestCase
 {
     /**
      * @return TmpFileInterface[]
@@ -31,7 +29,7 @@ class GarbageCollectionHandlerTest extends TestCase
         return $tmpFiles;
     }
 
-    public function testCollect()
+    public function testSuccess()
     {
         $tmpFiles = $this->getTmpFiles();
 
@@ -41,11 +39,7 @@ class GarbageCollectionHandlerTest extends TestCase
             ->build()
         ;
 
-        $defaultGarbageCollectionHandler = new GarbageCollectionHandler();
-
-        $this->assertInstanceOf(GarbageCollectionHandlerInterface::class, $defaultGarbageCollectionHandler);
-
-        $defaultGarbageCollectionHandler($config);
+        new TmpFileManager($config);
 
         foreach ($tmpFiles as $tmpFile) {
             $this->assertFileNotExists($tmpFile);
