@@ -31,8 +31,8 @@ $tmpFile = $tmpFileManager->createTmpFile();
 
 Read the docs:
 
-- [Default configuration](docs/1-default-configuration.md)
-- [Removing temp files](docs/2-removing-temp-files.md)
-- [Usage in CLI](docs/3-usage-in-cli.md)
-- [Check unclosed resources](docs/4-check-unclosed-resources.md)
-- [Garbage collection](docs/5-garbage-collection.md)
+- [Default configuration](docs/index.md#default-configuration)
+- [Removing temp files](docs/index.md#removing-temp-files)
+- [Check unclosed resources](docs/index.md#check-unclosed-resources)
+- [Garbage collection](docs/index.md#garbage-collection)
+- [Custom handlers](docs/index.md#custom-handlers)
