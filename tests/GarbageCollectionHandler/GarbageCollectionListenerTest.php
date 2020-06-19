@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class GarbageCollectionListenerTest extends TestCase
 {
-    public function testHandle()
+    public function testCallable()
     {
         $this->assertIsCallable(new GarbageCollectionListener());
     }
