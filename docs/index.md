@@ -72,9 +72,9 @@ TmpFileManager can close open resources automatically before purge temp files. C
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
 use Bulletproof\TmpFileManager\ConfigBuilder;
+use Bulletproof\TmpFileManager\TmpFileManager;
+use Bulletproof\TmpFile\TmpFile;
 
 $config = (new ConfigBuilder())
     ->setUnclosedResourcesCheck(true)
@@ -102,8 +102,8 @@ The probability is calculated by using probability/divisor, e.g. 1/100 means the
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\TmpFileManager;
 use Bulletproof\TmpFileManager\ConfigBuilder;
+use Bulletproof\TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
     ->setGarbageCollectionProbability(1)

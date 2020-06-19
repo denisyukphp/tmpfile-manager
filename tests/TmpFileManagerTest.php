@@ -3,21 +3,33 @@
 namespace Bulletproof\TmpFileManager\Tests;
 
 use Bulletproof\TmpFile\TmpFileInterface;
+
+use Bulletproof\TmpFileManager\ConfigInterface;
+use Bulletproof\TmpFileManager\ContainerInterface;
+use Bulletproof\TmpFileManager\TmpFileHandlerInterface;
 use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\TmpFileManagerInterface;
 use Bulletproof\TmpFileManager\TmpFileContextCallbackException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 
 class TmpFileManagerTest extends TestCase
 {
     /**
-     * @var TmpFileManagerInterface
+     * @var TmpFileManager
      */
     private $tmpFileManager;
 
     public function setUp()
     {
         $this->tmpFileManager = new TmpFileManager();
+    }
+
+    public function testServices()
+    {
+        $this->assertInstanceOf(ConfigInterface::class, $this->tmpFileManager->getConfig());
+        $this->assertInstanceOf(ContainerInterface::class, $this->tmpFileManager->getContainer());
+        $this->assertInstanceOf(TmpFileHandlerInterface::class, $this->tmpFileManager->getTmpFileHandler());
+        $this->assertInstanceOf(EventDispatcherInterface::class, $this->tmpFileManager->getEventDispatcher());
     }
 
     public function testCreateTmpFile(): TmpFileInterface

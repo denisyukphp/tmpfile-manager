@@ -60,6 +60,26 @@ final class TmpFileManager implements TmpFileManagerInterface
         $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
     }
 
+    public function getConfig(): ConfigInterface
+    {
+        return $this->config;
+    }
+
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    public function getTmpFileHandler(): TmpFileHandlerInterface
+    {
+        return $this->tmpFileHandler;
+    }
+
+    public function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->eventDispatcher;
+    }
+
     /**
      * @return TmpFileInterface
      *
