@@ -2,16 +2,20 @@
 
 namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
 
+use Bulletproof\TmpFileManager\PurgeEvent;
+
 class UnclosedResourcesListener
 {
-    public function __invoke(UnclosedResourcesEvent $unclosedResourcesEvent): void
+    public function __invoke(PurgeEvent $purgeEvent): void
     {
-        $config = $unclosedResourcesEvent->getConfig();
+        $config = $purgeEvent->getTmpFileManager()->getConfig();
 
-        $unclosedResourcesHandler = $config->getUnclosedResourcesHandler();
+        $container = $purgeEvent->getTmpFileManager()->getContainer();
+
+        $handler = $config->getUnclosedResourcesHandler();
 
         if ($config->getUnclosedResourcesCheck()) {
-            $unclosedResourcesHandler($unclosedResourcesEvent->getTmpFiles());
+            $handler($container->getTmpFiles());
         }
     }
 }

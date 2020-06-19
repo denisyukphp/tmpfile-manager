@@ -4,11 +4,8 @@ namespace Bulletproof\TmpFileManager;
 
 use Bulletproof\TmpFile\TmpFile;
 use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeEvent;
 use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionEvent;
 use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesEvent;
 use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -49,15 +46,14 @@ final class TmpFileManager implements TmpFileManagerInterface
 
         $this->addEventListeners();
 
-        $this->eventDispatcher->dispatch(new DeferredPurgeEvent($this, $this->config));
-        $this->eventDispatcher->dispatch(new GarbageCollectionEvent($this->config));
+        $this->eventDispatcher->dispatch(new StartEvent($this));
     }
 
     private function addEventListeners(): void
     {
-        $this->eventDispatcher->addListener(DeferredPurgeEvent::class, new DeferredPurgeListener());
-        $this->eventDispatcher->addListener(UnclosedResourcesEvent::class, new UnclosedResourcesListener());
-        $this->eventDispatcher->addListener(GarbageCollectionEvent::class, new GarbageCollectionListener());
+        $this->eventDispatcher->addListener(StartEvent::class, new GarbageCollectionListener());
+        $this->eventDispatcher->addListener(StartEvent::class, new DeferredPurgeListener());
+        $this->eventDispatcher->addListener(PurgeEvent::class, new UnclosedResourcesListener());
     }
 
     public function getConfig(): ConfigInterface
@@ -102,6 +98,8 @@ final class TmpFileManager implements TmpFileManagerInterface
         }
 
         $this->container->addTmpFile($tmpFile);
+
+        $this->eventDispatcher->dispatch(new CreateEvent($tmpFile));
 
         return $tmpFile;
     }
@@ -164,6 +162,8 @@ final class TmpFileManager implements TmpFileManagerInterface
      */
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
+        $this->eventDispatcher->dispatch(new RemoveEvent($tmpFile));
+
         if ($this->container->hasTmpFile($tmpFile)) {
             $this->container->removeTmpFile($tmpFile);
         }
@@ -178,14 +178,9 @@ final class TmpFileManager implements TmpFileManagerInterface
      */
     public function purge(): void
     {
-        $tmpFilesCount = $this->container->getTmpFilesCount();
+        $this->eventDispatcher->dispatch(new PurgeEvent($this));
+
         $tmpFiles = $this->container->getTmpFiles();
-
-        if (!$tmpFilesCount) {
-            return;
-        }
-
-        $this->eventDispatcher->dispatch(new UnclosedResourcesEvent($this->config, $tmpFiles));
 
         foreach ($tmpFiles as $tmpFile) {
             $this->removeTmpFile($tmpFile);

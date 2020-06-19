@@ -2,18 +2,20 @@
 
 namespace Bulletproof\TmpFileManager\DeferredPurgeHandler;
 
+use Bulletproof\TmpFileManager\StartEvent;
+
 class DeferredPurgeListener
 {
-    public function __invoke(DeferredPurgeEvent $deferredPurgeEvent): void
+    public function __invoke(StartEvent $startEvent): void
     {
-        $tmpFileManager = $deferredPurgeEvent->getTmpFileManager();
+        $tmpFileManager = $startEvent->getTmpFileManager();
 
-        $config = $deferredPurgeEvent->getConfig();
+        $config = $tmpFileManager->getConfig();
 
-        $deferredPurgeHandler = $config->getDeferredPurgeHandler();
+        $handler = $config->getDeferredPurgeHandler();
 
         if ($config->getDeferredPurge()) {
-            $deferredPurgeHandler($tmpFileManager);
+            $handler($tmpFileManager);
         }
     }
 }

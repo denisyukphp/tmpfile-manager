@@ -2,16 +2,18 @@
 
 namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
 
+use Bulletproof\TmpFileManager\StartEvent;
+
 class GarbageCollectionListener
 {
-    public function __invoke(GarbageCollectionEvent $garbageCollectionEvent): void
+    public function __invoke(StartEvent $startEvent): void
     {
-        $config = $garbageCollectionEvent->getConfig();
+        $config = $startEvent->getTmpFileManager()->getConfig();
 
-        $garbageCollectionHandler = $config->getGarbageCollectionHandler();
+        $handler = $config->getGarbageCollectionHandler();
 
         if ($config->getGarbageCollectionProbability()) {
-            $garbageCollectionHandler($config);
+            $handler($config);
         }
     }
 }
