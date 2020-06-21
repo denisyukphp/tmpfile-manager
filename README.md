@@ -29,10 +29,12 @@ $tmpFileManager = new TmpFileManager($config);
 $tmpFile = $tmpFileManager->createTmpFile();
 ```
 
-Read the docs:
+Further docs are available:
 
 - [Default configuration](docs/index.md#default-configuration)
 - [Removing temp files](docs/index.md#removing-temp-files)
 - [Check unclosed resources](docs/index.md#check-unclosed-resources)
 - [Garbage collection](docs/index.md#garbage-collection)
 - [Custom handlers](docs/index.md#custom-handlers)
+- [Advanced usage](docs/index.md#advanced-usage)
+- [Subscribe events](docs/index.md#subscribe-events)
