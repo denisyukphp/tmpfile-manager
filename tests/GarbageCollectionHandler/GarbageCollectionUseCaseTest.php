@@ -5,6 +5,7 @@ namespace Bulletproof\TmpFileManager\Tests\GarbageCollectionHandler;
 use Bulletproof\TmpFile\TmpFileInterface;
 use Bulletproof\TmpFileManager\TmpFileManager;
 use Bulletproof\TmpFileManager\ConfigBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 
 class GarbageCollectionUseCaseTest extends TestCase
@@ -21,7 +22,7 @@ class GarbageCollectionUseCaseTest extends TestCase
         for ($i = 0; $i < 10; $i++) {
             $tmpFile = $tmpFileManager->createTmpFile();
 
-            touch($tmpFile, time() - 3600);
+            (new Filesystem())->touch($tmpFile, time() - 3600);
 
             $tmpFiles[] = $tmpFile;
         }
