@@ -11,7 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-final class TmpFileManager implements TmpFileManagerInterface
+final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerServicesInterface
 {
     /**
      * @var ConfigInterface
