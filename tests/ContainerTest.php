@@ -1,11 +1,11 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\Container;
-use Bulletproof\TmpFileManager\ContainerInterface;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\Container;
+use TmpFileManager\ContainerInterface;
 use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase

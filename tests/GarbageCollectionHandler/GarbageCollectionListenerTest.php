@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\GarbageCollectionHandler;
+namespace TmpFileManager\Tests\GarbageCollectionHandler;
 
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
 use PHPUnit\Framework\TestCase;
 
 class GarbageCollectionListenerTest extends TestCase

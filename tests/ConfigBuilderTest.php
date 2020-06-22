@@ -1,12 +1,12 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\ConfigInterface;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandler;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\ConfigInterface;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandler;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
 use PHPUnit\Framework\TestCase;
 
 class ConfigBuilderTest extends TestCase

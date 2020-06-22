@@ -1,9 +1,9 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\StartEvent;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\StartEvent;
 use PHPUnit\Framework\TestCase;
 
 class StartEventTest extends TestCase

@@ -1,12 +1,12 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\GarbageCollectionHandler;
+namespace TmpFileManager\Tests\GarbageCollectionHandler;
 
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 

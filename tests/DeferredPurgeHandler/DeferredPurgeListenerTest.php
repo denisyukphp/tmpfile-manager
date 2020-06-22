@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\DeferredPurgeHandler;
+namespace TmpFileManager\Tests\DeferredPurgeHandler;
 
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
 use PHPUnit\Framework\TestCase;
 
 class DeferredPurgeListenerTest extends TestCase

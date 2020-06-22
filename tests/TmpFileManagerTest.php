@@ -1,14 +1,14 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
-use Bulletproof\TmpFileManager\ConfigInterface;
-use Bulletproof\TmpFileManager\ContainerInterface;
-use Bulletproof\TmpFileManager\TmpFileHandlerInterface;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\TmpFileContextCallbackException;
+use TmpFileManager\ConfigInterface;
+use TmpFileManager\ContainerInterface;
+use TmpFileManager\TmpFileHandlerInterface;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileContextCallbackException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
 

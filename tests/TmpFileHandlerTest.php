@@ -1,11 +1,11 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\TmpFileHandler;
-use Bulletproof\TmpFileManager\TmpFileHandlerInterface;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFileHandler;
+use TmpFileManager\TmpFileHandlerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 

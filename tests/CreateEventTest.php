@@ -1,10 +1,10 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\CreateEvent;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\CreateEvent;
 use PHPUnit\Framework\TestCase;
 
 class CreateEventTest extends TestCase

@@ -1,9 +1,9 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\DeferredPurgeHandler;
+namespace TmpFileManager\Tests\DeferredPurgeHandler;
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeCallback;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeCallback;
 use PHPUnit\Framework\TestCase;
 
 class DeferredPurgeCallbackTest extends TestCase

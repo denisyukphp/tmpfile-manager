@@ -1,9 +1,9 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\PurgeEvent;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\PurgeEvent;
 use PHPUnit\Framework\TestCase;
 
 class PurgeEventTest extends TestCase

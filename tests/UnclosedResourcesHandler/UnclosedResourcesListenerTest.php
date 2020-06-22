@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\UnclosedResourcesHandler;
+namespace TmpFileManager\Tests\UnclosedResourcesHandler;
 
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
 use PHPUnit\Framework\TestCase;
 
 class UnclosedResourcesListenerTest extends TestCase

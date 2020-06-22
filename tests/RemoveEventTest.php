@@ -1,10 +1,10 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests;
+namespace TmpFileManager\Tests;
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\RemoveEvent;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\RemoveEvent;
 use PHPUnit\Framework\TestCase;
 
 class RemoveEventTest extends TestCase

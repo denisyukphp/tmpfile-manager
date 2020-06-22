@@ -1,9 +1,9 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\Tests\UnclosedResourcesHandler;
+namespace TmpFileManager\Tests\UnclosedResourcesHandler;
 
-use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\TmpFileManager;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\TmpFileManager;
 use PHPUnit\Framework\TestCase;
 
 class UnclosedResourcesUseCaseTest extends TestCase
