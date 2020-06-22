@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
+namespace TmpFileManager\GarbageCollectionHandler;
 
-use Bulletproof\TmpFileManager\ConfigInterface;
+use TmpFileManager\ConfigInterface;
 use Symfony\Component\Process\Process;
 
 class GarbageCollectionHandler implements GarbageCollectionHandlerInterface

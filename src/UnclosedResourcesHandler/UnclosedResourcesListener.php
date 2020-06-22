@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
+namespace TmpFileManager\UnclosedResourcesHandler;
 
-use Bulletproof\TmpFileManager\PurgeEvent;
+use TmpFileManager\PurgeEvent;
 
 class UnclosedResourcesListener
 {

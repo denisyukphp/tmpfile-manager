@@ -1,10 +1,10 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class Config implements ConfigInterface
 {

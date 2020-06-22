@@ -1,12 +1,12 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFile\TmpFileInterface;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;

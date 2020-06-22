@@ -1,6 +1,6 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
 class TmpFileCreateException extends \RuntimeException
 {

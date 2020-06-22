@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\UnclosedResourcesHandler;
+namespace TmpFileManager\UnclosedResourcesHandler;
 
-use Bulletproof\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
 class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {

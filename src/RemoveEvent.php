@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
-use Bulletproof\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class RemoveEvent extends Event

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
-use Bulletproof\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 

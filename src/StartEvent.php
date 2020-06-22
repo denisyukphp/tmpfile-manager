@@ -1,6 +1,6 @@
 <?php
 
-namespace Bulletproof\TmpFileManager;
+namespace TmpFileManager;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

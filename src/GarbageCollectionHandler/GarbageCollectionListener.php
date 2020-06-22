@@ -1,8 +1,8 @@
 <?php
 
-namespace Bulletproof\TmpFileManager\GarbageCollectionHandler;
+namespace TmpFileManager\GarbageCollectionHandler;
 
-use Bulletproof\TmpFileManager\StartEvent;
+use TmpFileManager\StartEvent;
 
 class GarbageCollectionListener
 {
