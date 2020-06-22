@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Bulletproof\\TmpFileManager\\": "src/"
+            "TmpFileManager\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bulletproof\\TmpFileManager\\Tests\\": "tests/"
+            "TmpFileManager\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",

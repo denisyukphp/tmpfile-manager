@@ -5,8 +5,8 @@
 - [Check unclosed resources](#check-unclosed-resources)
 - [Garbage collection](#garbage-collection)
 - [Custom handlers](#custom-handlers)
-- [Advanced usage](#advanced-usage)
 - [Subscribe events](#subscribe-events)
+- [Advanced usage](#advanced-usage)
 
 ## Default configuration
 
@@ -15,8 +15,8 @@ Configure TmpFileManager with config builder. By default temp files will purge a
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\ConfigBuilder;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
     ->setTmpFileDirectory(sys_get_temp_dir())
@@ -39,8 +39,8 @@ By default created temp files will purge automatically when PHP finished.
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
+use TmpFile\TmpFile;
+use TmpFileManager\TmpFileManager;
 
 $tmpFileManager = new TmpFileManager();
 
@@ -75,9 +75,9 @@ TmpFileManager can close open resources automatically before purge temp files. C
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\ConfigBuilder;
+use TmpFile\TmpFile;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
     ->setUnclosedResourcesCheck(true)
@@ -105,8 +105,8 @@ The probability is calculated by using probability/divisor, e.g. 1/100 means the
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\ConfigBuilder;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
     ->setGarbageCollectionProbability(1)
@@ -137,10 +137,10 @@ Define your handlers to get more control for manage temp files with config build
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandler;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandler;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandler;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandler;
 
 $config = (new ConfigBuilder())
     ->setDeferredPurgeHandler(new DeferredPurgeHandler())
@@ -156,8 +156,8 @@ Each handler implements yourself interface. DeferredPurgeHandlerInterface needed
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 
 class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
@@ -173,8 +173,8 @@ For replace unclosed resources handler needed implement UnclosedResourcesHandler
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFile\TmpFile;
+use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
 class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
@@ -193,8 +193,8 @@ Garbage collection process has yourself handler which implements GarbageCollecti
 ```php
 <?php
 
-use Bulletproof\TmpFileManager\ConfigInterface;
-use Bulletproof\TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\ConfigInterface;
+use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
@@ -205,61 +205,6 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 }
 ```
 
-## Advanced usage
-
-You can get more control on manager if implement basic interfaces of inner services or extend exists. For example you will need strore temp files in cloud storage or change way of configuration.
-
-```php
-<?php
-
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\Config;
-use Bulletproof\TmpFileManager\ConfigBuilder;
-use Bulletproof\TmpFileManager\ConfigInterface;
-use Bulletproof\TmpFileManager\Container;
-use Bulletproof\TmpFileManager\ContainerInterface;
-use Bulletproof\TmpFileManager\TmpFileHandler;
-use Bulletproof\TmpFileManager\TmpFileHandlerInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-/** @var ConfigInterface $config */
-$config = new Config(new ConfigBuilder());
-
-/** @var ContainerInterface $container */
-$container = new Container();
-
-/** @var TmpFileHandlerInterface $tmpFileHandler */
-$tmpFileHandler = new TmpFileHandler(new Filesystem());
-
-/** @var EventDispatcherInterface $eventDispatcher */
-$eventDispatcher = new EventDispatcher();
-```
-
-Next you must inject dependencies into to TmpFileManager:
-
-```php
-$tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
-```
-
-After that manager's inner services are availbale to extend TmpFileManager use-cases in any part your application.
-
-```php
-/** @var ConfigInterface $config */
-$config = $tmpFileManager->getConfig();
-
-/** @var ContainerInterface $container */
-$container = $tmpFileManager->getContainer();
-
-/** @var TmpFileHandlerInterface $tmpFileHandler */
-$tmpFileHandler = $tmpFileManager->getTmpFileHandler();
-
-/** @var EventDispatcherInterface $eventDispatcher */
-$eventDispatcher = $tmpFileManager->getEventDispatcher();
-```
-
 ## Subscribe events
 
 With EventDispatcher you can subsribe manager's events to inject your code in lifecycle of temp files.
@@ -267,12 +212,12 @@ With EventDispatcher you can subsribe manager's events to inject your code in li
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\StartEvent;
-use Bulletproof\TmpFileManager\CreateEvent;
-use Bulletproof\TmpFileManager\RemoveEvent;
-use Bulletproof\TmpFileManager\PurgeEvent;
+use TmpFile\TmpFile;
+use TmpFileManager\StartEvent;
+use TmpFileManager\CreateEvent;
+use TmpFileManager\RemoveEvent;
+use TmpFileManager\PurgeEvent;
+use TmpFileManager\TmpFileManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $eventDispatcher = new EventDispatcher();
@@ -320,4 +265,69 @@ $eventDispatcher->addListener(PurgeEvent::class, function (PurgeEvent $purgeEven
     
     // ...
 });
+```
+
+After that you need to add event dispatcher in TmpFileManager to your event listeners run fire.
+
+```php
+/** @var \TmpFileManager\ConfigInterface $config */
+/** @var \TmpFileManager\ContainerInterface $container */
+/** @var \TmpFileManager\TmpFileHandlerInterface $tmpFileHandler */
+
+$tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
+```
+
+## Advanced usage
+
+You can get more control on manager if implement basic interfaces of inner services or extend exists. For example you will need strore temp files in cloud storage or change way of configuration.
+
+```php
+<?php
+
+use TmpFile\TmpFile;
+use TmpFileManager\Config;
+use TmpFileManager\ConfigBuilder;
+use TmpFileManager\ConfigInterface;
+use TmpFileManager\Container;
+use TmpFileManager\ContainerInterface;
+use TmpFileManager\TmpFileHandler;
+use TmpFileManager\TmpFileHandlerInterface;
+use TmpFileManager\TmpFileManager;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/** @var ConfigInterface $config */
+$config = new Config(new ConfigBuilder());
+
+/** @var ContainerInterface $container */
+$container = new Container();
+
+/** @var TmpFileHandlerInterface $tmpFileHandler */
+$tmpFileHandler = new TmpFileHandler(new Filesystem());
+
+/** @var EventDispatcherInterface $eventDispatcher */
+$eventDispatcher = new EventDispatcher();
+```
+
+Next you must inject dependencies into to TmpFileManager:
+
+```php
+$tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
+```
+
+After that manager's inner services are available to extend TmpFileManager use-cases in any part your application.
+
+```php
+/** @var ConfigInterface $config */
+$config = $tmpFileManager->getConfig();
+
+/** @var ContainerInterface $container */
+$container = $tmpFileManager->getContainer();
+
+/** @var TmpFileHandlerInterface $tmpFileHandler */
+$tmpFileHandler = $tmpFileManager->getTmpFileHandler();
+
+/** @var EventDispatcherInterface $eventDispatcher */
+$eventDispatcher = $tmpFileManager->getEventDispatcher();
 ```

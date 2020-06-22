@@ -13,9 +13,9 @@ This package requires PHP 7.1 or later.
 ```php
 <?php
 
-use Bulletproof\TmpFile\TmpFile;
-use Bulletproof\TmpFileManager\TmpFileManager;
-use Bulletproof\TmpFileManager\ConfigBuilder;
+use TmpFile\TmpFile;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\ConfigBuilder;
 
 $config = (new ConfigBuilder())
     ->setTmpFileDirectory(sys_get_temp_dir())
@@ -36,5 +36,5 @@ Further docs are available:
 - [Check unclosed resources](docs/index.md#check-unclosed-resources)
 - [Garbage collection](docs/index.md#garbage-collection)
 - [Custom handlers](docs/index.md#custom-handlers)
-- [Advanced usage](docs/index.md#advanced-usage)
 - [Subscribe events](docs/index.md#subscribe-events)
+- [Advanced usage](docs/index.md#advanced-usage)
