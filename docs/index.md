@@ -10,7 +10,7 @@
 
 ## Default configuration
 
-Configure TmpFileManager with config builder. By default temp files will purge automatically. Unclosed resources check and garbage collection are off. Below is the default configuration:
+Configure TmpFileManager with config builder. By default, temp files will purge automatically. Unclosed resources check and garbage collection are off. Below is the default configuration:
 
 ```php
 <?php
@@ -34,7 +34,7 @@ $tmpFileManager = new TmpFileManager($config);
 
 ## Removing temp files
 
-By default created temp files will purge automatically when PHP finished.
+By default, created temp files will purge automatically after PHP is finished.
 
 ```php
 <?php
@@ -48,7 +48,7 @@ $tmpFileManager = new TmpFileManager();
 $tmpFile = $tmpFileManager->createTmpFile();
 ```
 
-You can remove temp files by manual with `removeTmpFile()`:
+You can remove temp files manually with `removeTmpFile()`:
 
 ```php
 $tmpFileManager->removeTmpFile($tmpFile);
@@ -60,7 +60,7 @@ If you need to purge all temp files by force call `purge()`:
 $tmpFileManager->purge();
 ```
 
-In console commands use `createTmpFileContext()` method to create and handle temp files. Temp files will immediately removed after finished callback:
+In console commands use `createTmpFileContext()` method to create and handle temp files. Temp files will be immediately removed after finished callback:
 
 ```php
 $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
@@ -70,7 +70,7 @@ $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
 
 ## Check unclosed resources
 
-TmpFileManager can close open resources automatically before purge temp files. Configure `setUnclosedResourcesCheck()` to `true`.
+TmpFileManager can close open resources automatically before purging temp files. Configure `setUnclosedResourcesCheck()` to `true`.
 
 ```php
 <?php
@@ -100,7 +100,7 @@ for ($i = 0; $i < 10; $i++) {
 
 ## Garbage collection
 
-The probability is calculated by using probability/divisor, e.g. 1/100 means there is a 1% chance that the garbage collection process start. Lifetime is seconds after which temp files will be seen as garbage and potentially cleaned up. 
+The probability is calculated by using probability/divisor, e.g. 1/100 means there is a 1% chance that the garbage collection process will start. Lifetime is seconds after which temp files will be seen as garbage and potentially cleaned up. 
 
 ```php
 <?php
@@ -116,13 +116,13 @@ $config = (new ConfigBuilder())
 ;
 ```
 
-Garbage collector process will start before new the instance of TmpFileManager:
+Garbage collection process will start before the new instance of TmpFileManager:
 
 ```php
 $tmpFileManager = new TmpFileManager($config);
 ```
 
-Also you can start garbage collection process with only handler:
+Also you can start garbage collection process only with handler:
 
 ```php
 $handler = $config->getGarbageCollectionHandler();
@@ -132,7 +132,7 @@ $handler($config);
 
 ## Custom handlers
 
-Define your handlers to get more control for manage temp files with config builder. Below is the default handlers:
+Define your handlers to get more control of temp files management with config builder. Below are the default handlers:
 
 ```php
 <?php
@@ -150,8 +150,7 @@ $config = (new ConfigBuilder())
 ;
 ```
 
-Each handler implements yourself interface. DeferredPurgeHandlerInterface needed for implements temp files purge when PHP finished. You can make your handler implementing this interface:
-
+Each handler implements its own interface. DeferredPurgeHandlerInterface is needed to implement temp files purge after PHP is finished. You can make your handler implementing this interface:
 
 ```php
 <?php
@@ -168,7 +167,7 @@ class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 }
 ```
 
-For replace unclosed resources handler needed implement UnclosedResourcesHandlerInterface:
+To replace unclosed resources handler yoo need to implement UnclosedResourcesHandlerInterface:
 
 ```php
 <?php
@@ -188,7 +187,7 @@ class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 }
 ```
 
-Garbage collection process has yourself handler which implements GarbageCollectionHandlerInterface. Implement this interface to change garbage collection handler by default:
+Garbage collection process has its own handler GarbageCollectionHandlerInterface. Implement this interface to change garbage collection handler by default:
 
 ```php
 <?php
@@ -207,7 +206,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 
 ## Subscribe events
 
-With EventDispatcher you can subsribe manager's events to inject your code in lifecycle of temp files.
+With EventDispatcher you can subscribe manager's events to inject your code in lifecycle of temp files.
 
 ```php
 <?php
