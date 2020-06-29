@@ -26,6 +26,8 @@ class TmpFileHandlerTest extends TestCase
         $filename = $this->tmpFileHandler->getTmpFileName(sys_get_temp_dir(), 'php');
 
         $this->assertFileExists($filename);
+
+        unlink($filename);
     }
 
     public function testExists(): TmpFileInterface
