@@ -6,5 +6,5 @@ use TmpFileManager\ConfigInterface;
 
 interface GarbageCollectionHandlerInterface
 {
-    public function __invoke(ConfigInterface $config): void;
+    public function handle(ConfigInterface $config): void;
 }

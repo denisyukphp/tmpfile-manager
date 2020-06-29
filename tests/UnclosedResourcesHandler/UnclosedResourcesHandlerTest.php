@@ -21,11 +21,11 @@ class UnclosedResourcesHandlerTest extends TestCase
             $resources[] = fopen($tmpFile, 'r');
         }
 
-        $defaultUnclosedResourcesHandler = new UnclosedResourcesHandler();
+        $handler = new UnclosedResourcesHandler();
 
-        $this->assertInstanceOf(UnclosedResourcesHandlerInterface::class, $defaultUnclosedResourcesHandler);
+        $this->assertInstanceOf(UnclosedResourcesHandlerInterface::class, $handler);
 
-        $defaultUnclosedResourcesHandler($tmpFiles);
+        $handler->handle($tmpFiles);
 
         foreach ($resources as $resource) {
             $this->assertFalse(is_resource($resource));

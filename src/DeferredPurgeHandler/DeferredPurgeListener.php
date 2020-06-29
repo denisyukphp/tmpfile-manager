@@ -15,7 +15,7 @@ class DeferredPurgeListener
         $handler = $config->getDeferredPurgeHandler();
 
         if ($config->getDeferredPurge()) {
-            $handler($tmpFileManager);
+            $handler->handle($tmpFileManager);
         }
     }
 }

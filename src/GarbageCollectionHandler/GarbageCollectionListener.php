@@ -13,7 +13,7 @@ class GarbageCollectionListener
         $handler = $config->getGarbageCollectionHandler();
 
         if ($config->getGarbageCollectionProbability()) {
-            $handler($config);
+            $handler->handle($config);
         }
     }
 }

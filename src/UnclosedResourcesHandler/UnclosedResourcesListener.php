@@ -15,7 +15,7 @@ class UnclosedResourcesListener
         $handler = $config->getUnclosedResourcesHandler();
 
         if ($config->getUnclosedResourcesCheck()) {
-            $handler($container->getTmpFiles());
+            $handler->handle($container->getTmpFiles());
         }
     }
 }

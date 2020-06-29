@@ -9,7 +9,7 @@ class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
     /**
      * @param TmpFileInterface[] $tmpFiles
      */
-    public function __invoke(array $tmpFiles): void
+    public function handle(array $tmpFiles): void
     {
         foreach (get_resources('stream') as $resource) {
             if (!stream_is_local($resource)) {

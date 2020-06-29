@@ -9,5 +9,5 @@ interface UnclosedResourcesHandlerInterface
     /**
      * @param TmpFileInterface[] $tmpFiles
      */
-    public function __invoke(array $tmpFiles): void;
+    public function handle(array $tmpFiles): void;
 }

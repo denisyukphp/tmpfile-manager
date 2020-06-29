@@ -29,7 +29,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
         $this->executable = $executable;
     }
 
-    public function __invoke(ConfigInterface $config): void
+    public function handle(ConfigInterface $config): void
     {
         $this->dir = $config->getTmpFileDirectory();
         $this->prefix = $config->getTmpFilePrefix();
@@ -37,11 +37,9 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
         $this->divisor = $config->getGarbageCollectionDivisor();
         $this->lifetime = $config->getGarbageCollectionLifetime();
 
-        if (!$this->isChance()) {
-            return;
+        if ($this->isChance()) {
+            $this->runProcess();
         }
-
-        $this->handle();
     }
 
     private function isChance(): bool
@@ -49,7 +47,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
         return $this->probability == rand($this->probability, $this->divisor);
     }
 
-    private function handle(): void
+    private function runProcess(): void
     {
         $minutes = $this->convertSecondsToMinutes($this->lifetime);
 

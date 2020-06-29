@@ -42,11 +42,11 @@ class GarbageCollectionHandlerTest extends TestCase
             ->build()
         ;
 
-        $defaultGarbageCollectionHandler = new GarbageCollectionHandler();
+        $handler = new GarbageCollectionHandler();
 
-        $this->assertInstanceOf(GarbageCollectionHandlerInterface::class, $defaultGarbageCollectionHandler);
+        $this->assertInstanceOf(GarbageCollectionHandlerInterface::class, $handler);
 
-        $defaultGarbageCollectionHandler($config);
+        $handler->handle($config);
 
         foreach ($tmpFiles as $tmpFile) {
             $this->assertFileNotExists($tmpFile);

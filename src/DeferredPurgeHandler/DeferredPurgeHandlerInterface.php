@@ -6,5 +6,5 @@ use TmpFileManager\TmpFileManager;
 
 interface DeferredPurgeHandlerInterface
 {
-    public function __invoke(TmpFileManager $tmpFileManager): void;
+    public function handle(TmpFileManager $tmpFileManager): void;
 }

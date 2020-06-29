@@ -6,7 +6,7 @@ use TmpFileManager\TmpFileManager;
 
 class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
-    public function __invoke(TmpFileManager $tmpFileManager): void
+    public function handle(TmpFileManager $tmpFileManager): void
     {
         $callback = new DeferredPurgeCallback($tmpFileManager);
 

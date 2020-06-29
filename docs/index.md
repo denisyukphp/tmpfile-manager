@@ -127,7 +127,7 @@ Also you can start garbage collection process only with handler:
 ```php
 $handler = $config->getGarbageCollectionHandler();
 
-$handler($config);
+$handler->handle($config);
 ```
 
 ## Custom handlers
@@ -160,7 +160,7 @@ use TmpFileManager\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 
 class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
-    public function __invoke(TmpFileManager $tmpFileManager): void
+    public function handle(TmpFileManager $tmpFileManager): void
     {
         // ...
     }
@@ -180,7 +180,7 @@ class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
     /**
      * @param TmpFile[] $tmpFiles
      */
-    public function __invoke(array $tmpFiles): void
+    public function handle(array $tmpFiles): void
     {
         // ...
     }
@@ -197,7 +197,7 @@ use TmpFileManager\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    public function __invoke(ConfigInterface $config): void
+    public function handle(ConfigInterface $config): void
     {
         // ...
     }
