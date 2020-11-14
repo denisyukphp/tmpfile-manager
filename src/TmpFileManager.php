@@ -4,9 +4,22 @@ namespace TmpFileManager;
 
 use TmpFile\TmpFile;
 use TmpFile\TmpFileInterface;
-use TmpFileManager\DeferredPurgeHandler\DeferredPurgeListener;
-use TmpFileManager\GarbageCollectionHandler\GarbageCollectionListener;
-use TmpFileManager\UnclosedResourcesHandler\UnclosedResourcesListener;
+use TmpFileManager\Config\Config;
+use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\ConfigInterface;
+use TmpFileManager\Container\Container;
+use TmpFileManager\Container\ContainerInterface;
+use TmpFileManager\TmpFileHandler\TmpFileHandler;
+use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\Event\TmpFileManagerStartEvent;
+use TmpFileManager\Event\TmpFileCreateEvent;
+use TmpFileManager\Event\TmpFileRemoveEvent;
+use TmpFileManager\Event\TmpFileManagerPurgeEvent;
+use TmpFileManager\Listener\DeferredPurgeListener;
+use TmpFileManager\Listener\GarbageCollectionListener;
+use TmpFileManager\Listener\UnclosedResourcesListener;
+use TmpFileManager\Exception\TmpFileCreateException;
+use TmpFileManager\Exception\TmpFileContextCallbackException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -17,17 +30,14 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
      * @var ConfigInterface
      */
     private $config;
-
     /**
      * @var ContainerInterface
      */
     private $container;
-
     /**
      * @var TmpFileHandlerInterface
      */
     private $tmpFileHandler;
-
     /**
      * @var EventDispatcherInterface
      */
@@ -46,14 +56,14 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
 
         $this->addEventListeners();
 
-        $this->eventDispatcher->dispatch(new StartEvent($this));
+        $this->eventDispatcher->dispatch(new TmpFileManagerStartEvent($this));
     }
 
     private function addEventListeners(): void
     {
-        $this->eventDispatcher->addListener(StartEvent::class, new GarbageCollectionListener());
-        $this->eventDispatcher->addListener(StartEvent::class, new DeferredPurgeListener());
-        $this->eventDispatcher->addListener(PurgeEvent::class, new UnclosedResourcesListener());
+        $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new GarbageCollectionListener());
+        $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new DeferredPurgeListener());
+        $this->eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, new UnclosedResourcesListener());
     }
 
     public function getConfig(): ConfigInterface
@@ -79,7 +89,6 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
     /**
      * @return TmpFileInterface
      *
-     * @throws TmpFileIOException
      * @throws TmpFileCreateException
      */
     public function createTmpFile(): TmpFileInterface
@@ -99,7 +108,7 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
 
         $this->container->addTmpFile($tmpFile);
 
-        $this->eventDispatcher->dispatch(new CreateEvent($tmpFile));
+        $this->eventDispatcher->dispatch(new TmpFileCreateEvent($tmpFile));
 
         return $tmpFile;
     }
@@ -115,7 +124,7 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
     {
         $tmpFileReflection = new \ReflectionClass(TmpFile::class);
 
-        /** @var TmpFileInterface $tmpFile */
+        /** @var TmpFile $tmpFile */
         $tmpFile = $tmpFileReflection->newInstanceWithoutConstructor();
 
         $filename = $tmpFileReflection->getProperty('filename');
@@ -132,8 +141,6 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
      *
      * @return mixed
      *
-     * @throws TmpFileIOException
-     * @throws TmpFileCreateException
      * @throws TmpFileContextCallbackException
      */
     public function createTmpFileContext(callable $callback)
@@ -155,14 +162,9 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
         }
     }
 
-    /**
-     * @param TmpFileInterface $tmpFile
-     *
-     * @throws TmpFileIOException
-     */
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->eventDispatcher->dispatch(new RemoveEvent($tmpFile));
+        $this->eventDispatcher->dispatch(new TmpFileRemoveEvent($tmpFile));
 
         if ($this->container->hasTmpFile($tmpFile)) {
             $this->container->removeTmpFile($tmpFile);
@@ -173,17 +175,19 @@ final class TmpFileManager implements TmpFileManagerInterface, TmpFileManagerSer
         }
     }
 
-    /**
-     * @throws TmpFileIOException
-     */
     public function purge(): void
     {
-        $this->eventDispatcher->dispatch(new PurgeEvent($this));
+        $this->eventDispatcher->dispatch(new TmpFileManagerPurgeEvent($this));
 
         $tmpFiles = $this->container->getTmpFiles();
 
         foreach ($tmpFiles as $tmpFile) {
             $this->removeTmpFile($tmpFile);
         }
+    }
+
+    public function __destruct()
+    {
+        $this->purge();
     }
 }

@@ -3,13 +3,14 @@
 namespace TmpFileManager;
 
 use TmpFile\TmpFileInterface;
+use TmpFileManager\Exception\TmpFileCreateException;
+use TmpFileManager\Exception\TmpFileContextCallbackException;
 
 interface TmpFileManagerInterface
 {
     /**
      * @return TmpFileInterface
      *
-     * @throws TmpFileIOException
      * @throws TmpFileCreateException
      */
     public function createTmpFile(): TmpFileInterface;
@@ -19,21 +20,11 @@ interface TmpFileManagerInterface
      *
      * @return mixed
      *
-     * @throws TmpFileIOException
-     * @throws TmpFileCreateException
      * @throws TmpFileContextCallbackException
      */
     public function createTmpFileContext(callable $callback);
 
-    /**
-     * @param TmpFileInterface $tmpFile
-     *
-     * @throws TmpFileIOException
-     */
     public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
-    /**
-     * @throws TmpFileIOException
-     */
     public function purge(): void;
 }

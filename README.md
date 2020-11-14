@@ -15,7 +15,7 @@ This package requires PHP 7.1 or later.
 
 use TmpFile\TmpFile;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\ConfigBuilder;
+use TmpFileManager\Config\ConfigBuilder;
 
 $config = (new ConfigBuilder())
     ->setTmpFileDirectory(sys_get_temp_dir())
@@ -25,8 +25,14 @@ $config = (new ConfigBuilder())
 
 $tmpFileManager = new TmpFileManager($config);
 
-/** @var TmpFile $tmpFile */
-$tmpFile = $tmpFileManager->createTmpFile();
+for ($i = 0; $i < 5; $i++) {
+    /** @var TmpFile $tmpFile */
+    $tmpFile = $tmpFileManager->createTmpFile();
+    
+    // ...
+}
+
+$tmpFileManager->purge();
 ```
 
 Further docs are available:

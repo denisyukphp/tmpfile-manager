@@ -2,39 +2,37 @@
 
 namespace TmpFileManager\Tests;
 
-use TmpFile\TmpFileInterface;
-
-use TmpFileManager\ConfigInterface;
-use TmpFileManager\ContainerInterface;
-use TmpFileManager\TmpFileHandlerInterface;
-use TmpFileManager\TmpFileManager;
-use TmpFileManager\TmpFileContextCallbackException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\TestCase;
+use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
+use TmpFileManager\TmpFileManagerServicesInterface;
+use TmpFileManager\Config\ConfigInterface;
+use TmpFileManager\Container\ContainerInterface;
+use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\Exception\TmpFileContextCallbackException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TmpFileManagerTest extends TestCase
 {
-    /**
-     * @var TmpFileManager
-     */
-    private $tmpFileManager;
-
-    public function setUp()
+    public function testInstances()
     {
-        $this->tmpFileManager = new TmpFileManager();
-    }
+        $tmpFileManager = new TmpFileManager();
 
-    public function testServices()
-    {
-        $this->assertInstanceOf(ConfigInterface::class, $this->tmpFileManager->getConfig());
-        $this->assertInstanceOf(ContainerInterface::class, $this->tmpFileManager->getContainer());
-        $this->assertInstanceOf(TmpFileHandlerInterface::class, $this->tmpFileManager->getTmpFileHandler());
-        $this->assertInstanceOf(EventDispatcherInterface::class, $this->tmpFileManager->getEventDispatcher());
+        $this->assertInstanceOf(TmpFileManagerInterface::class, $tmpFileManager);
+        $this->assertInstanceOf(TmpFileManagerServicesInterface::class, $tmpFileManager);
+        $this->assertInstanceOf(ConfigInterface::class, $tmpFileManager->getConfig());
+        $this->assertInstanceOf(ContainerInterface::class, $tmpFileManager->getContainer());
+        $this->assertInstanceOf(TmpFileHandlerInterface::class, $tmpFileManager->getTmpFileHandler());
+        $this->assertInstanceOf(EventDispatcherInterface::class, $tmpFileManager->getEventDispatcher());
     }
 
     public function testCreateTmpFile(): TmpFileInterface
     {
-        $tmpFile = $this->tmpFileManager->createTmpFile();
+        $tmpFileManager = new TmpFileManager();
+
+        $tmpFile = $tmpFileManager->createTmpFile();
 
         $this->assertFileExists($tmpFile);
 
@@ -43,47 +41,64 @@ class TmpFileManagerTest extends TestCase
 
     public function testCreateTmpFileContext()
     {
-        $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
+        $tmpFileManager = new TmpFileManager();
+
+        $file = $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             $this->assertFileExists($tmpFile);
+
+            return new \SplFileInfo($tmpFile);
         });
+
+        $this->assertFileNotExists($file);
     }
 
     public function testCreateTmpFileContextException()
     {
+        $tmpFileManager = new TmpFileManager();
+
         $this->expectException(TmpFileContextCallbackException::class);
 
-        $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
+        $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             return $tmpFile;
         });
     }
 
     public function testCreateTmpFileContextNotExists()
     {
-        $splFileInfo = $this->tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
+        $tmpFileManager = new TmpFileManager();
+
+        $splFileInfo = $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
             return new \SplFileInfo($tmpFile);
         });
 
         $this->assertFileNotExists($splFileInfo);
     }
 
-    /**
-     * @depends testCreateTmpFile
-     *
-     * @param TmpFileInterface $tmpFile
-     */
-    public function testRemoveTmpFile(TmpFileInterface $tmpFile)
+    public function testRemoveTmpFile()
     {
-        $this->tmpFileManager->removeTmpFile($tmpFile);
+        $tmpFileManager = new TmpFileManager();
+
+        $tmpFile = new TmpFile();
+
+        $tmpFileManager->removeTmpFile($tmpFile);
 
         $this->assertFileNotExists($tmpFile);
     }
 
     public function testPurge(): void
     {
-        $tmpFile = $this->tmpFileManager->createTmpFile();
+        $tmpFileManager = new TmpFileManager();
 
-        $this->tmpFileManager->purge();
+        $tmpFiles = [];
 
-        $this->assertFileNotExists($tmpFile);
+        for ($i = 0; $i < 5; $i++) {
+            $tmpFiles[] = $tmpFileManager->createTmpFile();
+        }
+
+        $tmpFileManager->purge();
+
+        foreach ($tmpFiles as $tmpFile) {
+            $this->assertFileNotExists($tmpFile);
+        }
     }
 }
