@@ -25,12 +25,12 @@ $config = (new ConfigBuilder())
 
 $tmpFileManager = new TmpFileManager($config);
 
-for ($i = 0; $i < 5; $i++) {
-    /** @var TmpFile $tmpFile */
-    $tmpFile = $tmpFileManager->createTmpFile();
-    
+/** @var TmpFile $tmpFile */
+$tmpFile = $tmpFileManager->createTmpFile();
+
+$tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
     // ...
-}
+});
 
 $tmpFileManager->purge();
 ```
