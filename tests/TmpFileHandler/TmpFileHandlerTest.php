@@ -5,6 +5,7 @@ namespace TmpFileManager\Tests\TmpFileHandler;
 use TmpFile\TmpFile;
 use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileHandler\TmpFileHandler;
+use TmpFileManager\Tests\SplFileInfoBuilder;
 
 class TmpFileHandlerTest extends TestCase
 {
@@ -26,6 +27,21 @@ class TmpFileHandlerTest extends TestCase
         $tmpFile = new TmpFile();
 
         $this->assertTrue($tmpFileHandler->existsTmpFile($tmpFile));
+    }
+
+    public function testCopySplFileInfo(): void
+    {
+        $tmpFileHandler = TmpFileHandler::create();
+
+        $splFileInfo = (new SplFileInfoBuilder())->addData('Meow!')->build();
+
+        $tmpFile = new TmpFile();
+
+        $tmpFileHandler->copySplFileInfo($splFileInfo, $tmpFile);
+
+        $data = file_get_contents($tmpFile);
+
+        $this->assertSame('Meow!', $data);
     }
 
     public function testRemoveTmpFile(): void

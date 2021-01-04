@@ -3,8 +3,8 @@
 namespace TmpFileManager\Tests;
 
 use TmpFile\TmpFile;
-use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFileInterface;
+use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
@@ -43,6 +43,34 @@ class TmpFileManagerTest extends TestCase
         $tmpFilesCount = $tmpFileManager->getContainer()->getTmpFilesCount();
 
         $this->assertSame(0, $tmpFilesCount);
+    }
+
+    public function testCreateTmpFileFromSplFileInfo(): void
+    {
+        $tmpFileManager = new TmpFileManager();
+
+        $splFileInfo = (new SplFileInfoBuilder())->addData('Meow!')->build();
+
+        $tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
+
+        $data = file_get_contents($tmpFile);
+
+        $this->assertSame('Meow!', $data);
+    }
+
+    public function testCopyTmpFile(): void
+    {
+        $tmpFileManager = new TmpFileManager();
+
+        $tmpFile = $tmpFileManager->createTmpFile();
+
+        file_put_contents($tmpFile, 'Meow!');
+
+        $new = $tmpFileManager->copyTmpFile($tmpFile);
+
+        $data = file_get_contents($new);
+
+        $this->assertSame('Meow!', $data);
     }
 
     public function testRemoveTmpFile(): void
