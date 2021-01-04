@@ -19,14 +19,11 @@ class TmpFileHandler implements TmpFileHandlerInterface
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param string $dir
-     * @param string $prefix
-     *
-     * @return string
-     *
-     * @throws TmpFileIOException
-     */
+    public static function create(): TmpFileHandlerInterface
+    {
+        return new self(new Filesystem());
+    }
+
     public function getTmpFileName(string $dir, string $prefix): string
     {
         try {
@@ -38,13 +35,6 @@ class TmpFileHandler implements TmpFileHandlerInterface
         }
     }
 
-    /**
-     * @param TmpFileInterface $tmpFile
-     *
-     * @return bool
-     *
-     * @throws TmpFileIOException
-     */
     public function existsTmpFile(TmpFileInterface $tmpFile): bool
     {
         try {
@@ -56,11 +46,6 @@ class TmpFileHandler implements TmpFileHandlerInterface
         }
     }
 
-    /**
-     * @param TmpFileInterface $tmpFile
-     *
-     * @throws TmpFileIOException
-     */
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         try {

@@ -2,15 +2,14 @@
 
 namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
-use TmpFile\TmpFileInterface;
+use TmpFileManager\Container\ContainerInterface;
 
 class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
-    /**
-     * @param TmpFileInterface[] $tmpFiles
-     */
-    public function handle(array $tmpFiles): void
+    public function handle(ContainerInterface $container): void
     {
+        $tmpFiles = $container->getTmpFiles();
+
         foreach (get_resources('stream') as $resource) {
             if (!stream_is_local($resource)) {
                 continue;

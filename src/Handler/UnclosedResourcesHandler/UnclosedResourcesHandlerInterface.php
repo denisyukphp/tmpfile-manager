@@ -2,12 +2,9 @@
 
 namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
-use TmpFile\TmpFileInterface;
+use TmpFileManager\Container\ContainerInterface;
 
 interface UnclosedResourcesHandlerInterface
 {
-    /**
-     * @param TmpFileInterface[] $tmpFiles
-     */
-    public function handle(array $tmpFiles): void;
+    public function handle(ContainerInterface $container): void;
 }
