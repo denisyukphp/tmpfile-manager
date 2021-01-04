@@ -11,7 +11,7 @@ use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
 
 class ConfigBuilderTest extends TestCase
 {
-    public function testSetters()
+    public function testSetters(): ConfigBuilder
     {
         $configBuilder = new ConfigBuilder();
 
@@ -34,7 +34,7 @@ class ConfigBuilderTest extends TestCase
      *
      * @depends testSetters
      */
-    public function testGetters(ConfigBuilder $configBuilder)
+    public function testGetters(ConfigBuilder $configBuilder): void
     {
         $this->assertEquals(sys_get_temp_dir(), $configBuilder->getTmpFileDirectory());
         $this->assertEquals('php', $configBuilder->getTmpFilePrefix());
@@ -53,7 +53,7 @@ class ConfigBuilderTest extends TestCase
      *
      * @depends testSetters
      */
-    public function testBuild(ConfigBuilder $configBuilder)
+    public function testBuild(ConfigBuilder $configBuilder): void
     {
         $this->assertInstanceOf(ConfigInterface::class, $configBuilder->build());
     }

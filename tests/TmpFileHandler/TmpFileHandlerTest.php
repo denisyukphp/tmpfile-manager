@@ -1,45 +1,36 @@
 <?php
 
-namespace TmpFileManager\Tests;
+namespace TmpFileManager\Tests\TmpFileHandler;
 
-use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFile;
+use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileHandler\TmpFileHandler;
-use Symfony\Component\Filesystem\Filesystem;
 
 class TmpFileHandlerTest extends TestCase
 {
-    public function testGetTmpFileName()
+    public function testGetTmpFileName(): void
     {
-        $tmpFileHandler = new TmpFileHandler(
-            new Filesystem()
-        );
+        $tmpFileHandler = TmpFileHandler::create();
 
         $filename = $tmpFileHandler->getTmpFileName(sys_get_temp_dir(), 'php');
 
-        $this->assertIsString($filename);
         $this->assertFileExists($filename);
 
         unlink($filename);
     }
 
-    public function testExistsTmpFile()
+    public function testExistsTmpFile(): void
     {
-        $tmpFileHandler = new TmpFileHandler(
-            new Filesystem()
-        );
+        $tmpFileHandler = TmpFileHandler::create();
 
         $tmpFile = new TmpFile();
 
-        $this->assertIsBool($tmpFileHandler->existsTmpFile($tmpFile));
         $this->assertTrue($tmpFileHandler->existsTmpFile($tmpFile));
     }
 
-    public function testRemoveTmpFile()
+    public function testRemoveTmpFile(): void
     {
-        $tmpFileHandler = new TmpFileHandler(
-            new Filesystem()
-        );
+        $tmpFileHandler = TmpFileHandler::create();
 
         $tmpFile = new TmpFile();
 

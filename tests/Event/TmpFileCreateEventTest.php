@@ -1,15 +1,15 @@
 <?php
 
-namespace TmpFileManager\Tests;
+namespace TmpFileManager\Tests\Event;
 
-use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFile;
+use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFileInterface;
 use TmpFileManager\Event\TmpFileCreateEvent;
 
 class TmpFileCreateEventTest extends TestCase
 {
-    public function testSuccess()
+    public function testSuccess(): void
     {
         $tmpFile = new TmpFile();
 

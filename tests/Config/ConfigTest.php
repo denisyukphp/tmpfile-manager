@@ -10,7 +10,7 @@ use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInte
 
 class ConfigTest extends TestCase
 {
-    public function testTypes()
+    public function testTypes(): void
     {
         $config = (new ConfigBuilder())->build();
 

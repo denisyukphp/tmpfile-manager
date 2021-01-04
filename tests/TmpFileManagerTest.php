@@ -2,79 +2,50 @@
 
 namespace TmpFileManager\Tests;
 
-use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFile;
+use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\TmpFileManagerInterface;
-use TmpFileManager\TmpFileManagerServicesInterface;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
-use TmpFileManager\Exception\TmpFileContextCallbackException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TmpFileManagerTest extends TestCase
 {
-    public function testInstances()
+    public function testServices()
     {
         $tmpFileManager = new TmpFileManager();
 
-        $this->assertInstanceOf(TmpFileManagerInterface::class, $tmpFileManager);
-        $this->assertInstanceOf(TmpFileManagerServicesInterface::class, $tmpFileManager);
         $this->assertInstanceOf(ConfigInterface::class, $tmpFileManager->getConfig());
         $this->assertInstanceOf(ContainerInterface::class, $tmpFileManager->getContainer());
         $this->assertInstanceOf(TmpFileHandlerInterface::class, $tmpFileManager->getTmpFileHandler());
         $this->assertInstanceOf(EventDispatcherInterface::class, $tmpFileManager->getEventDispatcher());
     }
 
-    public function testCreateTmpFile(): TmpFileInterface
+    public function testCreateTmpFile(): void
     {
         $tmpFileManager = new TmpFileManager();
 
         $tmpFile = $tmpFileManager->createTmpFile();
 
         $this->assertFileExists($tmpFile);
-
-        return $tmpFile;
     }
 
-    public function testCreateTmpFileContext()
+    public function testCreateTmpFileContext(): void
     {
         $tmpFileManager = new TmpFileManager();
-
-        $file = $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-            $this->assertFileExists($tmpFile);
-
-            return new \SplFileInfo($tmpFile);
-        });
-
-        $this->assertFileNotExists($file);
-    }
-
-    public function testCreateTmpFileContextException()
-    {
-        $tmpFileManager = new TmpFileManager();
-
-        $this->expectException(TmpFileContextCallbackException::class);
 
         $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-            return $tmpFile;
-        });
-    }
-
-    public function testCreateTmpFileContextNotExists()
-    {
-        $tmpFileManager = new TmpFileManager();
-
-        $splFileInfo = $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-            return new \SplFileInfo($tmpFile);
+            $this->assertFileExists($tmpFile);
         });
 
-        $this->assertFileNotExists($splFileInfo);
+        $tmpFilesCount = $tmpFileManager->getContainer()->getTmpFilesCount();
+
+        $this->assertSame(0, $tmpFilesCount);
     }
 
-    public function testRemoveTmpFile()
+    public function testRemoveTmpFile(): void
     {
         $tmpFileManager = new TmpFileManager();
 
@@ -89,16 +60,10 @@ class TmpFileManagerTest extends TestCase
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFiles = [];
-
-        for ($i = 0; $i < 5; $i++) {
-            $tmpFiles[] = $tmpFileManager->createTmpFile();
-        }
+        $tmpFile = $tmpFileManager->createTmpFile();
 
         $tmpFileManager->purge();
 
-        foreach ($tmpFiles as $tmpFile) {
-            $this->assertFileNotExists($tmpFile);
-        }
+        $this->assertFileNotExists($tmpFile);
     }
 }

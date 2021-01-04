@@ -1,6 +1,6 @@
 <?php
 
-namespace TmpFileManager\Tests;
+namespace TmpFileManager\Tests\Event;
 
 use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
@@ -8,7 +8,7 @@ use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 
 class TmpFileManagerPurgeEventTest extends TestCase
 {
-    public function testSuccess()
+    public function testSuccess(): void
     {
         $tmpFileManager = new TmpFileManager();
 
