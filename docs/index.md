@@ -63,6 +63,25 @@ $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
 });
 ```
 
+If you need to create temp file from SplFileInfo use `createTmpFileFromSplFileInfo()` method:
+
+```php
+/** @var TmpFile $tmpFile */
+$tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo(
+    new \SplFileInfo('/path/to/file')
+);
+```
+
+Also you can copy temp file from other temp file just use `copyTmpFile()` method:
+
+```php
+$tmpFile = $tmpFileManager->createTmpFile();
+
+file_put_contents($tmpFile, 'Meow!');
+
+$new = $tmpFileManager->copyTmpFile($tmpFile);
+```
+
 ## Removing temp files
 
 By default, created temp files will purge automatically after PHP is finished, but you can remove temp files manually with `removeTmpFile()` method:
@@ -335,11 +354,7 @@ Next you must inject dependencies into to TmpFileManager:
 
 ```php
 $tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
-```
 
-After that manager's inner services are available to extend TmpFileManager use-cases in any part your application.
-
-```php
 /** @var ConfigInterface $config */
 $config = $tmpFileManager->getConfig();
 
@@ -352,3 +367,5 @@ $tmpFileHandler = $tmpFileManager->getTmpFileHandler();
 /** @var EventDispatcherInterface $eventDispatcher */
 $eventDispatcher = $tmpFileManager->getEventDispatcher();
 ```
+
+After that manager's inner services are available to extend TmpFileManager use-cases in any part your application.
