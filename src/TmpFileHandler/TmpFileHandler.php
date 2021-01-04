@@ -46,6 +46,17 @@ class TmpFileHandler implements TmpFileHandlerInterface
         }
     }
 
+    public function copySplFileInfo(\SplFileInfo $splFileInfo, TmpFileInterface $tmpFile): void
+    {
+        try {
+            $this->filesystem->copy($splFileInfo, $tmpFile, true);
+        } catch (IOException $e) {
+            throw new TmpFileIOException(
+                $e->getMessage()
+            );
+        }
+    }
+
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         try {

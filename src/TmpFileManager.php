@@ -134,6 +134,22 @@ final class TmpFileManager implements TmpFileManagerInterface
         }
     }
 
+    public function createTmpFileFromSplFileInfo(\SplFileInfo $splFileInfo): TmpFileInterface
+    {
+        $tmpFile = $this->createTmpFile();
+
+        $this->tmpFileHandler->copySplFileInfo($splFileInfo, $tmpFile);
+
+        return $tmpFile;
+    }
+
+    public function copyTmpFile(TmpFileInterface $tmpFile): TmpFileInterface
+    {
+        $splFileInfo = new \SplFileInfo($tmpFile);
+
+        return $this->createTmpFileFromSplFileInfo($splFileInfo);
+    }
+
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         $this->eventDispatcher->dispatch(new TmpFileRemoveEvent($tmpFile));
