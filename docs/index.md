@@ -1,6 +1,7 @@
 # Documentation
 
 - [Default configuration](#default-configuration)
+- [Creating temp files](#creating-temp-files)
 - [Removing temp files](#removing-temp-files)
 - [Check unclosed resources](#check-unclosed-resources)
 - [Garbage collection](#garbage-collection)
@@ -10,31 +11,37 @@
 
 ## Default configuration
 
-Configure TmpFileManager with config builder. By default, temp files will purge automatically. Unclosed resources check and garbage collection are off. Below is the default configuration:
+Configure TmpFileManager with ConfigBuilder. By default, temp files will purge automatically. Unclosed resources check and garbage collection are off. Below is the default configuration:
 
 ```php
 <?php
 
 use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandler;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
+use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
 use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
     ->setTmpFileDirectory(sys_get_temp_dir())
     ->setTmpFilePrefix('php')
     ->setDeferredPurge(true)
+    ->setDeferredPurgeHandler(new DeferredPurgeHandler())
     ->setUnclosedResourcesCheck(false)
+    ->setUnclosedResourcesHandler(new UnclosedResourcesHandler())
     ->setGarbageCollectionProbability(0)
     ->setGarbageCollectionDivisor(100)
     ->setGarbageCollectionLifetime(3600)
+    ->setGarbageCollectionHandler(new GarbageCollectionHandler())
     ->build()
 ;
 
 $tmpFileManager = new TmpFileManager($config);
 ```
 
-## Removing temp files
+## Creating temp files
 
-By default, created temp files will purge automatically after PHP is finished.
+To create a temp file use the `createTmpFile()` method:
 
 ```php
 <?php
@@ -48,24 +55,38 @@ $tmpFileManager = new TmpFileManager();
 $tmpFile = $tmpFileManager->createTmpFile();
 ```
 
-You can remove temp files manually with `removeTmpFile()`:
-
-```php
-$tmpFileManager->removeTmpFile($tmpFile);
-```
-
-If you need to purge all temp files by force call `purge()`:
-
-```php
-$tmpFileManager->purge();
-```
-
 In console commands use `createTmpFileContext()` method to create and handle temp files. Temp files will be immediately removed after finished callback:
 
 ```php
 $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
     // ...
 });
+```
+
+## Removing temp files
+
+By default, created temp files will purge automatically after PHP is finished, but you can remove temp files manually with `removeTmpFile()` method:
+
+```php
+<?php
+
+use TmpFile\TmpFile;
+use TmpFileManager\TmpFileManager;
+
+$tmpFileManager = new TmpFileManager();
+
+/** @var TmpFile $tmpFile */
+$tmpFileManager->createTmpFile();
+
+// ...
+
+$tmpFileManager->removeTmpFile($tmpFile);
+```
+
+If you need to purge all temp files by force get call `purge()` method:
+
+```php
+$tmpFileManager->purge();
 ```
 
 ## Check unclosed resources
@@ -86,17 +107,17 @@ $config = (new ConfigBuilder())
 
 $tmpFileManager = new TmpFileManager($config);
 
-for ($i = 0; $i < 10; $i++) {
-    /** @var TmpFile $tmpFile */
-    $tmpFile = $tmpFileManager->createTmpFile();
+/** @var TmpFile $tmpFile */
+$tmpFile = $tmpFileManager->createTmpFile();
     
-    $fh = fopen($tmpFile, 'r+');
+$fh = fopen($tmpFile, 'r+');
     
-    fwrite($fh, random_bytes(1024));
-    
-    // ...
-}
+fwrite($fh, random_bytes(1024));
+
+// ...
 ```
+
+After that you can ignore to open resources for temp files.
 
 ## Garbage collection
 
@@ -132,7 +153,7 @@ $handler->handle($config);
 
 ## Custom handlers
 
-Define your handlers to get more control of temp files management with config builder. Below are the default handlers:
+Define your handlers to get more control of temp files management with ConfigBuilder. Below are the default handlers:
 
 ```php
 <?php
@@ -172,16 +193,17 @@ To replace unclosed resources handler yoo need to implement UnclosedResourcesHan
 ```php
 <?php
 
-use TmpFile\TmpFile;
+use TmpFile\TmpFileInterface;
+use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
 class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
-    /**
-     * @param TmpFile[] $tmpFiles
-     */
-    public function handle(array $tmpFiles): void
+    public function handle(ContainerInterface $container): void
     {
+        /** @var TmpFileInterface[] $tmpFiles */
+        $tmpFiles = $container->getTmpFiles();
+        
         // ...
     }
 }
