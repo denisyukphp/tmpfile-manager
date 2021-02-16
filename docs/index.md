@@ -82,6 +82,15 @@ file_put_contents($tmpFile, 'Meow!');
 $new = $tmpFileManager->copyTmpFile($tmpFile);
 ```
 
+TmpFileManager can create TmpFile from upload file by HTTP:
+
+```php
+/** @var string $uploadedFilename */
+$uploadedFilename = $_FILES['your_field_name']['tmp_name'];
+
+$tmpFile = $tmpFileManager->createTmpFileFromUploadedFile($uploadedFilename);
+```
+
 ## Removing temp files
 
 By default, created temp files will purge automatically after PHP is finished, but you can remove temp files manually with `removeTmpFile()` method:
