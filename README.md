@@ -1,14 +1,26 @@
 # TmpFileManager
 
-[![Build Status](https://travis-ci.org/denisyukphp/tmpfile-manager.svg?branch=master)](https://travis-ci.org/denisyukphp/tmpfile-manager) [![Total Downloads](https://poser.pugx.org/denisyukphp/tmpfile-manager/downloads)](https://packagist.org/packages/denisyukphp/tmpfile-manager) [![License](https://poser.pugx.org/denisyukphp/tmpfile-manager/license)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
+[![Build Status](https://img.shields.io/travis/com/denisyukphp/tmpfile-manager/master?style=plastic)](https://travis-ci.com/denisyukphp/tmpfile-manager)
+[![Latest Stable Version](https://img.shields.io/packagist/v/denisyukphp/tmpfile-manager?style=plastic)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
+[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/denisyukphp/tmpfile-manager?style=plastic&color=8892BF)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
+[![Total Downloads](https://img.shields.io/packagist/dt/denisyukphp/tmpfile-manager?style=plastic)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
+[![License](https://img.shields.io/packagist/l/denisyukphp/tmpfile-manager?style=plastic&color=428F7E)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
 
-```
+Temp files manager.
+
+## Installation
+
+You can install the latest version via [Composer](https://getcomposer.org/):
+
+```text
 composer require denisyukphp/tmpfile-manager
 ```
 
-This package requires PHP 7.1 or later.
+This package requires PHP 7.2 or later.
 
 ## Quick usage
+
+Configure TmpFileManager and create a temp file:
 
 ```php
 <?php
@@ -35,7 +47,7 @@ $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
 $tmpFileManager->removeTmpFile($tmpFile);
 ```
 
-All temp files which create with manager will purge automatically.
+All temp files which created with the manager will be purged automatically by default.
 
 ## Documentation
 
