@@ -33,7 +33,7 @@ class TmpFileHandlerTest extends TestCase
     {
         $tmpFileHandler = TmpFileHandler::create();
 
-        $splFileInfo = (new SplFileInfoBuilder())->addData('Meow!')->build();
+        $splFileInfo = SplFileInfoBuilder::create()->addData('Meow!')->build();
 
         $tmpFile = new TmpFile();
 

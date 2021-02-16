@@ -9,6 +9,7 @@ use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\Exception\FileNotUploadedException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TmpFileManagerTest extends TestCase
@@ -49,13 +50,22 @@ class TmpFileManagerTest extends TestCase
     {
         $tmpFileManager = new TmpFileManager();
 
-        $splFileInfo = (new SplFileInfoBuilder())->addData('Meow!')->build();
+        $splFileInfo = SplFileInfoBuilder::create()->addData('Meow!')->build();
 
         $tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
 
         $data = file_get_contents($tmpFile);
 
         $this->assertSame('Meow!', $data);
+    }
+
+    public function testCreateTmpFileFromUploadedFileFailure(): void
+    {
+        $tmpFileManager = new TmpFileManager();
+
+        $this->expectException(FileNotUploadedException::class);
+
+        $tmpFileManager->createTmpFileFromUploadedFile('Meow!');
     }
 
     public function testCopyTmpFile(): void

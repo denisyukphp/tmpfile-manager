@@ -11,11 +11,16 @@ class SplFileInfoBuilder
      */
     private $splFileInfo;
 
-    public function __construct()
+    private function __construct()
     {
-        $this->splFileInfo = new \SplFileInfo(
-            new TmpFile()
-        );
+        $tmpFile = new TmpFile();
+
+        $this->splFileInfo = new \SplFileInfo($tmpFile);
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     public function addData(string $data): self
