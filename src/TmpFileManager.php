@@ -4,12 +4,13 @@ namespace TmpFileManager;
 
 use TmpFile\TmpFile;
 use TmpFile\TmpFileInterface;
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\Container;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\TmpFileHandler\TmpFileHandler;
 use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\TmpFileReflection\TmpFileReflection;
 use TmpFileManager\Event\TmpFileManagerStartEvent;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\Event\TmpFileRemoveEvent;
@@ -17,7 +18,7 @@ use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 use TmpFileManager\Listener\DeferredPurgeListener;
 use TmpFileManager\Listener\GarbageCollectionListener;
 use TmpFileManager\Listener\UnclosedResourcesListener;
-use TmpFileManager\Exception\TmpFileCreateException;
+use TmpFileManager\Exception\FileNotUploadedException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -46,16 +47,21 @@ final class TmpFileManager implements TmpFileManagerInterface
         TmpFileHandlerInterface $tmpFileHandler = null,
         EventDispatcherInterface $eventDispatcher = null
     ) {
-        $this->config = $config ?? (new ConfigBuilder())->build();
+        $this->config = $config ?? Config::createFromDefault();
         $this->container = $container ?? new Container();
         $this->tmpFileHandler = $tmpFileHandler ?? TmpFileHandler::create();
         $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
 
+        $this->addDefaultListeners();
+
+        $this->eventDispatcher->dispatch(new TmpFileManagerStartEvent($this));
+    }
+
+    private function addDefaultListeners(): void
+    {
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new GarbageCollectionListener());
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new DeferredPurgeListener());
         $this->eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, new UnclosedResourcesListener());
-
-        $this->eventDispatcher->dispatch(new TmpFileManagerStartEvent($this));
     }
 
     public function getConfig(): ConfigInterface
@@ -85,40 +91,18 @@ final class TmpFileManager implements TmpFileManagerInterface
 
         $filename = $this->tmpFileHandler->getTmpFileName($dir, $prefix);
 
-        try {
-            $tmpFile = $this->makeTmpFile($filename);
-        } catch (\ReflectionException $e) {
-            throw new TmpFileCreateException(
-                $e->getMessage()
-            );
-        }
+        return $this->getTmpFile($filename);
+    }
+
+    private function getTmpFile(string $realPath): TmpFileInterface
+    {
+        $tmpFileReflection = new TmpFileReflection(TmpFile::class);
+
+        $tmpFile = $tmpFileReflection->changeFilename($realPath);
 
         $this->container->addTmpFile($tmpFile);
 
         $this->eventDispatcher->dispatch(new TmpFileCreateEvent($tmpFile));
-
-        return $tmpFile;
-    }
-
-    /**
-     * @param string $realPath
-     *
-     * @return TmpFileInterface
-     *
-     * @throws \ReflectionException
-     */
-    private function makeTmpFile(string $realPath): TmpFileInterface
-    {
-        $tmpFileReflection = new \ReflectionClass(TmpFile::class);
-
-        /** @var TmpFile $tmpFile */
-        $tmpFile = $tmpFileReflection->newInstanceWithoutConstructor();
-
-        $filename = $tmpFileReflection->getProperty('filename');
-
-        $filename->setAccessible(true);
-
-        $filename->setValue($tmpFile, $realPath);
 
         return $tmpFile;
     }
@@ -141,6 +125,17 @@ final class TmpFileManager implements TmpFileManagerInterface
         $this->tmpFileHandler->copySplFileInfo($splFileInfo, $tmpFile);
 
         return $tmpFile;
+    }
+
+    public function createTmpFileFromUploadedFile(string $filename): TmpFileInterface
+    {
+        if (!is_uploaded_file($filename)) {
+            throw new FileNotUploadedException(
+                sprintf('The file %s is not uploaded', $filename)
+            );
+        }
+
+        return $this->getTmpFile($filename);
     }
 
     public function copyTmpFile(TmpFileInterface $tmpFile): TmpFileInterface

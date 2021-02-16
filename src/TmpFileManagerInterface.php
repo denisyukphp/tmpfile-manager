@@ -12,6 +12,8 @@ interface TmpFileManagerInterface
 
     public function createTmpFileFromSplFileInfo(\SplFileInfo $splFileInfo): TmpFileInterface;
 
+    public function createTmpFileFromUploadedFile(string $filename): TmpFileInterface;
+
     public function copyTmpFile(TmpFileInterface $tmpFile): TmpFileInterface;
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void;
