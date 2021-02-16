@@ -18,6 +18,13 @@ class Config implements ConfigInterface
         $this->configBuilder = $configBuilder;
     }
 
+    public static function createFromDefault(): ConfigInterface
+    {
+        $configBuilder = new ConfigBuilder();
+
+        return new self($configBuilder);
+    }
+
     public function getTmpFileDirectory(): string
     {
         return $this->configBuilder->getTmpFileDirectory();
