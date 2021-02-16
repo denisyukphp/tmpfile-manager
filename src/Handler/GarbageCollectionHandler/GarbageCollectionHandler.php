@@ -32,7 +32,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 
     private function isChance(int $probability, int $divisor): bool
     {
-        return $probability == rand($probability, $divisor);
+        return $probability === mt_rand($probability, $divisor);
     }
 
     private function runProcess(string $dir, string $prefix, int $lifetime): void
