@@ -1,10 +1,10 @@
 <?php
 
-namespace TmpFileManager\TmpFileHandler;
+namespace TmpFileManager\Filesystem;
 
 use TmpFileManager\TmpFile\TmpFileInterface;
 
-interface TmpFileHandlerInterface
+interface FilesystemInterface
 {
     public function getTmpFileName(string $dir, string $prefix): string;
 

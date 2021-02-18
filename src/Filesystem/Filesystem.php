@@ -1,72 +1,46 @@
 <?php
 
-namespace TmpFileManager\TmpFileHandler;
+namespace TmpFileManager\Filesystem;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
 use TmpFileManager\TmpFile\TmpFileInterface;
-use TmpFileManager\TmpFileHandler\Exception\TmpFileIOException;
+use Symfony\Component\Filesystem\Filesystem as Fs;
 
-class TmpFileHandler implements TmpFileHandlerInterface
+class Filesystem implements FilesystemInterface
 {
     /**
-     * @var Filesystem
+     * @var Fs
      */
-    private $filesystem;
+    private $fs;
 
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Fs $fs)
     {
-        $this->filesystem = $filesystem;
+        $this->fs = $fs;
     }
 
-    public static function create(): TmpFileHandlerInterface
+    public static function create(): FilesystemInterface
     {
-        $fs = new Filesystem();
+        $fs = new Fs();
 
         return new self($fs);
     }
 
     public function getTmpFileName(string $dir, string $prefix): string
     {
-        try {
-            return $this->filesystem->tempnam($dir, $prefix);
-        } catch (IOException $e) {
-            throw new TmpFileIOException(
-                $e->getMessage()
-            );
-        }
+        return $this->fs->tempnam($dir, $prefix);
     }
 
     public function existsTmpFile(TmpFileInterface $tmpFile): bool
     {
-        try {
-            return $this->filesystem->exists($tmpFile);
-        } catch (IOException $e) {
-            throw new TmpFileIOException(
-                $e->getMessage()
-            );
-        }
+        return $this->fs->exists($tmpFile);
     }
 
     public function copySplFileInfo(\SplFileInfo $splFileInfo, TmpFileInterface $tmpFile): void
     {
-        try {
-            $this->filesystem->copy($splFileInfo, $tmpFile, true);
-        } catch (IOException $e) {
-            throw new TmpFileIOException(
-                $e->getMessage()
-            );
-        }
+        $this->fs->copy($splFileInfo, $tmpFile, true);
     }
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
-        try {
-            $this->filesystem->remove($tmpFile);
-        } catch (IOException $e) {
-            throw new TmpFileIOException(
-                $e->getMessage()
-            );
-        }
+        $this->fs->remove($tmpFile);
     }
 }
