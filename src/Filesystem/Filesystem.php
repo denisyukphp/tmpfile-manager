@@ -2,9 +2,9 @@
 
 namespace TmpFileManager\TmpFileHandler;
 
-use TmpFile\TmpFileInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
+use TmpFileManager\TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileHandler\Exception\TmpFileIOException;
 
 class TmpFileHandler implements TmpFileHandlerInterface
@@ -21,7 +21,9 @@ class TmpFileHandler implements TmpFileHandlerInterface
 
     public static function create(): TmpFileHandlerInterface
     {
-        return new self(new Filesystem());
+        $fs = new Filesystem();
+
+        return new self($fs);
     }
 
     public function getTmpFileName(string $dir, string $prefix): string

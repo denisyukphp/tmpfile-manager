@@ -2,19 +2,21 @@
 
 namespace TmpFileManager\Tests\Event;
 
-use TmpFile\TmpFile;
 use PHPUnit\Framework\TestCase;
-use TmpFile\TmpFileInterface;
 use TmpFileManager\Event\TmpFileCreateEvent;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFile\TmpFileInterface;
 
 class TmpFileCreateEventTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $tmpFile = new TmpFile();
+        $manager = new TmpFileManager();
 
-        $tmpFileCreateEvent = new TmpFileCreateEvent($tmpFile);
+        $tmpFile = $manager->createTmpFile();
 
-        $this->assertInstanceOf(TmpFileInterface::class, $tmpFileCreateEvent->getTmpFile());
+        $createEvent = new TmpFileCreateEvent($tmpFile);
+
+        $this->assertInstanceOf(TmpFileInterface::class, $createEvent->getTmpFile());
     }
 }

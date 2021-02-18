@@ -6,19 +6,19 @@ use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigBuilder;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Filesystem as Fs;
 
 class GarbageCollectionHandlerTest extends TestCase
 {
     public function testHandle(): void
     {
-        $tmpFileManager = new TmpFileManager();
+        $manager = new TmpFileManager();
 
-        $filesystem = new Filesystem();
+        $fs = new Fs();
 
-        $tmpFile = $tmpFileManager->createTmpFile();
+        $tmpFile = $manager->createTmpFile();
 
-        $filesystem->touch($tmpFile, time() - 3600);
+        $fs->touch($tmpFile, time() - 3600);
 
         $config = (new ConfigBuilder())
             ->setGarbageCollectionProbability(100)

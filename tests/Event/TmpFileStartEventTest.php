@@ -3,17 +3,17 @@
 namespace TmpFileManager\Tests\Event;
 
 use PHPUnit\Framework\TestCase;
-use TmpFileManager\TmpFileManager;
 use TmpFileManager\Event\TmpFileManagerStartEvent;
+use TmpFileManager\TmpFileManager;
 
 class TmpFileStartEventTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $tmpFileManager = new TmpFileManager();
+        $manager = new TmpFileManager();
 
-        $tmpFileManagerStartEvent = new TmpFileManagerStartEvent($tmpFileManager);
+        $startEvent = new TmpFileManagerStartEvent($manager);
 
-        $this->assertInstanceOf(TmpFileManager::class, $tmpFileManagerStartEvent->getTmpFileManager());
+        $this->assertInstanceOf(TmpFileManager::class, $startEvent->getTmpFileManager());
     }
 }

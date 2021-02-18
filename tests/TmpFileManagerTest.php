@@ -2,13 +2,13 @@
 
 namespace TmpFileManager\Tests;
 
-use TmpFile\TmpFile;
-use TmpFile\TmpFileInterface;
 use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
-use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\Filesystem\FilesystemInterface;
+use TmpFileManager\Provider\ProviderInterface;
+use TmpFileManager\TmpFile\TmpFileInterface;
 use TmpFileManager\Exception\FileNotUploadedException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -20,8 +20,9 @@ class TmpFileManagerTest extends TestCase
 
         $this->assertInstanceOf(ConfigInterface::class, $tmpFileManager->getConfig());
         $this->assertInstanceOf(ContainerInterface::class, $tmpFileManager->getContainer());
-        $this->assertInstanceOf(TmpFileHandlerInterface::class, $tmpFileManager->getTmpFileHandler());
+        $this->assertInstanceOf(FilesystemInterface::class, $tmpFileManager->getFilesystem());
         $this->assertInstanceOf(EventDispatcherInterface::class, $tmpFileManager->getEventDispatcher());
+        $this->assertInstanceOf(ProviderInterface::class, $tmpFileManager->getProvider());
     }
 
     public function testCreateTmpFile(): void
@@ -50,11 +51,15 @@ class TmpFileManagerTest extends TestCase
     {
         $tmpFileManager = new TmpFileManager();
 
-        $splFileInfo = SplFileInfoBuilder::create()->addData('Meow!')->build();
+        $tmpFile = $tmpFileManager->createTmpFile();
 
-        $tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
+        $splFileInfo = new \SplFileInfo($tmpFile);
 
-        $data = file_get_contents($tmpFile);
+        file_put_contents($splFileInfo, 'Meow!');
+
+        $createdTmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
+
+        $data = file_get_contents($createdTmpFile);
 
         $this->assertSame('Meow!', $data);
     }
@@ -76,9 +81,9 @@ class TmpFileManagerTest extends TestCase
 
         file_put_contents($tmpFile, 'Meow!');
 
-        $new = $tmpFileManager->copyTmpFile($tmpFile);
+        $copiedTmpFile = $tmpFileManager->copyTmpFile($tmpFile);
 
-        $data = file_get_contents($new);
+        $data = file_get_contents($copiedTmpFile);
 
         $this->assertSame('Meow!', $data);
     }
@@ -87,7 +92,7 @@ class TmpFileManagerTest extends TestCase
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFile = new TmpFile();
+        $tmpFile = $tmpFileManager->createTmpFile();
 
         $tmpFileManager->removeTmpFile($tmpFile);
 

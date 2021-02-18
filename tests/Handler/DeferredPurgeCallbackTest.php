@@ -10,15 +10,15 @@ class DeferredPurgeCallbackTest extends TestCase
 {
     public function testCallback(): void
     {
-        $tmpFileManager = new TmpFileManager();
+        $manager = new TmpFileManager();
 
-        $deferredPurgeCallback = new DeferredPurgeCallback($tmpFileManager);
+        $callback = new DeferredPurgeCallback($manager);
 
-        $tmpFile = $tmpFileManager->createTmpFile();
+        $tmpFile = $manager->createTmpFile();
 
-        $this->assertIsCallable($deferredPurgeCallback);
+        $this->assertIsCallable($callback);
 
-        $deferredPurgeCallback();
+        $callback();
 
         $this->assertFileNotExists($tmpFile);
     }

@@ -2,19 +2,21 @@
 
 namespace TmpFileManager\Tests\Event;
 
-use TmpFile\TmpFile;
 use PHPUnit\Framework\TestCase;
-use TmpFile\TmpFileInterface;
 use TmpFileManager\Event\TmpFileRemoveEvent;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFile\TmpFileInterface;
 
 class TmpFileManagerRemoveEventTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $tmpFile = new TmpFile();
+        $manager = new TmpFileManager();
 
-        $tmpFileRemoveEvent = new TmpFileRemoveEvent($tmpFile);
+        $tmpFile = $manager->createTmpFile();
 
-        $this->assertInstanceOf(TmpFileInterface::class, $tmpFileRemoveEvent->getTmpFile());
+        $removeEvent = new TmpFileRemoveEvent($tmpFile);
+
+        $this->assertInstanceOf(TmpFileInterface::class, $removeEvent->getTmpFile());
     }
 }

@@ -3,17 +3,17 @@
 namespace TmpFileManager\Tests\Event;
 
 use PHPUnit\Framework\TestCase;
-use TmpFileManager\TmpFileManager;
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
+use TmpFileManager\TmpFileManager;
 
 class TmpFileManagerPurgeEventTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $tmpFileManager = new TmpFileManager();
+        $manager = new TmpFileManager();
 
-        $tmpFileManagerPurgeEvent = new TmpFileManagerPurgeEvent($tmpFileManager);
+        $purgeEvent = new TmpFileManagerPurgeEvent($manager);
 
-        $this->assertInstanceOf(TmpFileManager::class, $tmpFileManagerPurgeEvent->getTmpFileManager());
+        $this->assertInstanceOf(TmpFileManager::class, $purgeEvent->getTmpFileManager());
     }
 }

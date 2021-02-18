@@ -2,18 +2,20 @@
 
 namespace TmpFileManager\Tests\Container;
 
-use TmpFile\TmpFile;
-use TmpFile\TmpFileInterface;
 use PHPUnit\Framework\TestCase;
+use TmpFileManager\TmpFileManager;
 use TmpFileManager\Container\Container;
+use TmpFileManager\TmpFile\TmpFileInterface;
 
 class ContainerTest extends TestCase
 {
     public function testAddTmpFile(): void
     {
+        $manager = new TmpFileManager();
+
         $container = new Container();
 
-        $container->addTmpFile(new TmpFile());
+        $container->addTmpFile($manager->createTmpFile());
 
         $tmpFiles = $container->getTmpFiles();
 
@@ -22,9 +24,11 @@ class ContainerTest extends TestCase
 
     public function testHasTmpFile(): void
     {
+        $manager = new TmpFileManager();
+
         $container = new Container();
 
-        $tmpFile = new TmpFile();
+        $tmpFile = $manager->createTmpFile();
 
         $container->addTmpFile($tmpFile);
 
@@ -33,9 +37,11 @@ class ContainerTest extends TestCase
 
     public function testRemoveTmpFile(): void
     {
+        $manager = new TmpFileManager();
+
         $container = new Container();
 
-        $tmpFile = new TmpFile();
+        $tmpFile = $manager->createTmpFile();
 
         $container->addTmpFile($tmpFile);
 
@@ -48,9 +54,11 @@ class ContainerTest extends TestCase
 
     public function testGetTmpFiles(): void
     {
+        $manager = new TmpFileManager();
+
         $container = new Container();
 
-        $container->addTmpFile(new TmpFile());
+        $container->addTmpFile($manager->createTmpFile());
 
         $tmpFiles = $container->getTmpFiles();
 
@@ -61,9 +69,11 @@ class ContainerTest extends TestCase
 
     public function testGetTmpFilesCount(): void
     {
+        $manager = new TmpFileManager();
+
         $container = new Container();
 
-        $container->addTmpFile(new TmpFile());
+        $container->addTmpFile($manager->createTmpFile());
 
         $this->assertSame(1, $container->getTmpFilesCount());
     }
