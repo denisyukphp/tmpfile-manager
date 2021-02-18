@@ -25,9 +25,9 @@ Configure TmpFileManager and create a temp file:
 ```php
 <?php
 
-use TmpFile\TmpFile;
-use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFile\TmpFile;
 
 $config = (new ConfigBuilder())
     ->setTmpFileDirectory(sys_get_temp_dir())
