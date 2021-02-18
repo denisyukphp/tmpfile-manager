@@ -2,7 +2,7 @@
 
 namespace TmpFileManager\Container;
 
-use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFile\TmpFileInterface;
 
 interface ContainerInterface
 {

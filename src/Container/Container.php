@@ -2,33 +2,33 @@
 
 namespace TmpFileManager\Container;
 
-use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFile\TmpFileInterface;
 
 class Container implements ContainerInterface
 {
     /**
      * @var \SplObjectStorage
      */
-    private $tmpFiles;
+    private $splObjectStorage;
 
     public function __construct()
     {
-        $this->tmpFiles = new \SplObjectStorage();
+        $this->splObjectStorage = new \SplObjectStorage();
     }
 
     public function addTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->tmpFiles->attach($tmpFile);
+        $this->splObjectStorage->attach($tmpFile);
     }
 
     public function hasTmpFile(TmpFileInterface $tmpFile): bool
     {
-        return $this->tmpFiles->contains($tmpFile);
+        return $this->splObjectStorage->contains($tmpFile);
     }
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->tmpFiles->detach($tmpFile);
+        $this->splObjectStorage->detach($tmpFile);
     }
 
     /**
@@ -36,11 +36,11 @@ class Container implements ContainerInterface
      */
     public function getTmpFiles(): array
     {
-        return iterator_to_array($this->tmpFiles, false);
+        return iterator_to_array($this->splObjectStorage, false);
     }
 
     public function getTmpFilesCount(): int
     {
-        return $this->tmpFiles->count();
+        return $this->splObjectStorage->count();
     }
 }
