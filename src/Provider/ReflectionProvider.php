@@ -15,7 +15,9 @@ class ReflectionProvider implements ProviderInterface
         $tmpFile = $reflection->newInstanceWithoutConstructor();
 
         $filenameProperty = $reflection->getProperty('filename');
+
         $filenameProperty->setAccessible(true);
+
         $filenameProperty->setValue($tmpFile, $filename);
 
         return $tmpFile;
