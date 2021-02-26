@@ -184,9 +184,4 @@ final class TmpFileManager implements TmpFileManagerInterface
             $this->removeTmpFile($tmpFile);
         }
     }
-
-    public function __destruct()
-    {
-        $this->purge();
-    }
 }
