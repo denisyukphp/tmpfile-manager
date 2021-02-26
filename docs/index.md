@@ -270,7 +270,7 @@ With EventDispatcher you can subscribe manager's events to inject your code in l
 <?php
 
 use TmpFileManager\TmpFile\TmpFile;
-use TmpFileManager\Event\ManagerStartEvent;
+use TmpFileManager\Event\TmpFileManagerStartEvent;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\Event\TmpFileRemoveEvent;
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
@@ -283,9 +283,9 @@ $eventDispatcher = new EventDispatcher();
 `TmpFileManagerStartEvent::class` is fired when TmpFileManager constructing. Here deferred purge handler and garbage collector are register. This event haven't access to temp files:
 
 ```php
-$eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFileManagerStartEvent $tmpFileManagerStartEvent) {
+$eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFileManagerStartEvent $startEvent) {
     /** @var TmpFileManager $tmpFileManager */
-    $tmpFileManager = $tmpFileManagerStartEvent->getTmpFileManager();
+    $tmpFileManager = $startEvent->getTmpFileManager();
     
     // ...
 });
@@ -294,9 +294,9 @@ $eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFile
 `TmpFileCreateEvent::class` is fired after temp file created:
 
 ```php
-$eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreateEvent $tmpFileCreateEvent) {
+$eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreateEvent $createEvent) {
     /** @var TmpFile $tmpFile */
-    $tmpFile = $tmpFileCreateEvent->getTmpFile();
+    $tmpFile = $createEvent->getTmpFile();
     
     // ...
 });
@@ -305,9 +305,9 @@ $eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreate
 `TmpFileRemoveEvent::class` is fired before temp file removed:
 
 ```php
-$eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemoveEvent $tmpFileRemoveEvent) {
+$eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemoveEvent $removeEvent) {
     /** @var TmpFile $tmpFile */
-    $tmpFile = $tmpFileRemoveEvent->getTmpFile();
+    $tmpFile = $removeEvent->getTmpFile();
     
     // ...
 });
@@ -316,9 +316,9 @@ $eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemove
 `TmpFileManagerPurgeEvent::class` is fired before all temp files will are purge. Here may run unclosed resources handler:
 
 ```php
-$eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFileManagerPurgeEvent $tmpFileManagerPurgeEvent) {
+$eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFileManagerPurgeEvent $purgeEvent) {
     /** @var TmpFileManager $tmpFileManager */
-    $tmpFileManager = $tmpFileManagerPurgeEvent->getTmpFileManager();
+    $tmpFileManager = $purgeEvent->getTmpFileManager();
     
     // ...
 });
