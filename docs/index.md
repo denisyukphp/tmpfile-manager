@@ -39,6 +39,8 @@ $config = (new ConfigBuilder())
 $tmpFileManager = new TmpFileManager($config);
 ```
 
+You can use TmpFileManager without configuration and with default options.
+
 ## Creating temp files
 
 To create a temp file use the `createTmpFile()` method:
@@ -46,7 +48,7 @@ To create a temp file use the `createTmpFile()` method:
 ```php
 <?php
 
-use TmpFile\TmpFile;
+use TmpFileManager\TmpFile\TmpFile;
 use TmpFileManager\TmpFileManager;
 
 $tmpFileManager = new TmpFileManager();
@@ -66,10 +68,9 @@ $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
 If you need to create temp file from SplFileInfo use `createTmpFileFromSplFileInfo()` method:
 
 ```php
-/** @var TmpFile $tmpFile */
-$tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo(
-    new \SplFileInfo('/path/to/file')
-);
+$splFileInfo = new \SplFileInfo('/path/to/file');
+
+$tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
 ```
 
 Also you can copy temp file from other temp file just use `copyTmpFile()` method:
@@ -79,17 +80,18 @@ $tmpFile = $tmpFileManager->createTmpFile();
 
 file_put_contents($tmpFile, 'Meow!');
 
-$new = $tmpFileManager->copyTmpFile($tmpFile);
+$copiedTmpFile = $tmpFileManager->copyTmpFile($tmpFile);
 ```
 
-TmpFileManager can create TmpFile from upload file by HTTP:
+TmpFileManager can create TmpFile from upload file by HTTP with `createTmpFileFromUploadedFile()` method:
 
 ```php
-/** @var string $uploadedFilename */
 $uploadedFilename = $_FILES['your_field_name']['tmp_name'];
 
 $tmpFile = $tmpFileManager->createTmpFileFromUploadedFile($uploadedFilename);
 ```
+
+TmpFileManager provides different ways to create a temp file, use one of them in your tasks.
 
 ## Removing temp files
 
@@ -98,7 +100,7 @@ By default, created temp files will purge automatically after PHP is finished, b
 ```php
 <?php
 
-use TmpFile\TmpFile;
+use TmpFileManager\TmpFile\TmpFile;
 use TmpFileManager\TmpFileManager;
 
 $tmpFileManager = new TmpFileManager();
@@ -117,6 +119,8 @@ If you need to purge all temp files by force get call `purge()` method:
 $tmpFileManager->purge();
 ```
 
+All temp files will immediately remove.
+
 ## Check unclosed resources
 
 TmpFileManager can close open resources automatically before purging temp files. Configure `setUnclosedResourcesCheck()` to `true`:
@@ -124,8 +128,8 @@ TmpFileManager can close open resources automatically before purging temp files.
 ```php
 <?php
 
-use TmpFile\TmpFile;
 use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\TmpFile\TmpFile;
 use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
@@ -179,6 +183,8 @@ $handler = $config->getGarbageCollectionHandler();
 $handler->handle($config);
 ```
 
+By default, garbage collection in TmpFileManager is off.
+
 ## Custom handlers
 
 Define your handlers to get more control of temp files management with ConfigBuilder. Below are the default handlers:
@@ -221,7 +227,7 @@ To replace unclosed resources handler yoo need to implement UnclosedResourcesHan
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFile\TmpFileInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
@@ -254,6 +260,8 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 }
 ```
 
+Use handler to pass specific logic in temp files handlers.
+
 ## Subscribe events
 
 With EventDispatcher you can subscribe manager's events to inject your code in lifecycle of temp files.
@@ -261,8 +269,8 @@ With EventDispatcher you can subscribe manager's events to inject your code in l
 ```php
 <?php
 
-use TmpFile\TmpFile;
-use TmpFileManager\Event\TmpFileManagerStartEvent;
+use TmpFileManager\TmpFile\TmpFile;
+use TmpFileManager\Event\ManagerStartEvent;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\Event\TmpFileRemoveEvent;
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
@@ -321,9 +329,10 @@ After that you need to add event dispatcher in TmpFileManager to your event list
 ```php
 /** @var \TmpFileManager\Config\ConfigInterface $config */
 /** @var \TmpFileManager\Container\ContainerInterface $container */
-/** @var \TmpFileManager\TmpFileHandler\TmpFileHandlerInterface $tmpFileHandler */
+/** @var \TmpFileManager\Filesystem\FilesystemInterface $filesystem */
+/** @var \TmpFileManager\Provider\ProviderInterface $provider */
 
-$tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
+$tmpFileManager = new TmpFileManager($config, $container, $filesystem, $eventDispatcher, $provider);
 ```
 
 ## Advanced usage
@@ -333,36 +342,38 @@ You can get more control on manager if implement basic interfaces of inner servi
 ```php
 <?php
 
-use TmpFile\TmpFile;
 use TmpFileManager\Config\Config;
-use TmpFileManager\Config\ConfigBuilder;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\Container;
 use TmpFileManager\Container\ContainerInterface;
-use TmpFileManager\TmpFileHandler\TmpFileHandler;
-use TmpFileManager\TmpFileHandler\TmpFileHandlerInterface;
+use TmpFileManager\Filesystem\Filesystem;
+use TmpFileManager\Filesystem\FilesystemInterface;
+use TmpFileManager\Provider\ReflectionProvider;
+use TmpFileManager\Provider\ProviderInterface;
 use TmpFileManager\TmpFileManager;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /** @var ConfigInterface $config */
-$config = new Config(new ConfigBuilder());
+$config = Config::createFromDefault();
 
 /** @var ContainerInterface $container */
 $container = new Container();
 
-/** @var TmpFileHandlerInterface $tmpFileHandler */
-$tmpFileHandler = new TmpFileHandler(new Filesystem());
+/** @var FilesystemInterface $filesystem */
+$filesystem = Filesystem::create();
 
 /** @var EventDispatcherInterface $eventDispatcher */
 $eventDispatcher = new EventDispatcher();
+
+/** @var ProviderInterface $provider */
+$provider = new ReflectionProvider();
 ```
 
 Next you must inject dependencies into to TmpFileManager:
 
 ```php
-$tmpFileManager = new TmpFileManager($config, $container, $tmpFileHandler, $eventDispatcher);
+$tmpFileManager = new TmpFileManager($config, $container, $filesystem, $eventDispatcher, $provider);
 
 /** @var ConfigInterface $config */
 $config = $tmpFileManager->getConfig();
@@ -370,11 +381,14 @@ $config = $tmpFileManager->getConfig();
 /** @var ContainerInterface $container */
 $container = $tmpFileManager->getContainer();
 
-/** @var TmpFileHandlerInterface $tmpFileHandler */
-$tmpFileHandler = $tmpFileManager->getTmpFileHandler();
+/** @var FilesystemInterface $filesystem */
+$filesystem = $tmpFileManager->getFilesystem();
 
 /** @var EventDispatcherInterface $eventDispatcher */
 $eventDispatcher = $tmpFileManager->getEventDispatcher();
+
+/** @var ProviderInterface $provider */
+$provider = $tmpFileManager->getProvider();
 ```
 
 After that manager's inner services are available to extend TmpFileManager use-cases in any part your application.
