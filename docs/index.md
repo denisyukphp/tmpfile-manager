@@ -159,6 +159,7 @@ The probability is calculated by using probability/divisor, e.g. 1/100 means the
 <?php
 
 use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Handler\GarbageCollectionHandler;
 use TmpFileManager\TmpFileManager;
 
 $config = (new ConfigBuilder())
@@ -178,7 +179,7 @@ $tmpFileManager = new TmpFileManager($config);
 Also you can start garbage collection process only with handler:
 
 ```php
-$handler = $config->getGarbageCollectionHandler();
+$handler = new GarbageCollectionHandler();
 
 $handler->handle($config);
 ```
