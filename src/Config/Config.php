@@ -6,7 +6,7 @@ use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
-class Config implements ConfigInterface
+final class Config implements ConfigInterface
 {
     /**
      * @var ConfigBuilder
@@ -18,7 +18,7 @@ class Config implements ConfigInterface
         $this->configBuilder = $configBuilder;
     }
 
-    public static function createFromDefault(): ConfigInterface
+    public static function default(): ConfigInterface
     {
         $configBuilder = new ConfigBuilder();
 

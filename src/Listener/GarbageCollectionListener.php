@@ -4,7 +4,7 @@ namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerStartEvent;
 
-class GarbageCollectionListener
+final class GarbageCollectionListener
 {
     public function __invoke(TmpFileManagerStartEvent $startEvent): void
     {

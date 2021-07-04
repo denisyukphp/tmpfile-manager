@@ -2,10 +2,10 @@
 
 namespace TmpFileManager\Event;
 
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class TmpFileRemoveEvent extends Event
+final class TmpFileRemoveEvent extends Event
 {
     /**
      * @var TmpFileInterface

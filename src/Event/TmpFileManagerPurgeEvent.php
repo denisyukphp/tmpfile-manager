@@ -5,7 +5,7 @@ namespace TmpFileManager\Event;
 use TmpFileManager\TmpFileManager;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class TmpFileManagerPurgeEvent extends Event
+final class TmpFileManagerPurgeEvent extends Event
 {
     /**
      * @var TmpFileManager

@@ -2,6 +2,7 @@
 
 namespace TmpFileManager;
 
+use TmpFile\TmpFileInterface;
 use TmpFileManager\Config\Config;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\Container;
@@ -17,7 +18,6 @@ use TmpFileManager\Listener\GarbageCollectionListener;
 use TmpFileManager\Listener\UnclosedResourcesListener;
 use TmpFileManager\Provider\ReflectionProvider;
 use TmpFileManager\Provider\ProviderInterface;
-use TmpFileManager\TmpFile\TmpFileInterface;
 use TmpFileManager\Exception\FileNotExistsException;
 use TmpFileManager\Exception\FileNotUploadedException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -47,13 +47,13 @@ final class TmpFileManager implements TmpFileManagerInterface
     private $provider;
 
     public function __construct(
-        ConfigInterface $config = null,
-        ContainerInterface $container = null,
-        FilesystemInterface $filesystem = null,
-        EventDispatcherInterface $eventDispatcher = null,
-        ProviderInterface $provider = null
+        ?ConfigInterface $config = null,
+        ?ContainerInterface $container = null,
+        ?FilesystemInterface $filesystem = null,
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?ProviderInterface $provider = null
     ) {
-        $this->config = $config ?? Config::createFromDefault();
+        $this->config = $config ?? Config::default();
         $this->container = $container ?? new Container();
         $this->filesystem = $filesystem ?? Filesystem::create();
         $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
@@ -110,7 +110,7 @@ final class TmpFileManager implements TmpFileManagerInterface
     {
         if (!is_file($filename)) {
             throw new FileNotExistsException(
-                sprintf('The file %s not exists', $filename)
+                sprintf('The file "%s" not exists', $filename)
             );
         }
 
@@ -147,7 +147,7 @@ final class TmpFileManager implements TmpFileManagerInterface
     {
         if (!is_uploaded_file($filename)) {
             throw new FileNotUploadedException(
-                sprintf('The file %s is not uploaded', $filename)
+                sprintf('The file "%s" is not uploaded', $filename)
             );
         }
 

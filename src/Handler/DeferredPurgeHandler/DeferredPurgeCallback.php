@@ -4,7 +4,7 @@ namespace TmpFileManager\Handler\DeferredPurgeHandler;
 
 use TmpFileManager\TmpFileManagerInterface;
 
-class DeferredPurgeCallback
+final class DeferredPurgeCallback
 {
     /**
      * @var TmpFileManagerInterface

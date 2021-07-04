@@ -5,7 +5,7 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler;
 use TmpFileManager\Config\ConfigInterface;
 use Symfony\Component\Process\Process;
 
-class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
+final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
     /**
      * @var string

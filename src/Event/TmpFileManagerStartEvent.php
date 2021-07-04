@@ -5,7 +5,7 @@ namespace TmpFileManager\Event;
 use TmpFileManager\TmpFileManager;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class TmpFileManagerStartEvent extends Event
+final class TmpFileManagerStartEvent extends Event
 {
     /**
      * @var TmpFileManager

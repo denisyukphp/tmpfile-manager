@@ -2,7 +2,7 @@
 
 namespace TmpFileManager\Filesystem;
 
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
 interface FilesystemInterface
 {

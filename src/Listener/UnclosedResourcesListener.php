@@ -4,7 +4,7 @@ namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 
-class UnclosedResourcesListener
+final class UnclosedResourcesListener
 {
     public function __invoke(TmpFileManagerPurgeEvent $purgeEvent): void
     {

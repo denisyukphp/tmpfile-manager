@@ -4,7 +4,7 @@ namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
 use TmpFileManager\Container\ContainerInterface;
 
-class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
+final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
     public function handle(ContainerInterface $container): void
     {

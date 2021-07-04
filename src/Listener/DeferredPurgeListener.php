@@ -4,7 +4,7 @@ namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerStartEvent;
 
-class DeferredPurgeListener
+final class DeferredPurgeListener
 {
     public function __invoke(TmpFileManagerStartEvent $startEvent): void
     {

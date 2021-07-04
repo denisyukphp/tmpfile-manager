@@ -2,10 +2,9 @@
 
 namespace TmpFileManager\Provider;
 
-use TmpFileManager\TmpFile\TmpFile;
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
-class ReflectionProvider implements ProviderInterface
+final class ReflectionProvider implements ProviderInterface
 {
     public function getTmpFile(string $filename): TmpFileInterface
     {

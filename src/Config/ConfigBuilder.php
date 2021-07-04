@@ -14,43 +14,43 @@ class ConfigBuilder
     /**
      * @var string
      */
-    private $tmpFileDirectory;
+    protected $tmpFileDirectory;
     /**
      * @var string
      */
-    private $tmpFilePrefix;
+    protected $tmpFilePrefix;
     /**
      * @var bool
      */
-    private $deferredPurge;
+    protected $deferredPurge;
     /**
      * @var DeferredPurgeHandlerInterface
      */
-    private $deferredPurgeHandler;
+    protected $deferredPurgeHandler;
     /**
      * @var bool
      */
-    private $unclosedResourcesCheck;
+    protected $unclosedResourcesCheck;
     /**
      * @var UnclosedResourcesHandlerInterface
      */
-    private $unclosedResourcesHandler;
+    protected $unclosedResourcesHandler;
     /**
      * @var int
      */
-    private $garbageCollectionProbability;
+    protected $garbageCollectionProbability;
     /**
      * @var int
      */
-    private $garbageCollectionDivisor;
+    protected $garbageCollectionDivisor;
     /**
      * @var int
      */
-    private $garbageCollectionLifetime;
+    protected $garbageCollectionLifetime;
     /**
      * @var GarbageCollectionHandlerInterface
      */
-    private $garbageCollectionHandler;
+    protected $garbageCollectionHandler;
 
     public function __construct()
     {
@@ -64,6 +64,11 @@ class ConfigBuilder
         $this->garbageCollectionDivisor = 100;
         $this->garbageCollectionLifetime = 3600;
         $this->garbageCollectionHandler = new GarbageCollectionHandler();
+    }
+
+    public static function create(): self
+    {
+        return new self();
     }
 
     public function setTmpFileDirectory(string $tmpFileDirectory): self

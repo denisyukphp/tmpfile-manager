@@ -1,6 +1,8 @@
 <?php
 
-namespace TmpFileManager\TmpFile;
+namespace TmpFileManager\Provider;
+
+use TmpFile\TmpFileInterface;
 
 final class TmpFile implements TmpFileInterface
 {
@@ -8,6 +10,11 @@ final class TmpFile implements TmpFileInterface
 
     private function __construct()
     {
+    }
+
+    public function getFilename(): string
+    {
+        return $this->filename;
     }
 
     public function __toString(): string

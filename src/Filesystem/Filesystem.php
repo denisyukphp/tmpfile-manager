@@ -2,10 +2,10 @@
 
 namespace TmpFileManager\Filesystem;
 
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 use Symfony\Component\Filesystem\Filesystem as Fs;
 
-class Filesystem implements FilesystemInterface
+final class Filesystem implements FilesystemInterface
 {
     /**
      * @var Fs

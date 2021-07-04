@@ -4,7 +4,7 @@ namespace TmpFileManager\Handler\DeferredPurgeHandler;
 
 use TmpFileManager\TmpFileManagerInterface;
 
-class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
+final class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
     public function handle(TmpFileManagerInterface $tmpFileManager): void
     {

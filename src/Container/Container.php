@@ -2,9 +2,9 @@
 
 namespace TmpFileManager\Container;
 
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
-class Container implements ContainerInterface
+final class Container implements ContainerInterface
 {
     /**
      * @var \SplObjectStorage

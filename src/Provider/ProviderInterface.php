@@ -2,7 +2,7 @@
 
 namespace TmpFileManager\Provider;
 
-use TmpFileManager\TmpFile\TmpFileInterface;
+use TmpFile\TmpFileInterface;
 
 interface ProviderInterface
 {
