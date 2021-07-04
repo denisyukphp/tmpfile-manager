@@ -3,8 +3,8 @@
 namespace TmpFileManager\Tests\Provider;
 
 use PHPUnit\Framework\TestCase;
+use TmpFile\TmpFileInterface;
 use TmpFileManager\Provider\ReflectionProvider;
-use TmpFileManager\TmpFile\TmpFileInterface;
 
 class ReflectionProviderTest extends TestCase
 {
@@ -14,7 +14,8 @@ class ReflectionProviderTest extends TestCase
 
         $tmpFile = $provider->getTmpFile('Meow!');
 
-        $this->assertSame('Meow!', (string) $tmpFile);
+        $this->assertSame('Meow!', $tmpFile->getFilename());
+
         $this->assertInstanceOf(TmpFileInterface::class, $tmpFile);
     }
 }

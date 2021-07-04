@@ -12,16 +12,16 @@ use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInte
 
 class ConfigTest extends TestCase
 {
-    public function testCreateFromDefault(): void
+    public function testDefault(): void
     {
-        $config = Config::createFromDefault();
+        $config = Config::default();
 
         $this->assertInstanceOf(ConfigInterface::class, $config);
     }
 
     public function testTypes(): void
     {
-        $config = (new ConfigBuilder())->build();
+        $config = ConfigBuilder::create()->build();
 
         $this->assertIsString($config->getTmpFileDirectory());
         $this->assertIsString($config->getTmpFilePrefix());

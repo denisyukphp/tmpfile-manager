@@ -20,7 +20,7 @@ class GarbageCollectionHandlerTest extends TestCase
 
         $fs->touch($tmpFile, time() - 3600);
 
-        $config = (new ConfigBuilder())
+        $config = ConfigBuilder::create()
             ->setGarbageCollectionProbability(100)
             ->setGarbageCollectionLifetime(0)
             ->build()

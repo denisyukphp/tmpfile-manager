@@ -3,9 +3,9 @@
 namespace TmpFileManager\Tests\Event;
 
 use PHPUnit\Framework\TestCase;
+use TmpFile\TmpFileInterface;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\TmpFile\TmpFileInterface;
 
 class TmpFileCreateEventTest extends TestCase
 {

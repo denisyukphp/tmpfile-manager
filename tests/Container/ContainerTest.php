@@ -3,9 +3,9 @@
 namespace TmpFileManager\Tests\Container;
 
 use PHPUnit\Framework\TestCase;
+use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Container\Container;
-use TmpFileManager\TmpFile\TmpFileInterface;
 
 class ContainerTest extends TestCase
 {

@@ -3,12 +3,12 @@
 namespace TmpFileManager\Tests;
 
 use PHPUnit\Framework\TestCase;
+use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Filesystem\FilesystemInterface;
 use TmpFileManager\Provider\ProviderInterface;
-use TmpFileManager\TmpFile\TmpFileInterface;
 use TmpFileManager\Exception\FileNotUploadedException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
