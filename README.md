@@ -25,11 +25,11 @@ Configure TmpFileManager and create a temp file:
 ```php
 <?php
 
+use TmpFile\TmpFileInterface;
 use TmpFileManager\Config\ConfigBuilder;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\TmpFile\TmpFile;
 
-$config = (new ConfigBuilder())
+$config = ConfigBuilder::create()
     ->setTmpFileDirectory(sys_get_temp_dir())
     ->setTmpFilePrefix('php')
     ->build()
@@ -37,14 +37,12 @@ $config = (new ConfigBuilder())
 
 $tmpFileManager = new TmpFileManager($config);
 
-/** @var TmpFile $tmpFile */
+/** @var TmpFileInterface $tmpFile */
 $tmpFile = $tmpFileManager->createTmpFile();
 
-$tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+$tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
     // ...
 });
-
-$tmpFileManager->removeTmpFile($tmpFile);
 ```
 
 All temp files which created with the manager will be purged automatically by default.
