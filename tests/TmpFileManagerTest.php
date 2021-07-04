@@ -5,26 +5,10 @@ namespace TmpFileManager\Tests;
 use PHPUnit\Framework\TestCase;
 use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\Config\ConfigInterface;
-use TmpFileManager\Container\ContainerInterface;
-use TmpFileManager\Filesystem\FilesystemInterface;
-use TmpFileManager\Provider\ProviderInterface;
 use TmpFileManager\Exception\FileNotUploadedException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TmpFileManagerTest extends TestCase
 {
-    public function testServices()
-    {
-        $tmpFileManager = new TmpFileManager();
-
-        $this->assertInstanceOf(ConfigInterface::class, $tmpFileManager->getConfig());
-        $this->assertInstanceOf(ContainerInterface::class, $tmpFileManager->getContainer());
-        $this->assertInstanceOf(FilesystemInterface::class, $tmpFileManager->getFilesystem());
-        $this->assertInstanceOf(EventDispatcherInterface::class, $tmpFileManager->getEventDispatcher());
-        $this->assertInstanceOf(ProviderInterface::class, $tmpFileManager->getProvider());
-    }
-
     public function testCreateTmpFile(): void
     {
         $tmpFileManager = new TmpFileManager();

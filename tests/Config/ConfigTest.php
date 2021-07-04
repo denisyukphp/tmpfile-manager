@@ -4,24 +4,15 @@ namespace TmpFileManager\Tests;
 
 use PHPUnit\Framework\TestCase;
 use TmpFileManager\Config\Config;
-use TmpFileManager\Config\ConfigBuilder;
-use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
 
 class ConfigTest extends TestCase
 {
-    public function testDefault(): void
+    public function testDefaultTypes(): void
     {
         $config = Config::default();
-
-        $this->assertInstanceOf(ConfigInterface::class, $config);
-    }
-
-    public function testTypes(): void
-    {
-        $config = ConfigBuilder::create()->build();
 
         $this->assertIsString($config->getTmpFileDirectory());
         $this->assertIsString($config->getTmpFilePrefix());
