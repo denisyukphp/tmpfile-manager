@@ -39,10 +39,6 @@ $tmpFileManager = new TmpFileManager($config);
 
 /** @var TmpFileInterface $tmpFile */
 $tmpFile = $tmpFileManager->createTmpFile();
-
-$tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-    // ...
-});
 ```
 
 All temp files which created with the manager will be purged automatically by default.
