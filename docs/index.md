@@ -65,33 +65,7 @@ $tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
 });
 ```
 
-If you need to create the temp file from SplFileInfo use `createTmpFileFromSplFileInfo()` method:
-
-```php
-$splFileInfo = new \SplFileInfo('/path/to/file');
-
-$tmpFile = $tmpFileManager->createTmpFileFromSplFileInfo($splFileInfo);
-```
-
-Also you can copy the temp file from other temp file use `copyTmpFile()` method:
-
-```php
-$tmpFile = $tmpFileManager->createTmpFile();
-
-file_put_contents($tmpFile, 'Meow!');
-
-$copiedTmpFile = $tmpFileManager->copyTmpFile($tmpFile);
-```
-
-TmpFileManager can create TmpFile from an uploaded file by HTTP with `createTmpFileFromUploadedFile()` method:
-
-```php
-$uploadedFilename = $_FILES['upload']['tmp_name'];
-
-$tmpFile = $tmpFileManager->createTmpFileFromUploadedFile($uploadedFilename);
-```
-
-Use one of different ways to create the temp file for your tasks.
+Use one of these ways to create the temp file for your tasks.
 
 ## Removing temp files
 
