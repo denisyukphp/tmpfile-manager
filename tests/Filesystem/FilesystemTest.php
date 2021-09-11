@@ -30,25 +30,6 @@ class FilesystemTest extends TestCase
         $this->assertTrue($filesystem->existsTmpFile($tmpFile));
     }
 
-    public function testCopySplFileInfo(): void
-    {
-        $filesystem = Filesystem::create();
-
-        $manager = new TmpFileManager();
-
-        $splFileInfo = new \SplFileInfo($manager->createTmpFile());
-
-        file_put_contents($splFileInfo, 'Meow!');
-
-        $tmpFile = $manager->createTmpFile();
-
-        $filesystem->copySplFileInfo($splFileInfo, $tmpFile);
-
-        $data = file_get_contents($tmpFile);
-
-        $this->assertSame('Meow!', $data);
-    }
-
     public function testRemoveTmpFile(): void
     {
         $filesystem = Filesystem::create();
