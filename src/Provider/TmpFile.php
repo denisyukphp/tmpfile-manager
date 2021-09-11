@@ -6,6 +6,9 @@ use TmpFile\TmpFileInterface;
 
 final class TmpFile implements TmpFileInterface
 {
+    /**
+     * @var string
+     */
     private $filename;
 
     private function __construct()

@@ -34,11 +34,6 @@ final class Filesystem implements FilesystemInterface
         return $this->fs->exists($tmpFile);
     }
 
-    public function copySplFileInfo(\SplFileInfo $splFileInfo, TmpFileInterface $tmpFile): void
-    {
-        $this->fs->copy($splFileInfo, $tmpFile, true);
-    }
-
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         $this->fs->remove($tmpFile);
