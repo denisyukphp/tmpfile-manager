@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Container;
 
 use TmpFile\TmpFileInterface;

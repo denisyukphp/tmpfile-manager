@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
 use TmpFileManager\Config\ConfigInterface;
@@ -7,14 +9,9 @@ use Symfony\Component\Process\Process;
 
 final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    /**
-     * @var string
-     */
-    private $executable;
-
-    public function __construct(string $executable = 'find')
-    {
-        $this->executable = $executable;
+    public function __construct(
+        private string $executable = 'find',
+    ) {
     }
 
     public function handle(ConfigInterface $config): void
@@ -53,6 +50,6 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
 
     private function convertSecondsToMinutes(int $seconds): int
     {
-        return ceil($seconds / 60);
+        return (int) ceil($seconds / 60);
     }
 }

@@ -1,21 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerStartEvent;
 
 final class GarbageCollectionListener
 {
-    public function __invoke(TmpFileManagerStartEvent $startEvent): void
+    public function __invoke(TmpFileManagerStartEvent $event): void
     {
-        $tmpFileManager = $startEvent->getTmpFileManager();
-
-        $config = $tmpFileManager->getConfig();
-
-        $handler = $config->getGarbageCollectionHandler();
-
-        if ($config->getGarbageCollectionProbability()) {
-            $handler->handle($config);
+        if ($event->tmpFileManager->config->getGarbageCollectionProbability()) {
+            $event->tmpFileManager->config->getGarbageCollectionHandler()->handle($event->tmpFileManager->config);
         }
     }
 }

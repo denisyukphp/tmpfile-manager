@@ -1,23 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 
 final class UnclosedResourcesListener
 {
-    public function __invoke(TmpFileManagerPurgeEvent $purgeEvent): void
+    public function __invoke(TmpFileManagerPurgeEvent $event): void
     {
-        $tmpFileManager = $purgeEvent->getTmpFileManager();
-
-        $config = $tmpFileManager->getConfig();
-
-        $container = $tmpFileManager->getContainer();
-
-        $handler = $config->getUnclosedResourcesHandler();
-
-        if ($config->getUnclosedResourcesCheck()) {
-            $handler->handle($container);
+        if ($event->tmpFileManager->config->isUnclosedResourcesCheck()) {
+            $event->tmpFileManager->config->getUnclosedResourcesHandler()->handle($event->tmpFileManager->container);
         }
     }
 }

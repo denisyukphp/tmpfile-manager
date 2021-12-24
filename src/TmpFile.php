@@ -1,18 +1,16 @@
 <?php
 
-namespace TmpFileManager\Provider;
+declare(strict_types=1);
+
+namespace TmpFileManager;
 
 use TmpFile\TmpFileInterface;
 
 final class TmpFile implements TmpFileInterface
 {
-    /**
-     * @var string
-     */
-    private $filename;
-
-    private function __construct()
-    {
+    public function __construct(
+        private string $filename,
+    ) {
     }
 
     public function getFilename(): string

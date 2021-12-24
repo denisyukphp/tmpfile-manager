@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Config;
 
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
@@ -12,11 +14,11 @@ interface ConfigInterface
 
     public function getTmpFilePrefix(): string;
 
-    public function getDeferredPurge(): bool;
+    public function isDeferredPurge(): bool;
 
     public function getDeferredPurgeHandler(): DeferredPurgeHandlerInterface;
 
-    public function getUnclosedResourcesCheck(): bool;
+    public function isUnclosedResourcesCheck(): bool;
 
     public function getUnclosedResourcesHandler(): UnclosedResourcesHandlerInterface;
 

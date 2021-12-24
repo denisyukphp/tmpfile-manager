@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Event;
 
 use TmpFileManager\TmpFileManager;
@@ -7,18 +9,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 final class TmpFileManagerStartEvent extends Event
 {
-    /**
-     * @var TmpFileManager
-     */
-    private $tmpFileManager;
-
-    public function __construct(TmpFileManager $tmpFileManager)
-    {
-        $this->tmpFileManager = $tmpFileManager;
-    }
-
-    public function getTmpFileManager(): TmpFileManager
-    {
-        return $this->tmpFileManager;
+    public function __construct(
+        public readonly TmpFileManager $tmpFileManager,
+    ) {
     }
 }
