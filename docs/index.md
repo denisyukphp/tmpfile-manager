@@ -11,30 +11,23 @@
 
 ## Default configuration
 
-By default temp files will purge automatically, unclosed resources check and garbage collection are off. Below is the default configuration:
+By default, temp files will purge automatically, unclosed resources check and garbage collection are off. Below is the default configuration:
 
 ```php
 <?php
 
-use TmpFileManager\Config\ConfigBuilder;
-use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandler;
-use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
-use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
+use TmpFileManager\Config\Config;
 use TmpFileManager\TmpFileManager;
 
-$config = ConfigBuilder::create()
-    ->setTmpFileDirectory(sys_get_temp_dir())
-    ->setTmpFilePrefix('php')
-    ->setDeferredPurge(true)
-    ->setDeferredPurgeHandler(new DeferredPurgeHandler())
-    ->setUnclosedResourcesCheck(false)
-    ->setUnclosedResourcesHandler(new UnclosedResourcesHandler())
-    ->setGarbageCollectionProbability(0)
-    ->setGarbageCollectionDivisor(100)
-    ->setGarbageCollectionLifetime(3600)
-    ->setGarbageCollectionHandler(new GarbageCollectionHandler())
-    ->build()
-;
+$config = new Config(
+    tmpFileDirectory: sys_get_temp_dir(),
+    tmpFilePrefix: 'php',
+    isDeferredPurge: true,
+    isUnclosedResourcesCheck: false,
+    garbageCollectionProbability: 0,
+    garbageCollectionDivisor: 100,
+    garbageCollectionLifetime: 3600,
+);
 
 $tmpFileManager = new TmpFileManager($config);
 ```
@@ -43,24 +36,24 @@ You can use TmpFileManager with default options.
 
 ## Creating temp files
 
-To create a temp file use `createTmpFile()` method:
+To create a temp file use `create()` method:
 
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
 
 $tmpFileManager = new TmpFileManager();
 
 /** @var TmpFileInterface $tmpFile */
-$tmpFile = $tmpFileManager->createTmpFile();
+$tmpFile = $tmpFileManager->create();
 ```
 
-In console commands use `createTmpFileContext()` method to create and handle temp files. Temp files will be immediately removed after finished callback:
+In console commands use `isolate()` method to create and handle temp files. Temp files will be immediately removed after finished callback:
 
 ```php
-$tmpFileManager->createTmpFileContext(function (TmpFile $tmpFile) {
+$tmpFileManager->isolate(function (TmpFile $tmpFile) {
     // ...
 });
 ```
@@ -69,22 +62,22 @@ Use one of these ways to create the temp file for your tasks.
 
 ## Removing temp files
 
-By default created temp files will purge automatically after PHP is finished but you can remove temp files manually with `removeTmpFile()` method:
+By default, created temp files will purge automatically after PHP is finished, but you can remove temp files manually with `remove()` method:
 
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
 
 $tmpFileManager = new TmpFileManager();
 
 /** @var TmpFileInterface $tmpFile */
-$tmpFileManager->createTmpFile();
+$tmpFileManager->create();
 
 // ...
 
-$tmpFileManager->removeTmpFile($tmpFile);
+$tmpFileManager->remove($tmpFile);
 ```
 
 If you need to purge all temp files by force get call `purge()` method:
@@ -102,19 +95,18 @@ TmpFileManager close open resources automatically before purging temp files:
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
 
-$config = ConfigBuilder::create()
-    ->setUnclosedResourcesCheck(true)
-    ->build()
-;
+$config = new Config(
+    unclosedResourcesHandler: true,
+);
 
 $tmpFileManager = new TmpFileManager($config);
 
 /** @var TmpFileInterface $tmpFile */
-$tmpFile = $tmpFileManager->createTmpFile();
+$tmpFile = $tmpFileManager->create();
     
 $fh = fopen($tmpFile, 'r+');
     
@@ -132,16 +124,15 @@ The probability is calculated by using probability/divisor, e.g. 1/100 means the
 ```php
 <?php
 
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\Handler\GarbageCollectionHandler;
 use TmpFileManager\TmpFileManager;
 
-$config = ConfigBuilder::create()
-    ->setGarbageCollectionProbability(1)
-    ->setGarbageCollectionDivisor(100)
-    ->setGarbageCollectionLifetime(3600)
-    ->build()
-;
+$config = new Config(
+    garbageCollectionProbability: 1,
+    garbageCollectionDivisor: 100,
+    garbageCollectionLifetime: 3600,
+);
 ```
 
 Garbage collection process will start before an instance of TmpFileManager:
@@ -150,15 +141,15 @@ Garbage collection process will start before an instance of TmpFileManager:
 $tmpFileManager = new TmpFileManager($config);
 ```
 
-Also you can start garbage collection process only with handler:
+Also, you can start garbage collection process only with handler:
 
 ```php
-$handler = new GarbageCollectionHandler();
+$garbageCollectionHandler = new GarbageCollectionHandler();
 
-$handler->handle($config);
+$garbageCollectionHandler->handle($config);
 ```
 
-By default garbage collection is off.
+By default, garbage collection is off.
 
 ## Custom handlers
 
@@ -167,17 +158,16 @@ Define your handlers to get more control of temp files. Each handler implements 
 ```php
 <?php
 
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandler;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
 
-$config = ConfigBuilder::create()
-    ->setDeferredPurgeHandler(new DeferredPurgeHandler())
-    ->setUnclosedResourcesHandler(new UnclosedResourcesHandler())
-    ->setGarbageCollectionHandler(new GarbageCollectionHandler())
-    ->build()
-;
+$config = new Config(
+    deferredPurgeHandler: new DeferredPurgeHandler(),
+    unclosedResourcesHandler: new UnclosedResourcesHandler(),
+    garbageCollectionHandler: new GarbageCollectionHandler(),
+);
 ```
 
 `DeferredPurgeHandlerInterface::class` is needed to implement temp files purge after PHP is finished:
@@ -185,8 +175,8 @@ $config = ConfigBuilder::create()
 ```php
 <?php
 
-use TmpFileManager\TmpFileManagerInterface;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
+use TmpFileManager\TmpFileManagerInterface;
 
 class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 {
@@ -202,9 +192,9 @@ class DeferredPurgeHandler implements DeferredPurgeHandlerInterface
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
-use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
+use TmpFileManager\Container\ContainerInterface;
+use TmpFile\TmpFileInterface;
 
 class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
@@ -218,13 +208,13 @@ class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 }
 ```
 
-`GarbageCollectionHandlerInterface::class` is handled process of garbage collection : 
+`GarbageCollectionHandlerInterface::class` is handled process of garbage collection: 
 
 ```php
 <?php
 
-use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\Config\ConfigInterface;
 
 class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
@@ -235,7 +225,7 @@ class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 }
 ```
 
-Use handlers to pass specific logic.
+Use handlers to pass specific logic or rewrite currents.
 
 ## Subscribe events
 
@@ -244,12 +234,12 @@ Subscribe to events to inject your code in lifecycle of temp files:
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
 use TmpFileManager\Event\TmpFileManagerStartEvent;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\Event\TmpFileRemoveEvent;
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $eventDispatcher = new EventDispatcher();
@@ -258,9 +248,9 @@ $eventDispatcher = new EventDispatcher();
 `TmpFileManagerStartEvent::class` is fired when TmpFileManager is constructed:
 
 ```php
-$eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFileManagerStartEvent $startEvent) {
+$eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFileManagerStartEvent $event): void {
     /** @var TmpFileManager $tmpFileManager */
-    $tmpFileManager = $startEvent->getTmpFileManager();
+    $tmpFileManager = $event->tmpFileManage;
     
     // ...
 });
@@ -269,9 +259,9 @@ $eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFile
 `TmpFileCreateEvent::class` is fired after a temp file created:
 
 ```php
-$eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreateEvent $createEvent) {
+$eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreateEvent $event): void {
     /** @var TmpFileInterface $tmpFile */
-    $tmpFile = $createEvent->getTmpFile();
+    $tmpFile = $event->tmpFile;
     
     // ...
 });
@@ -280,9 +270,9 @@ $eventDispatcher->addListener(TmpFileCreateEvent::class, function (TmpFileCreate
 `TmpFileRemoveEvent::class` is fired before the temp file removed:
 
 ```php
-$eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemoveEvent $removeEvent) {
+$eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemoveEvent $event): void {
     /** @var TmpFileInterface $tmpFile */
-    $tmpFile = $removeEvent->getTmpFile();
+    $tmpFile = $event->tmpFile;
     
     // ...
 });
@@ -291,9 +281,9 @@ $eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemove
 `TmpFileManagerPurgeEvent::class` is fired before all temp files will are purge:
 
 ```php
-$eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFileManagerPurgeEvent $purgeEvent) {
+$eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFileManagerPurgeEvent $event): void {
     /** @var TmpFileManager $tmpFileManager */
-    $tmpFileManager = $purgeEvent->getTmpFileManager();
+    $tmpFileManager = $event->tmpFileManager;
     
     // ...
 });
@@ -302,20 +292,16 @@ $eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFile
 After that you need to add event dispatcher to TmpFileManager to your event listeners run fire.
 
 ```php
-/** @var \TmpFileManager\Config\ConfigInterface $config */
-/** @var \TmpFileManager\Container\ContainerInterface $container */
-/** @var \TmpFileManager\Filesystem\FilesystemInterface $filesystem */
-/** @var \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher */
-/** @var \TmpFileManager\Provider\ProviderInterface $provider */
-
-$tmpFileManager = new TmpFileManager($config, $container, $filesystem, $eventDispatcher, $provider);
+$tmpFileManager = new TmpFileManager(
+    eventDispatcher: $eventDispatcher,
+);
 ```
 
 This allows flexible management.
 
 ## Advanced usage
 
-To get more control over temp files, implement service interfaces or use exists:
+To get more control over temp files, implement service interfaces or use exists. For example, you have opportunity to store temp files in cloud or change way of configuration. Inject your dependencies:
 
 ```php
 <?php
@@ -326,47 +312,32 @@ use TmpFileManager\Container\Container;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Filesystem\Filesystem;
 use TmpFileManager\Filesystem\FilesystemInterface;
-use TmpFileManager\Provider\ReflectionProvider;
-use TmpFileManager\Provider\ProviderInterface;
 use TmpFileManager\TmpFileManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/** @var ConfigInterface $config */
-$config = Config::default();
-
-/** @var ContainerInterface $container */
-$container = new Container();
-
-/** @var FilesystemInterface $filesystem */
-$filesystem = Filesystem::create();
-
-/** @var EventDispatcherInterface $eventDispatcher */
-$eventDispatcher = new EventDispatcher();
-
-/** @var ProviderInterface $provider */
-$provider = new ReflectionProvider();
+$tmpFileManager = new TmpFileManager(
+    config: new Config(),
+    container: new Container(),
+    filesystem: new Filesystem(),
+    eventDispatcher: new EventDispatcher(),
+);
 ```
 
-For example you have opportunity to store temp files in cloud or change way of configuration. Inject your dependencies:
+After that services are available to extend use-cases in any part your application:
 
 ```php
-$tmpFileManager = new TmpFileManager($config, $container, $filesystem, $eventDispatcher, $provider);
-
 /** @var ConfigInterface $config */
-$config = $tmpFileManager->getConfig();
+$config = $tmpFileManager->config;
 
 /** @var ContainerInterface $container */
-$container = $tmpFileManager->getContainer();
+$container = $tmpFileManager->container;
 
 /** @var FilesystemInterface $filesystem */
-$filesystem = $tmpFileManager->getFilesystem();
+$filesystem = $tmpFileManager->filesystem;
 
 /** @var EventDispatcherInterface $eventDispatcher */
-$eventDispatcher = $tmpFileManager->getEventDispatcher();
-
-/** @var ProviderInterface $provider */
-$provider = $tmpFileManager->getProvider();
+$eventDispatcher = $tmpFileManager->eventDispatcher;
 ```
 
-After that services are available to extend use-cases in any part your application.
+It is preferable to use this way in handlers and listeners.
