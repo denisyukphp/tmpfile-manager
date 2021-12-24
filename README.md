@@ -16,7 +16,7 @@ You can install the latest version via [Composer](https://getcomposer.org/):
 composer require denisyukphp/tmpfile-manager
 ```
 
-This package requires PHP 7.2 or later.
+This package requires PHP 8.1 or later.
 
 ## Quick usage
 
@@ -25,20 +25,19 @@ Configure TmpFileManager and create a temp file:
 ```php
 <?php
 
-use TmpFile\TmpFileInterface;
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
 
-$config = ConfigBuilder::create()
-    ->setTmpFileDirectory(sys_get_temp_dir())
-    ->setTmpFilePrefix('php')
-    ->build()
-;
+$config = new Config(
+    tmpFileDirectory: sys_get_temp_dir(),
+    tmpFilePrefix: 'php',
+);
 
 $tmpFileManager = new TmpFileManager($config);
 
 /** @var TmpFileInterface $tmpFile */
-$tmpFile = $tmpFileManager->createTmpFile();
+$tmpFile = $tmpFileManager->create();
 ```
 
 All temp files which created with the manager will be purged automatically by default.
