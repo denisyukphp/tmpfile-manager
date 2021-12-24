@@ -1,30 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Tests\Handler;
 
-use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Container\Container;
 use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
+use PHPUnit\Framework\TestCase;
 
 class UnclosedResourcesHandlerTest extends TestCase
 {
-    public function testHandle(): void
+    public function testUnclosedResourcesHandler(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $container = new Container();
 
-        $tmpFile = $manager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
         $container->addTmpFile($tmpFile);
 
-        $fh = fopen($tmpFile, 'r');
+        $fh = fopen($tmpFile->getFilename(), 'r');
 
-        $handler = new UnclosedResourcesHandler();
+        $unclosedResourcesHandler = new UnclosedResourcesHandler();
 
-        $handler->handle($container);
+        $unclosedResourcesHandler->handle($container);
 
-        $this->assertFalse(is_resource($fh));
+        $this->assertIsResource($fh);
     }
 }

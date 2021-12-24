@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Tests\Handler;
 
-use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeCallback;
+use PHPUnit\Framework\TestCase;
 
 class DeferredPurgeCallbackTest extends TestCase
 {
-    public function testCallback(): void
+    public function testDeferredPurgeCallback(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
-        $callback = new DeferredPurgeCallback($manager);
+        $deferredPurgeCallback = new DeferredPurgeCallback($tmpFileManager);
 
-        $tmpFile = $manager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
-        $this->assertIsCallable($callback);
+        $this->assertIsCallable($deferredPurgeCallback);
 
-        $callback();
+        $deferredPurgeCallback();
 
-        $this->assertFileNotExists($tmpFile);
+        $this->assertFileDoesNotExist($tmpFile->getFilename());
     }
 }

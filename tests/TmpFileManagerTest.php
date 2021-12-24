@@ -1,54 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Tests;
 
-use PHPUnit\Framework\TestCase;
-use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
+use TmpFile\TmpFileInterface;
+use PHPUnit\Framework\TestCase;
 
 class TmpFileManagerTest extends TestCase
 {
-    public function testCreateTmpFile(): void
+    public function testCreate(): void
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFile = $tmpFileManager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
-        $this->assertFileExists($tmpFile);
+        $this->assertFileExists($tmpFile->getFilename());
     }
 
-    public function testCreateTmpFileContext(): void
+    public function testIsolate(): void
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFileManager->createTmpFileContext(function (TmpFileInterface $tmpFile) {
-            $this->assertFileExists($tmpFile);
+        $tmpFileManager->isolate(function (TmpFileInterface $tmpFile) {
+            $this->assertFileExists($tmpFile->getFilename());
         });
 
-        $tmpFilesCount = $tmpFileManager->getContainer()->getTmpFilesCount();
-
-        $this->assertSame(0, $tmpFilesCount);
+        $this->assertEquals(0, $tmpFileManager->container->getTmpFilesCount());
     }
 
     public function testRemoveTmpFile(): void
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFile = $tmpFileManager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
-        $tmpFileManager->removeTmpFile($tmpFile);
+        $tmpFileManager->remove($tmpFile);
 
-        $this->assertFileNotExists($tmpFile);
+        $this->assertFileDoesNotExist($tmpFile->getFilename());
     }
 
     public function testPurge(): void
     {
         $tmpFileManager = new TmpFileManager();
 
-        $tmpFile = $tmpFileManager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
         $tmpFileManager->purge();
 
-        $this->assertFileNotExists($tmpFile);
+        $this->assertFileDoesNotExist($tmpFile->getFilename());
     }
 }

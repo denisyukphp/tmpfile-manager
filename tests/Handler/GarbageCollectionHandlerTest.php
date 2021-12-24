@@ -1,35 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Tests\Handler;
 
-use PHPUnit\Framework\TestCase;
 use TmpFileManager\TmpFileManager;
-use TmpFileManager\Config\ConfigBuilder;
+use TmpFileManager\Config\Config;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
 use Symfony\Component\Filesystem\Filesystem as Fs;
+use PHPUnit\Framework\TestCase;
 
 class GarbageCollectionHandlerTest extends TestCase
 {
-    public function testHandle(): void
+    public function testGarbageCollectionHandler(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $fs = new Fs();
 
-        $tmpFile = $manager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
-        $fs->touch($tmpFile, time() - 3600);
+        $fs->touch($tmpFile->getFilename(), time() - 3600);
 
-        $config = ConfigBuilder::create()
-            ->setGarbageCollectionProbability(100)
-            ->setGarbageCollectionLifetime(0)
-            ->build()
-        ;
+        $config = new Config(
+            garbageCollectionProbability: 100,
+            garbageCollectionLifetime: 0,
+        );
 
-        $handler = new GarbageCollectionHandler();
+        $garbageCollectionHandler = new GarbageCollectionHandler();
 
-        $handler->handle($config);
+        $garbageCollectionHandler->handle($config);
 
-        $this->assertFileNotExists($tmpFile);
+        $this->assertFileDoesNotExist($tmpFile->getFilename());
     }
 }

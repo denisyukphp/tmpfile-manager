@@ -1,34 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TmpFileManager\Tests\Container;
 
-use PHPUnit\Framework\TestCase;
-use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFileManager;
 use TmpFileManager\Container\Container;
+use TmpFile\TmpFileInterface;
+use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {
     public function testAddTmpFile(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $container = new Container();
 
-        $container->addTmpFile($manager->createTmpFile());
+        $container->addTmpFile($tmpFileManager->create());
 
-        $tmpFiles = $container->getTmpFiles();
-
-        $this->assertCount(1, $tmpFiles);
+        $this->assertCount(1, $container->getTmpFiles());
     }
 
     public function testHasTmpFile(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $container = new Container();
 
-        $tmpFile = $manager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
         $container->addTmpFile($tmpFile);
 
@@ -37,11 +37,11 @@ class ContainerTest extends TestCase
 
     public function testRemoveTmpFile(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $container = new Container();
 
-        $tmpFile = $manager->createTmpFile();
+        $tmpFile = $tmpFileManager->create();
 
         $container->addTmpFile($tmpFile);
 
@@ -54,17 +54,19 @@ class ContainerTest extends TestCase
 
     public function testGetTmpFiles(): void
     {
-        $manager = new TmpFileManager();
+        $tmpFileManager = new TmpFileManager();
 
         $container = new Container();
 
-        $container->addTmpFile($manager->createTmpFile());
+        $container->addTmpFile($tmpFileManager->create());
 
         $tmpFiles = $container->getTmpFiles();
 
         $this->assertNotEmpty($tmpFiles);
 
-        $this->assertInstanceOf(TmpFileInterface::class, $tmpFiles[0]);
+        foreach ($tmpFiles as $tmpFile) {
+            $this->assertInstanceOf(TmpFileInterface::class, $tmpFile);
+        }
     }
 
     public function testGetTmpFilesCount(): void
@@ -73,8 +75,8 @@ class ContainerTest extends TestCase
 
         $container = new Container();
 
-        $container->addTmpFile($manager->createTmpFile());
+        $container->addTmpFile($manager->create());
 
-        $this->assertSame(1, $container->getTmpFilesCount());
+        $this->assertEquals(1, $container->getTmpFilesCount());
     }
 }
