@@ -53,7 +53,7 @@ $tmpFile = $tmpFileManager->create();
 In console commands use `isolate()` method to create and handle temp files. Temp files will be immediately removed after finished callback:
 
 ```php
-$tmpFileManager->isolate(function (TmpFile $tmpFile) {
+$tmpFileManager->isolate(function (TmpFileInterface $tmpFile) {
     // ...
 });
 ```
@@ -108,7 +108,7 @@ $tmpFileManager = new TmpFileManager($config);
 /** @var TmpFileInterface $tmpFile */
 $tmpFile = $tmpFileManager->create();
     
-$fh = fopen($tmpFile, 'r+');
+$fh = fopen($tmpFile->getFilename(), 'r+');
     
 fwrite($fh, random_bytes(1024));
 
