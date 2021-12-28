@@ -27,6 +27,6 @@ class UnclosedResourcesHandlerTest extends TestCase
 
         $unclosedResourcesHandler->handle($container);
 
-        $this->assertIsResource($fh);
+        $this->assertFalse(is_resource($fh));
     }
 }
