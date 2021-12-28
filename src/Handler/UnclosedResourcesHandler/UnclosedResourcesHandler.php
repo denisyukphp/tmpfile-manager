@@ -11,7 +11,9 @@ final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterfac
 {
     public function handle(ContainerInterface $container): void
     {
-        $filenames = array_map(fn(TmpFileInterface $tmpFile): string => $tmpFile->getFilename(), $container->getTmpFiles());
+        $filenames = array_map(function (TmpFileInterface $tmpFile): string {
+            return $tmpFile->getFilename();
+        }, $container->getTmpFiles());
 
         foreach (get_resources('stream') as $resource) {
             if (!stream_is_local($resource)) {
