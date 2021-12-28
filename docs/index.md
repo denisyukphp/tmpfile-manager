@@ -100,7 +100,7 @@ use TmpFileManager\TmpFileManager;
 use TmpFile\TmpFileInterface;
 
 $config = new Config(
-    unclosedResourcesHandler: true,
+    isUnclosedResourcesCheck: true,
 );
 
 $tmpFileManager = new TmpFileManager($config);
