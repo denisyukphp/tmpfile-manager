@@ -4,13 +4,13 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
-      - '**/LICENSE.txt'
-      - '**/README.md'
+      - '!LICENSE.txt'
+      - '!README.md'
   pull_request:
     paths-ignore:
       - 'docs/**'
-      - '**/LICENSE.txt'
-      - '**/README.md'
+      - '!LICENSE.txt'
+      - '!README.md'
 
 jobs:
   unit-tests:
