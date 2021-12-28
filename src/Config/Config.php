@@ -73,6 +73,11 @@ final class Config implements ConfigInterface
         return $this->garbageCollectionLifetime;
     }
 
+    public function isGarbageCollection(): bool
+    {
+        return 0 < $this->garbageCollectionProbability;
+    }
+
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface
     {
         return $this->garbageCollectionHandler;

@@ -28,5 +28,7 @@ interface ConfigInterface
 
     public function getGarbageCollectionLifetime(): int;
 
+    public function isGarbageCollection(): bool;
+
     public function getGarbageCollectionHandler(): GarbageCollectionHandlerInterface;
 }

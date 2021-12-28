@@ -10,7 +10,7 @@ final class GarbageCollectionListener
 {
     public function __invoke(TmpFileManagerStartEvent $event): void
     {
-        if ($event->tmpFileManager->config->getGarbageCollectionProbability()) {
+        if ($event->tmpFileManager->config->isGarbageCollection()) {
             $event->tmpFileManager->config->getGarbageCollectionHandler()->handle($event->tmpFileManager->config);
         }
     }
