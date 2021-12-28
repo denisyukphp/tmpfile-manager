@@ -25,6 +25,7 @@ class ConfigTest extends TestCase
         $this->assertSame(0, $config->getGarbageCollectionProbability());
         $this->assertSame(100, $config->getGarbageCollectionDivisor());
         $this->assertSame(3600, $config->getGarbageCollectionLifetime());
+        $this->assertFalse($config->isGarbageCollection());
         $this->assertInstanceOf(GarbageCollectionHandler::class, $config->getGarbageCollectionHandler());
     }
 
@@ -52,6 +53,7 @@ class ConfigTest extends TestCase
         $this->assertSame(0, $config->getGarbageCollectionProbability());
         $this->assertSame(100, $config->getGarbageCollectionDivisor());
         $this->assertSame(3600, $config->getGarbageCollectionLifetime());
+        $this->assertFalse($config->isGarbageCollection());
         $this->assertInstanceOf(GarbageCollectionHandler::class, $config->getGarbageCollectionHandler());
     }
 }
