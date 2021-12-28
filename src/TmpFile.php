@@ -17,9 +17,4 @@ final class TmpFile implements TmpFileInterface
     {
         return $this->filename;
     }
-
-    public function __toString(): string
-    {
-        return $this->filename;
-    }
 }
