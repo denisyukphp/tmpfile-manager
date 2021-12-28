@@ -1,5 +1,6 @@
 # TmpFileManager
 
+[![Build Status](https://img.shields.io/github/workflow/status/denisyukphp/tmpfile-manager/build/master?style=plastic)](https://github.com/denisyukphp/tmpfile-manager/actions/workflows/continuous-integration.yml)
 [![Latest Stable Version](https://img.shields.io/packagist/v/denisyukphp/tmpfile-manager?style=plastic)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
 [![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/denisyukphp/tmpfile-manager?style=plastic&color=8892BF)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
 [![Total Downloads](https://img.shields.io/packagist/dt/denisyukphp/tmpfile-manager?style=plastic)](https://packagist.org/packages/denisyukphp/tmpfile-manager)
