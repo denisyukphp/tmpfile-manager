@@ -10,8 +10,8 @@ final class UnclosedResourcesListener
 {
     public function __invoke(TmpFileManagerPurgeEvent $event): void
     {
-        if ($event->tmpFileManager->config->isUnclosedResourcesCheck()) {
-            $event->tmpFileManager->config->getUnclosedResourcesHandler()->handle($event->tmpFileManager->container);
+        if ($event->config->isUnclosedResourcesCheck()) {
+            $event->config->getUnclosedResourcesHandler()->handle($event->container);
         }
     }
 }

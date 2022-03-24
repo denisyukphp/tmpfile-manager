@@ -7,7 +7,6 @@
 - [Garbage collection](#garbage-collection)
 - [Custom handlers](#custom-handlers)
 - [Subscribe events](#subscribe-events)
-- [Advanced usage](#advanced-usage)
 
 ## Default configuration
 
@@ -238,7 +237,10 @@ use TmpFileManager\Event\TmpFileManagerStartEvent;
 use TmpFileManager\Event\TmpFileCreateEvent;
 use TmpFileManager\Event\TmpFileRemoveEvent;
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
-use TmpFileManager\TmpFileManager;
+use TmpFileManager\TmpFileManagerInterface;
+use TmpFileManager\Config\ConfigInterface;
+use TmpFileManager\Container\ContainerInterface;
+use TmpFileManager\Filesystem\FilesystemInterface;
 use TmpFile\TmpFileInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -249,8 +251,14 @@ $eventDispatcher = new EventDispatcher();
 
 ```php
 $eventDispatcher->addListener(TmpFileManagerStartEvent::class, function (TmpFileManagerStartEvent $event): void {
-    /** @var TmpFileManager $tmpFileManager */
+    /** @var TmpFileManagerInterface $tmpFileManager */
     $tmpFileManager = $event->tmpFileManage;
+    /** @var ConfigInterface $config */
+    $config = $event->config;
+    /** @var ContainerInterface $container */
+    $container = $event->container;
+    /** @var FilesystemInterface $filesystem */
+    $filesystem = $event->filesystem;
     
     // ...
 });
@@ -282,8 +290,14 @@ $eventDispatcher->addListener(TmpFileRemoveEvent::class, function (TmpFileRemove
 
 ```php
 $eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, function (TmpFileManagerPurgeEvent $event): void {
-    /** @var TmpFileManager $tmpFileManager */
-    $tmpFileManager = $event->tmpFileManager;
+    /** @var TmpFileManagerInterface $tmpFileManager */
+    $tmpFileManager = $event->tmpFileManage;
+    /** @var ConfigInterface $config */
+    $config = $event->config;
+    /** @var ContainerInterface $container */
+    $container = $event->container;
+    /** @var FilesystemInterface $filesystem */
+    $filesystem = $event->filesystem;
     
     // ...
 });
@@ -298,46 +312,3 @@ $tmpFileManager = new TmpFileManager(
 ```
 
 This allows flexible management.
-
-## Advanced usage
-
-To get more control over temp files, implement service interfaces or use exists. For example, you have opportunity to store temp files in cloud or change way of configuration. Inject your dependencies:
-
-```php
-<?php
-
-use TmpFileManager\Config\Config;
-use TmpFileManager\Config\ConfigInterface;
-use TmpFileManager\Container\Container;
-use TmpFileManager\Container\ContainerInterface;
-use TmpFileManager\Filesystem\Filesystem;
-use TmpFileManager\Filesystem\FilesystemInterface;
-use TmpFileManager\TmpFileManager;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-$tmpFileManager = new TmpFileManager(
-    config: new Config(),
-    container: new Container(),
-    filesystem: new Filesystem(),
-    eventDispatcher: new EventDispatcher(),
-);
-```
-
-After that services are available to extend use-cases in any part your application:
-
-```php
-/** @var ConfigInterface $config */
-$config = $tmpFileManager->config;
-
-/** @var ContainerInterface $container */
-$container = $tmpFileManager->container;
-
-/** @var FilesystemInterface $filesystem */
-$filesystem = $tmpFileManager->filesystem;
-
-/** @var EventDispatcherInterface $eventDispatcher */
-$eventDispatcher = $tmpFileManager->eventDispatcher;
-```
-
-It is preferable to use this way in handlers and listeners.

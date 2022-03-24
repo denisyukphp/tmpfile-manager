@@ -24,24 +24,21 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 final class TmpFileManager implements TmpFileManagerInterface
 {
     public function __construct(
-        public readonly ConfigInterface $config = new Config(),
-        public readonly ContainerInterface $container = new Container(),
-        public readonly FilesystemInterface $filesystem = new Filesystem(),
-        public readonly EventDispatcherInterface $eventDispatcher = new EventDispatcher(),
+        private readonly ConfigInterface $config = new Config(),
+        private readonly ContainerInterface $container = new Container(),
+        private readonly FilesystemInterface $filesystem = new Filesystem(),
+        private readonly EventDispatcherInterface $eventDispatcher = new EventDispatcher(),
     ) {
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new GarbageCollectionListener());
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new DeferredPurgeListener());
         $this->eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, new UnclosedResourcesListener());
 
-        $this->eventDispatcher->dispatch(new TmpFileManagerStartEvent($this));
+        $this->eventDispatcher->dispatch(new TmpFileManagerStartEvent($this, $this->config, $this->container, $this->filesystem));
     }
 
     public function create(): TmpFileInterface
     {
-        $filename = $this->filesystem->getTmpFileName(
-            dir: $this->config->getTmpFileDirectory(),
-            prefix: $this->config->getTmpFilePrefix(),
-        );
+        $filename = $this->filesystem->getTmpFileName($this->config->getTmpFileDirectory(), $this->config->getTmpFilePrefix());
 
         $tmpFile = new TmpFile($filename);
 
@@ -78,7 +75,7 @@ final class TmpFileManager implements TmpFileManagerInterface
 
     public function purge(): void
     {
-        $this->eventDispatcher->dispatch(new TmpFileManagerPurgeEvent($this));
+        $this->eventDispatcher->dispatch(new TmpFileManagerPurgeEvent($this, $this->config, $this->container, $this->filesystem));
 
         $tmpFiles = $this->container->getTmpFiles();
 

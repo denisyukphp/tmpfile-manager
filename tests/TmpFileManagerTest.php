@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TmpFileManager\Tests;
 
 use TmpFileManager\TmpFileManager;
+use TmpFileManager\Container\Container;
 use TmpFile\TmpFileInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -21,13 +22,15 @@ class TmpFileManagerTest extends TestCase
 
     public function testIsolate(): void
     {
-        $tmpFileManager = new TmpFileManager();
+        $container = new Container();
+
+        $tmpFileManager = new TmpFileManager(container: $container);
 
         $tmpFileManager->isolate(function (TmpFileInterface $tmpFile) {
             $this->assertFileExists($tmpFile->getFilename());
         });
 
-        $this->assertEquals(0, $tmpFileManager->container->getTmpFilesCount());
+        $this->assertEquals(0, $container->getTmpFilesCount());
     }
 
     public function testRemoveTmpFile(): void

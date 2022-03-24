@@ -51,6 +51,5 @@ All temp files which created with the manager will be purged automatically by de
 - [Garbage collection](docs/index.md#garbage-collection)
 - [Custom handlers](docs/index.md#custom-handlers)
 - [Subscribe events](docs/index.md#subscribe-events)
-- [Advanced usage](docs/index.md#advanced-usage)
 
 Read more about temp file on [Habr](https://habr.com/ru/post/320078/).
