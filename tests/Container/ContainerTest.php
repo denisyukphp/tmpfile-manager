@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TmpFileManager\Tests\Container;
 
 use PHPUnit\Framework\TestCase;
-use TmpFile\TmpFileInterface;
 use TmpFileManager\Container\Container;
 use TmpFileManager\TmpFileManager;
 
