@@ -83,7 +83,6 @@ jobs:
       matrix:
         operating-system:
           - 'ubuntu-latest'
-          - 'windows-latest'
         php-version:
           - '8.1'
         composer-dependency:
