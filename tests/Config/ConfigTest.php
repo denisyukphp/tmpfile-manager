@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Tests\Config;
 
+use PHPUnit\Framework\TestCase;
 use TmpFileManager\Config\Config;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandler;
-use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
-use PHPUnit\Framework\TestCase;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
 
 class ConfigTest extends TestCase
 {
@@ -18,9 +18,9 @@ class ConfigTest extends TestCase
 
         $this->assertSame(sys_get_temp_dir(), $config->getTmpFileDirectory());
         $this->assertSame('php', $config->getTmpFilePrefix());
-        $this->assertSame(true, $config->isDeferredPurge());
+        $this->assertTrue($config->isDeferredPurge());
         $this->assertInstanceOf(DeferredPurgeHandler::class, $config->getDeferredPurgeHandler());
-        $this->assertSame(false, $config->isUnclosedResourcesCheck());
+        $this->assertFalse($config->isUnclosedResourcesCheck());
         $this->assertInstanceOf(UnclosedResourcesHandler::class, $config->getUnclosedResourcesHandler());
         $this->assertSame(0, $config->getGarbageCollectionProbability());
         $this->assertSame(100, $config->getGarbageCollectionDivisor());
@@ -46,9 +46,9 @@ class ConfigTest extends TestCase
 
         $this->assertSame(sys_get_temp_dir(), $config->getTmpFileDirectory());
         $this->assertSame('php', $config->getTmpFilePrefix());
-        $this->assertSame(true, $config->isDeferredPurge());
+        $this->assertTrue($config->isDeferredPurge());
         $this->assertInstanceOf(DeferredPurgeHandler::class, $config->getDeferredPurgeHandler());
-        $this->assertSame(false, $config->isUnclosedResourcesCheck());
+        $this->assertFalse($config->isUnclosedResourcesCheck());
         $this->assertInstanceOf(UnclosedResourcesHandler::class, $config->getUnclosedResourcesHandler());
         $this->assertSame(0, $config->getGarbageCollectionProbability());
         $this->assertSame(100, $config->getGarbageCollectionDivisor());
