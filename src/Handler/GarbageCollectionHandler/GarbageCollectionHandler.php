@@ -10,7 +10,7 @@ use TmpFileManager\Config\ConfigInterface;
 final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
     public function __construct(
-        private readonly string $executable = '/usr/bin/find',
+        private readonly string $executable = 'find',
     ) {
     }
 
