@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace TmpFileManager\Config;
 
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
-use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
 interface ConfigInterface
 {

@@ -8,38 +8,41 @@ use TmpFile\TmpFileInterface;
 
 final class Container implements ContainerInterface
 {
-    private \SplObjectStorage $storage;
+    private \SplObjectStorage $tmpFiles;
 
     public function __construct()
     {
-        $this->storage = new \SplObjectStorage();
+        $this->tmpFiles = new \SplObjectStorage();
     }
 
     public function addTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->storage->attach($tmpFile);
+        $this->tmpFiles->attach($tmpFile);
     }
 
     public function hasTmpFile(TmpFileInterface $tmpFile): bool
     {
-        return $this->storage->contains($tmpFile);
+        return $this->tmpFiles->contains($tmpFile);
     }
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->storage->detach($tmpFile);
+        $this->tmpFiles->detach($tmpFile);
     }
 
     /**
-     * @return TmpFileInterface[]
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
+     *
+     * @return list<TmpFileInterface>
      */
     public function getTmpFiles(): array
     {
-        return iterator_to_array($this->storage, false);
+        return iterator_to_array($this->tmpFiles, false);
     }
 
     public function getTmpFilesCount(): int
     {
-        return $this->storage->count();
+        return $this->tmpFiles->count();
     }
 }

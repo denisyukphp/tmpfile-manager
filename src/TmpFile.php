@@ -9,7 +9,7 @@ use TmpFile\TmpFileInterface;
 final class TmpFile implements TmpFileInterface
 {
     public function __construct(
-        private string $filename,
+        private readonly string $filename,
     ) {
     }
 

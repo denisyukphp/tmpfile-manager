@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
-use TmpFileManager\Config\ConfigInterface;
 use Symfony\Component\Process\Process;
+use TmpFileManager\Config\ConfigInterface;
 
 final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
     public function __construct(
-        private string $executable = 'find',
+        private readonly string $executable = '/usr/bin/find',
     ) {
     }
 
@@ -38,9 +38,9 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
 
         $process = new Process([
             $this->executable, $dir,
-            '-name', ($prefix . '*'),
+            '-name', $prefix.'*',
             '-type', 'f',
-            '-amin', ('+' . $minutes),
+            '-amin', '+'.$minutes,
             '-maxdepth', 1,
             '-delete',
         ]);

@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Config;
 
-use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandler;
-use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
-use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
-use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\Handler\DeferredPurgeHandler\DeferredPurgeHandlerInterface;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
+use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
 final class Config implements ConfigInterface
 {
+    private string $tmpFileDirectory;
+
     public function __construct(
-        private ?string $tmpFileDirectory = null,
-        private string $tmpFilePrefix = 'php',
-        private bool $isDeferredPurge = true,
-        private DeferredPurgeHandlerInterface $deferredPurgeHandler = new DeferredPurgeHandler(),
-        private bool $isUnclosedResourcesCheck = false,
-        private UnclosedResourcesHandlerInterface $unclosedResourcesHandler = new UnclosedResourcesHandler(),
-        private int $garbageCollectionProbability = 0,
-        private int $garbageCollectionDivisor = 100,
-        private int $garbageCollectionLifetime = 3600,
-        private GarbageCollectionHandlerInterface $garbageCollectionHandler = new GarbageCollectionHandler(),
+        ?string $tmpFileDirectory = null,
+        private readonly string $tmpFilePrefix = 'php',
+        private readonly bool $isDeferredPurge = true,
+        private readonly DeferredPurgeHandlerInterface $deferredPurgeHandler = new DeferredPurgeHandler(),
+        private readonly bool $isUnclosedResourcesCheck = false,
+        private readonly UnclosedResourcesHandlerInterface $unclosedResourcesHandler = new UnclosedResourcesHandler(),
+        private readonly int $garbageCollectionProbability = 0,
+        private readonly int $garbageCollectionDivisor = 100,
+        private readonly int $garbageCollectionLifetime = 3600,
+        private readonly GarbageCollectionHandlerInterface $garbageCollectionHandler = new GarbageCollectionHandler(),
     ) {
-        $this->tmpFileDirectory ??= sys_get_temp_dir();
+        $this->tmpFileDirectory = $tmpFileDirectory ?? sys_get_temp_dir();
     }
 
     public function getTmpFileDirectory(): string

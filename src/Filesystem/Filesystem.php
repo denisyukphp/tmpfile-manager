@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Filesystem;
 
-use TmpFile\TmpFileInterface;
 use Symfony\Component\Filesystem\Filesystem as Fs;
+use TmpFile\TmpFileInterface;
 
 final class Filesystem implements FilesystemInterface
 {
     public function __construct(
-        private Fs $fs = new Fs(),
+        private readonly Fs $fs = new Fs(),
     ) {
     }
 

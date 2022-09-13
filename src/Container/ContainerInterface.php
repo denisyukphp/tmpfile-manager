@@ -15,7 +15,7 @@ interface ContainerInterface
     public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
     /**
-     * @return TmpFileInterface[]
+     * @return list<TmpFileInterface>
      */
     public function getTmpFiles(): array;
 

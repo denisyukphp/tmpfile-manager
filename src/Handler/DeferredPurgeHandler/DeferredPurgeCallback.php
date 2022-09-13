@@ -9,7 +9,7 @@ use TmpFileManager\TmpFileManagerInterface;
 final class DeferredPurgeCallback
 {
     public function __construct(
-        private TmpFileManagerInterface $tmpFileManager,
+        private readonly TmpFileManagerInterface $tmpFileManager,
     ) {
     }
 

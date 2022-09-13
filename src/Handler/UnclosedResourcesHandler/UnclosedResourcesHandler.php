@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
-use TmpFileManager\Container\ContainerInterface;
 use TmpFile\TmpFileInterface;
+use TmpFileManager\Container\ContainerInterface;
 
 final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
@@ -17,12 +17,14 @@ final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterfac
 
         foreach (get_resources('stream') as $resource) {
             if (!stream_is_local($resource)) {
+                // @codeCoverageIgnoreStart
                 continue;
+                // @codeCoverageIgnoreEnd
             }
 
             $metadata = stream_get_meta_data($resource);
 
-            if (in_array($metadata['uri'], $filenames, true)) {
+            if (\in_array($metadata['uri'], $filenames, true)) {
                 fclose($resource);
             }
         }

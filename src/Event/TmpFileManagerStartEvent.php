@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Event;
 
-use TmpFileManager\TmpFileManagerInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Filesystem\FilesystemInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use TmpFileManager\TmpFileManagerInterface;
 
 final class TmpFileManagerStartEvent extends Event
 {

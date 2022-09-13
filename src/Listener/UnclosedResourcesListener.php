@@ -6,6 +6,9 @@ namespace TmpFileManager\Listener;
 
 use TmpFileManager\Event\TmpFileManagerPurgeEvent;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class UnclosedResourcesListener
 {
     public function __invoke(TmpFileManagerPurgeEvent $event): void
