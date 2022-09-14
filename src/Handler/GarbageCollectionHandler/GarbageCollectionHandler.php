@@ -19,21 +19,21 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
 
     public function handle(ConfigInterface $config): void
     {
-        $dir = $config->getTmpFileDirectory();
-        $prefix = $config->getTmpFilePrefix();
-        $probability = $config->getGarbageCollectionProbability();
-        $divisor = $config->getGarbageCollectionDivisor();
-        $lifetime = $config->getGarbageCollectionLifetime();
+        $tmpFileDir = $config->getTmpFileDirectory();
+        $tmpFilePrefix = $config->getTmpFilePrefix();
+        $gcProbability = $config->getGarbageCollectionProbability();
+        $gcDivisor = $config->getGarbageCollectionDivisor();
+        $gcLifetime = $config->getGarbageCollectionLifetime();
 
-        if (0 === $probability || mt_rand(1, $divisor) > $probability) {
+        if (0 === $gcProbability || mt_rand(1, $gcDivisor) > $gcProbability) {
             return;
         }
 
         $finder = (new Finder())
-            ->in($dir)
-            ->name($prefix.'*')
+            ->in($tmpFileDir)
+            ->name($tmpFilePrefix.'*')
             ->depth('== 0')
-            ->date('< '.date('Y-m-d H:i:s', time() - $lifetime))
+            ->date('< '.date('Y-m-d H:i:s', time() - $gcLifetime))
             ->files()
         ;
 
