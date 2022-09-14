@@ -75,7 +75,7 @@ jobs:
 
   phpunit:
     name: 'PHPUnit'
-    needs: ['php-parallel-lint', 'psalm', 'php-cs-fixer']
+    needs: ['parallel-lint', 'psalm', 'php-cs-fixer']
     runs-on: ${{ matrix.operating-system }}
 
     strategy:
