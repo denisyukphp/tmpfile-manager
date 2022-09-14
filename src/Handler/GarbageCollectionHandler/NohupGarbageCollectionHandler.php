@@ -32,7 +32,7 @@ final class NohupGarbageCollectionHandler implements GarbageCollectionHandlerInt
         }
 
         $process = new Process([
-            'nohup '.$this->executable, $dir,
+            'nohup', 'find', $dir,
             '-name', $prefix.'*',
             '-type', 'f',
             '-amin', '+'.ceil($lifetime / 60),
