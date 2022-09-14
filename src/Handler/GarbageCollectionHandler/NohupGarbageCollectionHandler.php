@@ -12,11 +12,13 @@ use TmpFileManager\Config\ConfigInterface;
  */
 final class NohupGarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    private string $executable;
+    private string $nohupBin;
+    private string $findBin;
 
-    public function __construct(string $executable = '/usr/bin/find')
+    public function __construct(string $nohupBin = '/usr/bin/nohup', string $findBin = '/usr/bin/find')
     {
-        $this->executable = $executable;
+        $this->nohupBin = $nohupBin;
+        $this->findBin = $findBin;
     }
 
     public function handle(ConfigInterface $config): void
@@ -32,7 +34,8 @@ final class NohupGarbageCollectionHandler implements GarbageCollectionHandlerInt
         }
 
         $process = new Process([
-            'nohup', 'find', $dir,
+            $this->nohupBin,
+            $this->findBin, $dir,
             '-name', $prefix.'*',
             '-type', 'f',
             '-amin', '+'.ceil($lifetime / 60),
