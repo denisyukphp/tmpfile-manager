@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
-use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use TmpFileManager\Config\ConfigInterface;
 
 final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    public function __construct(
-        private readonly string $executable = 'find',
-    ) {
+    private Filesystem $fs;
+
+    public function __construct(?Filesystem $fs = null)
+    {
+        $this->fs = $fs ?? new Filesystem();
     }
 
     public function handle(ConfigInterface $config): void
@@ -22,34 +25,22 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
         $divisor = $config->getGarbageCollectionDivisor();
         $lifetime = $config->getGarbageCollectionLifetime();
 
-        if ($this->isChance($probability, $divisor)) {
-            $this->runProcess($dir, $prefix, $lifetime);
+        if (0 === $probability || mt_rand(1, $divisor) > $probability) {
+            return;
         }
-    }
 
-    private function isChance(int $probability, int $divisor): bool
-    {
-        return $probability === mt_rand($probability, $divisor);
-    }
+        $finder = (new Finder())
+            ->in($dir)
+            ->name($prefix.'*')
+            ->depth('== 0')
+            ->date('< '.date('Y-m-d H:i:s', time() - $lifetime))
+            ->files()
+        ;
 
-    private function runProcess(string $dir, string $prefix, int $lifetime): void
-    {
-        $minutes = $this->convertSecondsToMinutes($lifetime);
+        if (!$finder->hasResults()) {
+            return;
+        }
 
-        $process = new Process([
-            $this->executable, $dir,
-            '-name', $prefix.'*',
-            '-type', 'f',
-            '-amin', '+'.$minutes,
-            '-maxdepth', 1,
-            '-delete',
-        ]);
-
-        $process->run();
-    }
-
-    private function convertSecondsToMinutes(int $seconds): int
-    {
-        return (int) ceil($seconds / 60);
+        $this->fs->remove($finder->getIterator());
     }
 }
