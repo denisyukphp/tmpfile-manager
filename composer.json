@@ -55,7 +55,7 @@
         "php-cs-fixer:diff": "./vendor/bin/php-cs-fixer fix --ansi --verbose --dry-run --diff",
         "psalm": "./vendor/bin/psalm --show-info=true",
         "test": [
-            "@php-parallel-lint",
+            "@parallel-lint",
             "@psalm",
             "@php-cs-fixer:diff",
             "@phpunit"
