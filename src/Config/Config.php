@@ -14,20 +14,26 @@ use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInte
 final class Config implements ConfigInterface
 {
     private string $tmpFileDirectory;
+    private DeferredPurgeHandlerInterface $deferredPurgeHandler;
+    private UnclosedResourcesHandlerInterface $unclosedResourcesHandler;
+    private GarbageCollectionHandlerInterface $garbageCollectionHandler;
 
     public function __construct(
         ?string $tmpFileDirectory = null,
-        private readonly string $tmpFilePrefix = 'php',
-        private readonly bool $isDeferredPurge = true,
-        private readonly DeferredPurgeHandlerInterface $deferredPurgeHandler = new DeferredPurgeHandler(),
-        private readonly bool $isUnclosedResourcesCheck = false,
-        private readonly UnclosedResourcesHandlerInterface $unclosedResourcesHandler = new UnclosedResourcesHandler(),
-        private readonly int $garbageCollectionProbability = 0,
-        private readonly int $garbageCollectionDivisor = 100,
-        private readonly int $garbageCollectionLifetime = 3600,
-        private readonly GarbageCollectionHandlerInterface $garbageCollectionHandler = new GarbageCollectionHandler(),
+        private string $tmpFilePrefix = 'php',
+        private bool $isDeferredPurge = true,
+        ?DeferredPurgeHandlerInterface $deferredPurgeHandler = null,
+        private bool $isUnclosedResourcesCheck = false,
+        ?UnclosedResourcesHandlerInterface $unclosedResourcesHandler = null,
+        private int $garbageCollectionProbability = 0,
+        private int $garbageCollectionDivisor = 100,
+        private int $garbageCollectionLifetime = 3600,
+        ?GarbageCollectionHandlerInterface $garbageCollectionHandler = null,
     ) {
         $this->tmpFileDirectory = $tmpFileDirectory ?? sys_get_temp_dir();
+        $this->deferredPurgeHandler = $deferredPurgeHandler ?? new DeferredPurgeHandler();
+        $this->unclosedResourcesHandler = $unclosedResourcesHandler ?? new UnclosedResourcesHandler();
+        $this->garbageCollectionHandler = $garbageCollectionHandler ?? new GarbageCollectionHandler();
     }
 
     public function getTmpFileDirectory(): string

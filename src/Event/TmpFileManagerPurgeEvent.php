@@ -13,10 +13,10 @@ use TmpFileManager\TmpFileManagerInterface;
 final class TmpFileManagerPurgeEvent extends Event
 {
     public function __construct(
-        public readonly TmpFileManagerInterface $tmpFileManager,
-        public readonly ConfigInterface $config,
-        public readonly ContainerInterface $container,
-        public readonly FilesystemInterface $filesystem,
+        public TmpFileManagerInterface $tmpFileManager,
+        public ConfigInterface $config,
+        public ContainerInterface $container,
+        public FilesystemInterface $filesystem,
     ) {
     }
 }

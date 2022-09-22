@@ -23,12 +23,22 @@ use TmpFileManager\Listener\UnclosedResourcesListener;
 
 final class TmpFileManager implements TmpFileManagerInterface
 {
+    private ConfigInterface $config;
+    private ContainerInterface $container;
+    private FilesystemInterface $filesystem;
+    private EventDispatcherInterface $eventDispatcher;
+
     public function __construct(
-        private readonly ConfigInterface $config = new Config(),
-        private readonly ContainerInterface $container = new Container(),
-        private readonly FilesystemInterface $filesystem = new Filesystem(),
-        private readonly EventDispatcherInterface $eventDispatcher = new EventDispatcher(),
+        ?ConfigInterface $config = null,
+        ?ContainerInterface $container = null,
+        ?FilesystemInterface $filesystem = null,
+        ?EventDispatcherInterface $eventDispatcher = null,
     ) {
+        $this->config = $config ?? new Config();
+        $this->container = $container ?? new Container();
+        $this->filesystem = $filesystem ?? new Filesystem();
+        $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
+
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new GarbageCollectionListener());
         $this->eventDispatcher->addListener(TmpFileManagerStartEvent::class, new DeferredPurgeListener());
         $this->eventDispatcher->addListener(TmpFileManagerPurgeEvent::class, new UnclosedResourcesListener());

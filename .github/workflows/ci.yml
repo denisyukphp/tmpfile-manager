@@ -85,6 +85,7 @@ jobs:
           - 'ubuntu-latest'
           - 'windows-latest'
         php-version:
+          - '8.0'
           - '8.1'
         composer-dependency:
           - 'lowest'

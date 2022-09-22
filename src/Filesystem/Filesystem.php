@@ -9,9 +9,11 @@ use TmpFile\TmpFileInterface;
 
 final class Filesystem implements FilesystemInterface
 {
-    public function __construct(
-        private readonly Fs $fs = new Fs(),
-    ) {
+    private Fs $fs;
+
+    public function __construct(?Fs $fs = null)
+    {
+        $this->fs = $fs ?? new Fs();
     }
 
     public function getTmpFileName(string $dir, string $prefix): string

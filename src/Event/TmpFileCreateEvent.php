@@ -10,7 +10,7 @@ use TmpFile\TmpFileInterface;
 final class TmpFileCreateEvent extends Event
 {
     public function __construct(
-        public readonly TmpFileInterface $tmpFile,
+        public TmpFileInterface $tmpFile,
     ) {
     }
 }
