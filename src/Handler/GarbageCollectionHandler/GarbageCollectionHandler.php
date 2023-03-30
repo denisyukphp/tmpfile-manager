@@ -4,43 +4,27 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use TmpFileManager\Config\ConfigInterface;
+use TmpFileManager\Handler\GarbageCollectionHandler\Processor\ProcessorInterface;
 
 final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
-    private Filesystem $fs;
-
-    public function __construct(?Filesystem $fs = null)
-    {
-        $this->fs = $fs ?? new Filesystem();
+    public function __construct(
+        private int $probability,
+        private int $divisor,
+        private int $lifetime,
+        private ProcessorInterface $processor,
+    ) {
     }
 
-    public function handle(ConfigInterface $config): void
+    public function handle(string $tmpFileDirectory, string $tmpFilePrefix): void
     {
-        $tmpFileDir = $config->getTmpFileDirectory();
-        $tmpFilePrefix = $config->getTmpFilePrefix();
-        $gcProbability = $config->getGarbageCollectionProbability();
-        $gcDivisor = $config->getGarbageCollectionDivisor();
-        $gcLifetime = $config->getGarbageCollectionLifetime();
-
-        if (0 === $gcProbability || mt_rand(1, $gcDivisor) > $gcProbability) {
-            return;
+        if ($this->isChance($this->probability, $this->divisor)) {
+            $this->processor->process($tmpFileDirectory, $tmpFilePrefix, $this->lifetime);
         }
+    }
 
-        $finder = (new Finder())
-            ->in($tmpFileDir)
-            ->name($tmpFilePrefix.'*')
-            ->depth('== 0')
-            ->date('< '.date('Y-m-d H:i:s', time() - $gcLifetime))
-            ->files()
-        ;
-
-        if (!$finder->hasResults()) {
-            return;
-        }
-
-        $this->fs->remove($finder->getIterator());
+    private function isChance(int $probability, int $divisor): bool
+    {
+        return 0 !== $probability && mt_rand(1, $divisor) > $probability;
     }
 }

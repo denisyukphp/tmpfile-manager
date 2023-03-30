@@ -1,6 +1,6 @@
 {
     "name": "denisyukphp/tmpfile-manager",
-    "description": "Temp files manager.",
+    "description": "Temp file manager.",
     "keywords": [
         "tmpfile",
         "tempnam",
@@ -24,6 +24,7 @@
     "require": {
         "php": "^8.0",
         "denisyukphp/tmpfile": "^3.0",
+        "psr/event-dispatcher": "^1.0",
         "symfony/event-dispatcher": "^6.0",
         "symfony/filesystem": "^6.0",
         "symfony/finder": "^6.0",
@@ -52,9 +53,12 @@
         "phpunit-coverage": "./vendor/bin/phpunit --verbose --colors=always --coverage-text",
         "phpunit-coverage-html": "./vendor/bin/phpunit --verbose --colors=always --coverage-html ./build/logs/phpunit-coverage/",
         "parallel-lint": "./vendor/bin/parallel-lint --colors ./src/ ./tests/",
-        "php-cs-fixer:fix": "./vendor/bin/php-cs-fixer fix --ansi --verbose --show-progress=dots",
-        "php-cs-fixer:diff": "./vendor/bin/php-cs-fixer fix --ansi --verbose --dry-run --diff",
+        "php-cs-fixer:fix": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots",
+        "php-cs-fixer:diff": "./vendor/bin/php-cs-fixer fix --verbose --ansi --dry-run --diff",
         "psalm": "./vendor/bin/psalm --show-info=true",
+        "psalm:set-baseline": "@psalm --set-baseline=./psalm-baseline.xml",
+        "psalm:update-baseline": "@psalm --update-baseline",
+        "psalm:ignore-baseline": "@psalm --ignore-baseline",
         "test": [
             "@parallel-lint",
             "@psalm",

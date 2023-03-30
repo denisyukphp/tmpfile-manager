@@ -8,7 +8,7 @@ use TmpFile\TmpFileInterface;
 
 interface FilesystemInterface
 {
-    public function getTmpFileName(string $dir, string $prefix): string;
+    public function createTmpFile(string $tmpFileDirectory, string $tmpFilePrefix): string;
 
     public function existsTmpFile(TmpFileInterface $tmpFile): bool;
 

@@ -6,7 +6,7 @@ namespace TmpFileManager\Container;
 
 use TmpFile\TmpFileInterface;
 
-interface ContainerInterface
+interface ContainerInterface extends \Countable
 {
     public function addTmpFile(TmpFileInterface $tmpFile): void;
 
@@ -14,10 +14,10 @@ interface ContainerInterface
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
-    /**
-     * @return list<TmpFileInterface>
-     */
-    public function getTmpFiles(): array;
+    public function removeAll(): void;
 
-    public function getTmpFilesCount(): int;
+    /**
+     * @return TmpFileInterface[]
+     */
+    public function toArray(): array;
 }

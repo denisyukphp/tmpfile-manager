@@ -17,6 +17,10 @@ final class Container implements ContainerInterface
 
     public function addTmpFile(TmpFileInterface $tmpFile): void
     {
+        if ($this->hasTmpFile($tmpFile)) {
+            throw new \InvalidArgumentException(sprintf('Temp file "%s" has been already added.', $tmpFile->getFilename()));
+        }
+
         $this->tmpFiles->attach($tmpFile);
     }
 
@@ -27,22 +31,32 @@ final class Container implements ContainerInterface
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
+        if (!$this->hasTmpFile($tmpFile)) {
+            throw new \InvalidArgumentException(sprintf('Temp file "%s" hasn\'t been added yet.', $tmpFile->getFilename()));
+        }
+
         $this->tmpFiles->detach($tmpFile);
     }
 
-    /**
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
-     *
-     * @return list<TmpFileInterface>
-     */
-    public function getTmpFiles(): array
+    public function removeAll(): void
     {
+        $this->tmpFiles->removeAll($this->tmpFiles);
+    }
+
+    /**
+     * @return TmpFileInterface[]
+     */
+    public function toArray(): array
+    {
+        if (0 === $this->count()) {
+            return [];
+        }
+
         return iterator_to_array($this->tmpFiles, false);
     }
 
-    public function getTmpFilesCount(): int
+    public function count(): int
     {
-        return $this->tmpFiles->count();
+        return \count($this->tmpFiles);
     }
 }

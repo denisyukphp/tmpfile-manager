@@ -4,30 +4,30 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Filesystem;
 
-use Symfony\Component\Filesystem\Filesystem as Fs;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use TmpFile\TmpFileInterface;
 
 final class Filesystem implements FilesystemInterface
 {
-    private Fs $fs;
+    private SymfonyFilesystem $symfonyFilesystem;
 
-    public function __construct(?Fs $fs = null)
+    public function __construct(?SymfonyFilesystem $symfonyFilesystem = null)
     {
-        $this->fs = $fs ?? new Fs();
+        $this->symfonyFilesystem = $symfonyFilesystem ?? new SymfonyFilesystem();
     }
 
-    public function getTmpFileName(string $dir, string $prefix): string
+    public function createTmpFile(string $tmpFileDirectory, string $tmpFilePrefix): string
     {
-        return $this->fs->tempnam($dir, $prefix);
+        return $this->symfonyFilesystem->tempnam($tmpFileDirectory, $tmpFilePrefix);
     }
 
     public function existsTmpFile(TmpFileInterface $tmpFile): bool
     {
-        return $this->fs->exists($tmpFile->getFilename());
+        return $this->symfonyFilesystem->exists($tmpFile->getFilename());
     }
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
-        $this->fs->remove($tmpFile->getFilename());
+        $this->symfonyFilesystem->remove($tmpFile->getFilename());
     }
 }
