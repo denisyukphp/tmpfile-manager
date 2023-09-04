@@ -16,15 +16,10 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
     ) {
     }
 
-    public function handle(string $tmpFileDirectory, string $tmpFilePrefix): void
+    public function handle(string $tmpFileDir, string $tmpFilePrefix): void
     {
-        if ($this->isChance($this->probability, $this->divisor)) {
-            $this->processor->process($tmpFileDirectory, $tmpFilePrefix, $this->lifetime);
+        if (mt_rand(1, $this->divisor) <= $this->probability) {
+            $this->processor->process($tmpFileDir, $tmpFilePrefix, $this->lifetime);
         }
-    }
-
-    private function isChance(int $probability, int $divisor): bool
-    {
-        return 0 !== $probability && mt_rand(1, $divisor) > $probability;
     }
 }

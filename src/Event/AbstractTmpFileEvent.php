@@ -8,11 +8,9 @@ use TmpFile\TmpFileInterface;
 
 abstract class AbstractTmpFileEvent
 {
-    private TmpFileInterface $tmpFile;
-
-    public function __construct(TmpFileInterface $tmpFile)
-    {
-        $this->tmpFile = $tmpFile;
+    public function __construct(
+        private TmpFileInterface $tmpFile,
+    ) {
     }
 
     public function getTmpFile(): TmpFileInterface

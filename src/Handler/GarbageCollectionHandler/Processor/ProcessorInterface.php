@@ -6,5 +6,5 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 
 interface ProcessorInterface
 {
-    public function process(string $tmpFileDirectory, string $tmpFilePrefix, int $tmpFileLifetimeInSeconds): void;
+    public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void;
 }

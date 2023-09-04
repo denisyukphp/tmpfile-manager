@@ -13,27 +13,29 @@ use TmpFileManager\Event\TmpFileManagerPostPurge;
 use TmpFileManager\Event\TmpFileManagerPrePurge;
 use TmpFileManager\Filesystem\Filesystem;
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandlerInterface;
-use TmpFileManager\Handler\OpenResourcesHandler\OpenResourcesHandlerInterface;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandlerInterface;
 
 final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
 {
+    private string $tmpFileDir;
+    private string $tmpFilePrefix;
     private SymfonyFilesystem $symfonyFilesystem;
     private EventDispatcherInterface $eventDispatcher;
-    private ?string $tmpFileDirectory = null;
-    private string $tmpFilePrefix = 'php';
 
     public function __construct(
-        ?SymfonyFilesystem $symfonyFilesystem = null,
-        ?EventDispatcherInterface $eventDispatcher = null,
+        SymfonyFilesystem $symfonyFilesystem = null,
+        EventDispatcherInterface $eventDispatcher = null,
     ) {
+        $this->tmpFileDir = sys_get_temp_dir();
+        $this->tmpFilePrefix = 'php';
         $this->symfonyFilesystem = $symfonyFilesystem ?? new SymfonyFilesystem();
         $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
     }
 
-    public function withTmpFileDirectory(string $tmpFileDirectory): self
+    public function withTmpFileDir(string $tmpFileDir): self
     {
         $self = clone $this;
-        $self->tmpFileDirectory = $tmpFileDirectory;
+        $self->tmpFileDir = $tmpFileDir;
 
         return $self;
     }
@@ -46,14 +48,14 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
         return $self;
     }
 
-    public function withOpenResourcesHandler(OpenResourcesHandlerInterface $openResourcesHandler): self
+    public function withUnclosedResourcesHandler(UnclosedResourcesHandlerInterface $unclosedResourcesHandler): self
     {
         $self = clone $this;
-        $self->addEventListener(
+        $self->withEventListener(
             TmpFileManagerPrePurge::class,
-            static function (TmpFileManagerPrePurge $tmpFileManagerPrePurge) use ($openResourcesHandler): void {
-                $openResourcesHandler->handle(
-                    tmpFiles: $tmpFileManagerPrePurge->getContainer()->toArray(),
+            static function (TmpFileManagerPrePurge $tmpFileManagerPrePurge) use ($unclosedResourcesHandler): void {
+                $unclosedResourcesHandler->handle(
+                    tmpFiles: $tmpFileManagerPrePurge->getContainer()->getTmpFiles(),
                 );
             },
         );
@@ -64,11 +66,11 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
     public function withGarbageCollectionHandler(GarbageCollectionHandlerInterface $garbageCollectionHandler): self
     {
         $self = clone $this;
-        $self->addEventListener(
+        $self->withEventListener(
             TmpFileManagerPostPurge::class,
             static function (TmpFileManagerPostPurge $tmpFileManagerPostPurge) use ($garbageCollectionHandler): void {
                 $garbageCollectionHandler->handle(
-                    tmpFileDirectory: $tmpFileManagerPostPurge->getConfig()->getTmpFileDirectory(),
+                    tmpFileDir: $tmpFileManagerPostPurge->getConfig()->getTmpFileDir(),
                     tmpFilePrefix: $tmpFileManagerPostPurge->getConfig()->getTmpFilePrefix(),
                 );
             },
@@ -77,7 +79,7 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
         return $self;
     }
 
-    public function addEventListener(string $eventName, callable $listenerCallback): self
+    public function withEventListener(string $eventName, callable $listenerCallback): self
     {
         $self = clone $this;
         $self->eventDispatcher->addListener($eventName, $listenerCallback);
@@ -88,7 +90,7 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
     public function build(): TmpFileManagerInterface
     {
         return new TmpFileManager(
-            config: new Config($this->tmpFileDirectory, $this->tmpFilePrefix),
+            config: new Config($this->tmpFileDir, $this->tmpFilePrefix),
             container: new Container(),
             filesystem: new Filesystem($this->symfonyFilesystem),
             eventDispatcher: $this->eventDispatcher,

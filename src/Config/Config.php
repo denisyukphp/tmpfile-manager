@@ -6,18 +6,15 @@ namespace TmpFileManager\Config;
 
 final class Config implements ConfigInterface
 {
-    private string $tmpFileDirectory;
-
     public function __construct(
-        ?string $tmpFileDirectory = null,
-        private string $tmpFilePrefix = 'php',
+        private string $tmpFileDir,
+        private string $tmpFilePrefix,
     ) {
-        $this->tmpFileDirectory = $tmpFileDirectory ?? sys_get_temp_dir();
     }
 
-    public function getTmpFileDirectory(): string
+    public function getTmpFileDir(): string
     {
-        return $this->tmpFileDirectory;
+        return $this->tmpFileDir;
     }
 
     public function getTmpFilePrefix(): string

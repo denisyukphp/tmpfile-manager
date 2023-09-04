@@ -6,5 +6,5 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
 interface GarbageCollectionHandlerInterface
 {
-    public function handle(string $tmpFileDirectory, string $tmpFilePrefix): void;
+    public function handle(string $tmpFileDir, string $tmpFilePrefix): void;
 }

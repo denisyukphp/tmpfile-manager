@@ -6,7 +6,7 @@ namespace TmpFileManager\Config;
 
 interface ConfigInterface
 {
-    public function getTmpFileDirectory(): string;
+    public function getTmpFileDir(): string;
 
     public function getTmpFilePrefix(): string;
 }

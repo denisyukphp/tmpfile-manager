@@ -9,36 +9,37 @@ use Symfony\Component\Process\Process;
 
 final class AsyncProcessor implements ProcessorInterface
 {
-    private string $command;
-
     /**
-     * @param string[] $extraCommandDirectories
+     * @param string[] $extraExecutableCommandDirs
      */
-    public function __construct(array $extraCommandDirectories = [])
-    {
-        $command = (new ExecutableFinder())->find('find', '/usr/bin/find', $extraCommandDirectories);
-
-        if (null === $command) {
-            throw new \RuntimeException('Util "find" isn\'t supporting.');
-        }
-
-        $this->command = $command;
+    public function __construct(
+        private bool $isParallelProcess = true,
+        private array $extraExecutableCommandDirs = [],
+    ) {
     }
 
-    public function process(string $tmpFileDirectory, string $tmpFilePrefix, int $tmpFileLifetimeInSeconds): void
+    public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void
     {
+        $executableCommand = (new ExecutableFinder())
+            ->find('find', '/usr/bin/find', $this->extraExecutableCommandDirs)
+        ;
+
+        if (null === $executableCommand) {
+            throw new \RuntimeException('Async process can\'t be run because utility "find" not supported.');
+        }
+
         $process = new Process([
-            $this->command,
-            $tmpFileDirectory,
+            $executableCommand,
+            $tmpFileDir,
             '-name', $tmpFilePrefix.'*',
             '-type', 'f',
-            '-amin', '+'.ceil($tmpFileLifetimeInSeconds / 60),
+            '-amin', '+'.ceil($lifetime / 60),
             '-maxdepth', 1,
             '-delete',
         ]);
 
         $process->setOptions([
-            'create_new_console' => true,
+            'create_new_console' => $this->isParallelProcess,
         ]);
 
         $process->start();

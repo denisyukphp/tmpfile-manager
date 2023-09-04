@@ -20,19 +20,21 @@ This package requires PHP 8.0 or later.
 
 ## Quick usage
 
-Build TmpFileManager and create a temp file:
+Build a temp file manager and create a temp file:
 
 ```php
 <?php
 
 use TmpFileManager\TmpFileManagerBuilder;
+use TmpFile\TmpFileInterface;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->withTmpFileDirectory(sys_get_temp_dir())
+    ->withTmpFileDir(sys_get_temp_dir())
     ->withTmpFilePrefix('php')
     ->build()
 ;
 
+/** @var TmpFileInterface $tmpFile */
 $tmpFile = $tmpFileManager->create();
 ```
 

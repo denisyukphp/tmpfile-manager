@@ -38,7 +38,7 @@ final class Container implements ContainerInterface
         $this->tmpFiles->detach($tmpFile);
     }
 
-    public function removeAll(): void
+    public function clearTmpFiles(): void
     {
         $this->tmpFiles->removeAll($this->tmpFiles);
     }
@@ -46,13 +46,18 @@ final class Container implements ContainerInterface
     /**
      * @return TmpFileInterface[]
      */
-    public function toArray(): array
+    public function getTmpFiles(): array
     {
-        if (0 === $this->count()) {
+        if ($this->isEmpty()) {
             return [];
         }
 
         return iterator_to_array($this->tmpFiles, false);
+    }
+
+    public function isEmpty(): bool
+    {
+        return 0 === $this->count();
     }
 
     public function count(): int

@@ -14,10 +14,12 @@ interface ContainerInterface extends \Countable
 
     public function removeTmpFile(TmpFileInterface $tmpFile): void;
 
-    public function removeAll(): void;
+    public function clearTmpFiles(): void;
 
     /**
      * @return TmpFileInterface[]
      */
-    public function toArray(): array;
+    public function getTmpFiles(): array;
+
+    public function isEmpty(): bool;
 }

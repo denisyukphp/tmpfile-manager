@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace TmpFileManager;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use TmpFile\TmpFileInterface;
-use TmpFileManager\Config\Config;
 use TmpFileManager\Config\ConfigInterface;
-use TmpFileManager\Container\Container;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Event\TmpFileManagerEventArgs;
 use TmpFileManager\Event\TmpFileManagerOnFinish;
@@ -24,36 +21,29 @@ use TmpFileManager\Event\TmpFileOnCreate;
 use TmpFileManager\Event\TmpFileOnLoad;
 use TmpFileManager\Event\TmpFilePostRemove;
 use TmpFileManager\Event\TmpFilePreRemove;
-use TmpFileManager\Filesystem\Filesystem;
 use TmpFileManager\Filesystem\FilesystemInterface;
 
 final class TmpFileManager implements TmpFileManagerInterface
 {
-    private ConfigInterface $config;
-    private ContainerInterface $container;
-    private FilesystemInterface $filesystem;
-    private EventDispatcherInterface $eventDispatcher;
-
     public function __construct(
-        ?ConfigInterface $config = null,
-        ?ContainerInterface $container = null,
-        ?FilesystemInterface $filesystem = null,
-        ?EventDispatcherInterface $eventDispatcher = null,
+        private ConfigInterface $config,
+        private ContainerInterface $container,
+        private FilesystemInterface $filesystem,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
-        $this->config = $config ?? new Config();
-        $this->container = $container ?? new Container();
-        $this->filesystem = $filesystem ?? new Filesystem();
-        $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
         $this->eventDispatcher->dispatch(new TmpFileManagerOnStart($this->getTmpFileManagerEventArgs()));
         register_shutdown_function([$this, 'purge']);
+    }
+
+    private function getTmpFileManagerEventArgs(): TmpFileManagerEventArgs
+    {
+        return new TmpFileManagerEventArgs($this->config, $this->container, $this->filesystem);
     }
 
     public function create(): TmpFileInterface
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPreCreate($this->getTmpFileManagerEventArgs()));
-        $tmpFileDirectory = $this->config->getTmpFileDirectory();
-        $tmpFilePrefix = $this->config->getTmpFilePrefix();
-        $tmpFile = new TmpFile($this->filesystem->createTmpFile($tmpFileDirectory, $tmpFilePrefix));
+        $tmpFile = $this->filesystem->createTmpFile($this->config->getTmpFileDir(), $this->config->getTmpFilePrefix());
         $this->container->addTmpFile($tmpFile);
         $this->eventDispatcher->dispatch(new TmpFileOnCreate($tmpFile));
         $this->eventDispatcher->dispatch(new TmpFileManagerPostCreate($this->getTmpFileManagerEventArgs()));
@@ -61,19 +51,17 @@ final class TmpFileManager implements TmpFileManagerInterface
         return $tmpFile;
     }
 
-    public function load(\SplFileInfo ...$files): void
+    public function load(TmpFileInterface ...$tmpFiles): void
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPreLoad($this->getTmpFileManagerEventArgs()));
 
-        foreach ($files as $file) {
-            $tmpFile = new TmpFile($file->getPathname());
-            $this->eventDispatcher->dispatch(new TmpFileOnLoad($tmpFile));
-
+        foreach ($tmpFiles as $tmpFile) {
             if (!$this->filesystem->existsTmpFile($tmpFile)) {
                 throw new \InvalidArgumentException(sprintf('Temp file "%s" doesn\'t exist.', $tmpFile->getFilename()));
             }
 
             $this->container->addTmpFile($tmpFile);
+            $this->eventDispatcher->dispatch(new TmpFileOnLoad($tmpFile));
         }
 
         $this->eventDispatcher->dispatch(new TmpFileManagerPostLoad($this->getTmpFileManagerEventArgs()));
@@ -109,18 +97,18 @@ final class TmpFileManager implements TmpFileManagerInterface
     public function purge(): void
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPrePurge($this->getTmpFileManagerEventArgs()));
-        $tmpFiles = $this->container->toArray();
 
-        foreach ($tmpFiles as $tmpFile) {
-            $this->remove($tmpFile);
+        if (!$this->container->isEmpty()) {
+            foreach ($this->container->getTmpFiles() as $tmpFile) {
+                $this->remove($tmpFile);
+            }
         }
 
         $this->eventDispatcher->dispatch(new TmpFileManagerPostPurge($this->getTmpFileManagerEventArgs()));
-        $this->eventDispatcher->dispatch(new TmpFileManagerOnFinish($this->getTmpFileManagerEventArgs()));
     }
 
-    private function getTmpFileManagerEventArgs(): TmpFileManagerEventArgs
+    public function __destruct()
     {
-        return new TmpFileManagerEventArgs($this->config, $this->container, $this->filesystem);
+        $this->eventDispatcher->dispatch(new TmpFileManagerOnFinish($this->getTmpFileManagerEventArgs()));
     }
 }

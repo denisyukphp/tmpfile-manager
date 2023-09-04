@@ -6,19 +6,20 @@ namespace TmpFileManager\Filesystem;
 
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use TmpFile\TmpFileInterface;
+use TmpFileManager\TmpFile;
 
 final class Filesystem implements FilesystemInterface
 {
-    private SymfonyFilesystem $symfonyFilesystem;
-
-    public function __construct(?SymfonyFilesystem $symfonyFilesystem = null)
-    {
-        $this->symfonyFilesystem = $symfonyFilesystem ?? new SymfonyFilesystem();
+    public function __construct(
+        private SymfonyFilesystem $symfonyFilesystem,
+    ) {
     }
 
-    public function createTmpFile(string $tmpFileDirectory, string $tmpFilePrefix): string
+    public function createTmpFile(string $tmpFileDir, string $tmpFilePrefix): TmpFileInterface
     {
-        return $this->symfonyFilesystem->tempnam($tmpFileDirectory, $tmpFilePrefix);
+        $filename = $this->symfonyFilesystem->tempnam($tmpFileDir, $tmpFilePrefix);
+
+        return new TmpFile($filename);
     }
 
     public function existsTmpFile(TmpFileInterface $tmpFile): bool

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace TmpFileManager\Handler\OpenResourcesHandler;
+namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
 use TmpFile\TmpFileInterface;
 
-final class OpenResourcesHandler implements OpenResourcesHandlerInterface
+final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
     /**
      * @param TmpFileInterface[] $tmpFiles

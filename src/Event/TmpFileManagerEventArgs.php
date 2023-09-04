@@ -8,15 +8,11 @@ use TmpFileManager\Filesystem\FilesystemInterface;
 
 final class TmpFileManagerEventArgs
 {
-    private ConfigInterface $config;
-    private ContainerInterface $container;
-    private FilesystemInterface $filesystem;
-
-    public function __construct(ConfigInterface $config, ContainerInterface $container, FilesystemInterface $filesystem)
-    {
-        $this->config = $config;
-        $this->container = $container;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private ConfigInterface $config,
+        private ContainerInterface $container,
+        private FilesystemInterface $filesystem,
+    ) {
     }
 
     public function getConfig(): ConfigInterface

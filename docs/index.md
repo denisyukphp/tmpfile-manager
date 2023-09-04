@@ -12,128 +12,106 @@
 
 By default, temp files purge automatically, check unclosed resources and garbage collection are off. Below is the default configuration:
 
+```text
++--------------------------+--------------------+
+| Option                   | Default            |
++--------------------------+--------------------+
+| temp file dir            | sys_get_temp_dir() |
+| temp file prefix         | php                |
+| check unclosed resources | [x]                |
+| garbage collection       | [x]                |
++--------------------------+--------------------+
+```
+
+To create a temp file manager, build it with options like below:
+
 ```php
 <?php
 
 use TmpFileManager\TmpFileManagerBuilder;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->withTmpFileDirectory(sys_get_temp_dir())
+    ->withTmpFileDir(sys_get_temp_dir())
     ->withTmpFilePrefix('php')
     ->build()
 ;
 ```
 
-[...]
+All options are not required.
 
 ## Creating temp files
 
-[...]
+To create a temporary file, use the `create(): \TmpFile\TmpFileInterface` method. All created temp files are added on the stack and will be removed after PHP is finished:
 
 ```php
-<?php
-
-use TmpFileManager\TmpFileManagerBuilder;
-
-$tmpFileManager = (new TmpFileManagerBuilder())
-    ->withTmpFileDirectory(sys_get_temp_dir())
-    ->withTmpFilePrefix('php')
-    ->build()
-;
-```
-
-[...]
-
-```php
+/** @var \TmpFile\TmpFileInterface $tmpFile */
 $tmpFile = $tmpFileManager->create();
 ```
 
-
-[...]
-
+In console commands, use the `isolate(\TmpFile\TmpFileInterface $tmpFile): void` method to create and handle temp files. Temp files will be immediately removed after the finished callback:
 ```php
-$tmpFileManager->isolate(function (TmpFileInterface $tmpFile): void {
+$tmpFileManager->isolate(function (\TmpFile\TmpFileInterface $tmpFile): void {
     // ...
 });
 ```
 
-[...]
+Use one of the following methods to create a temp files for your tasks properly.
 
 ## Loading temp files
 
-[...]
+To add existing temp files to the temp file manager, use the `load(\TmpFile\TmpFileInterface ...$tmpFiles): void` method:
 
 ```php
-<?php
-
-use TmpFileManager\TmpFileManagerBuilder;
-
-$tmpFileManager = (new TmpFileManagerBuilder())
-    ->withTmpFileDirectory(sys_get_temp_dir())
-    ->withTmpFilePrefix('php')
-    ->build()
-;
-
-$files = [
-    new \SplFileInfo(__DIR__.'/cat.jpg'),
-    new \SplFileInfo(__DIR__.'/dog.jpg'),
-    new \SplFileInfo(__DIR__.'/fish.jpg'),
+$tmpFiles = [
+    new \TmpFileManager\TmpFile(__DIR__.'/cat.jpg'),
+    new \TmpFileManager\TmpFile(__DIR__.'/dog.jpg'),
+    new \TmpFileManager\TmpFile(__DIR__.'/fish.jpg'),
 ];
 
-$tmpFileManager->load(...$files);
+$tmpFileManager->load(...$tmpFiles);
 ```
 
-[...]
+The source files will be removed after PHP is finished.
 
 ## Removing temp files
 
-[...]
-
-```php
-<?php
-
-use TmpFileManager\TmpFileManagerBuilder;
-
-$tmpFileManager = (new TmpFileManagerBuilder())
-    ->withTmpFileDirectory(sys_get_temp_dir())
-    ->withTmpFilePrefix('php')
-    ->build()
-;
-
-$tmpFile = $tmpFileManager->create();
-```
-
-[...]
+By default, created temp files will purge automatically after PHP is finished, but you can remove temp files manually with `remove(\TmpFile\TmpFileInterface $tmpFile): void` method:
 
 ```php
 $tmpFileManager->remove($tmpFile);
 ```
 
-[...]
+If you need to forcefully purge all temp files, you can use the `purge(): void` method:
 
 ```php
 $tmpFileManager->purge();
 ```
 
-[...]
+All temp files will be immediately removed.
 
 ## Check unclosed resources
 
-[...]
+Before purging temp files temp file manager can check unclosed resources and close opened resources which refer to temp files. Build temp file manager with [UnclosedResourcesHandler](../src/Handler/UnclosedResourcesHandler/UnclosedResourcesHandler.php): 
 
 ```php
 <?php
 
-use TmpFileManager\Handler\OpenResourcesHandler\OpenResourcesHandler;
+use TmpFileManager\Handler\UnclosedResourcesHandler\UnclosedResourcesHandler;
 use TmpFileManager\TmpFileManagerBuilder;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->withOpenResourcesHandler(new OpenResourcesHandler())
+    ->withUnclosedResourcesHandler(new UnclosedResourcesHandler())
     ->build()
 ;
+```
 
+Now you can ignore opened resources, e. g.:
+
+```php
 $tmpFile = $tmpFileManager->create();
+
 $fh = fopen($tmpFile->getFilename(), 'r+');
+
 fwrite($fh, random_bytes(1024));
 
 // ...
@@ -149,14 +127,14 @@ Garbage collection process starts after temp files purging. The probability is c
 <?php
 
 use TmpFileManager\Handler\GarbageCollectionHandler\GarbageCollectionHandler;
-use TmpFileManager\Handler\GarbageCollectionHandler\Processor\SyncProcessor;
+use TmpFileManager\Handler\GarbageCollectionHandler\Processor\AsyncProcessor;
 use TmpFileManager\TmpFileManagerBuilder;
 
 $garbageCollectionHandler = new GarbageCollectionHandler(
     probability: 1,
     divisor: 100,
     lifetime: 3600,
-    processor: new SyncProcessor(),
+    processor: new AsyncProcessor(),
 );
 
 $tmpFileManager = (new TmpFileManagerBuilder())
@@ -174,7 +152,7 @@ By default, garbage collection is off.
 
 ## Lifecycle events
 
-Temp file manager is based on events. All handlers implemented through events. Use them to put your own code in temp file's lifecycle:
+The temp file manager is based on events. All handlers are implemented through events. Use them to put your own code into the temp file's lifecycle:
 
 ```text
           ┌─────────────┐
@@ -222,7 +200,7 @@ Events related to temp file:
 - [TmpFilePreRemove](../src/Event/TmpFilePreRemove.php)
 - [TmpFilePostRemove](../src/Event/TmpFilePostRemove.php)
 
-[...]
+To register an event listener, use the `withEventListener(string $eventName, callable $listenerCallback): self` method in the builder:
 
 ```php
 <?php
@@ -231,13 +209,16 @@ use TmpFileManager\TmpFileManagerBuilder;
 use TmpFileManager\Event\TmpFileOnCreate;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->addEventListener(TmpFileOnCreate::class, static function (TmpFileOnCreate $tmpFileOnCreate): void {
-        // ...
-    })
+    ->withEventListener(
+        TmpFileOnCreate::class,
+        static function (TmpFileOnCreate $tmpFileOnCreate): void {
+            // ...
+        },
+    )
     ->build()
 ;
 
 $tmpFile = $tmpFileManager->create();
 ```
 
-[...]
+All listeners will be run when the temp file manager fires events.
