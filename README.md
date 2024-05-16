@@ -46,6 +46,7 @@ All temp files created the manager will be purged automatically by default.
 - [Creating temp files](docs/index.md#creating-temp-files)
 - [Loading temp files](docs/index.md#loading-temp-files)
 - [Removing temp files](docs/index.md#removing-temp-files)
+- [Auto-purging](docs/index.md#auto-purging)
 - [Check unclosed resources](docs/index.md#check-unclosed-resources)
 - [Garbage collection](docs/index.md#garbage-collection)
 - [Lifecycle events](docs/index.md#lifecycle-events)

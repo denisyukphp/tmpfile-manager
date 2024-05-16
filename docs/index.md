@@ -4,6 +4,7 @@
 - [Creating temp files](#creating-temp-files)
 - [Loading temp files](#loading-temp-files)
 - [Removing temp files](#removing-temp-files)
+- [Auto-purging](#auto-purging)
 - [Check unclosed resources](#check-unclosed-resources)
 - [Garbage collection](#garbage-collection)
 - [Lifecycle events](#lifecycle-events)
@@ -18,6 +19,7 @@ By default, temp files purge automatically, check unclosed resources and garbage
 +--------------------------+--------------------+
 | temp file dir            | sys_get_temp_dir() |
 | temp file prefix         | php                |
+| auto purge               | [v]                |
 | check unclosed resources | [x]                |
 | garbage collection       | [x]                |
 +--------------------------+--------------------+
@@ -50,7 +52,7 @@ $tmpFile = $tmpFileManager->create();
 
 In console commands, use the `TmpFileManager\TmpFileManagerInterface::isolate(TmpFile\TmpFileInterface $tmpFile): void` method to create and handle temp files. Temp files will be immediately removed after the finished callback:
 ```php
-$tmpFileManager->isolate(function (TmpFile\TmpFileInterface $tmpFile): void {
+$tmpFileManager->isolate(static function (TmpFile\TmpFileInterface $tmpFile): void {
     // ...
 });
 ```
@@ -88,6 +90,23 @@ $tmpFileManager->purge();
 ```
 
 All temp files will be immediately removed.
+
+## Auto-purging
+
+By default, temp files purge automatically. The feature based on `register_shutdown_function` function and init every time when temp file manager is started. For difficult use cases you can turn off auto purging:
+
+```php
+<?php
+
+use TmpFileManager\TmpFileManagerBuilder;
+
+$tmpFileManager = (new TmpFileManagerBuilder())
+    ->withoutAutoPurge('php')
+    ->build()
+;
+```
+
+Think of auto purging as fallback feature to shoot all problems with removing.
 
 ## Check unclosed resources
 
@@ -133,7 +152,7 @@ use TmpFileManager\TmpFileManagerBuilder;
 $garbageCollectionHandler = new GarbageCollectionHandler(
     probability: 1,
     divisor: 100,
-    lifetime: 3600,
+    lifetime: 3_600,
     processor: new AsyncProcessor(),
 );
 
@@ -207,14 +226,11 @@ To register an event listener, use the `TmpFileManager\TmpFileManagerBuilder::wi
 
 use TmpFileManager\TmpFileManagerBuilder;
 use TmpFileManager\Event\TmpFileOnCreate;
+use TmpFileManager\Event\TmpFilePostRemove;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->withEventListener(
-        TmpFileOnCreate::class,
-        static function (TmpFileOnCreate $tmpFileOnCreate): void {
-            // ...
-        },
-    )
+    ->withEventListener(TmpFileOnCreate::class, static fn (TmpFileOnCreate $tmpFileOnCreate) => /* ... */)
+    ->withEventListener(TmpFilePostRemove::class, static fn (TmpFileOnCreate $tmpFileOnCreate) => /* ... */)
     ->build()
 ;
 
