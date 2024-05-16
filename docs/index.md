@@ -93,7 +93,7 @@ All temp files will be immediately removed.
 
 ## Auto-purging
 
-By default, temp files purge automatically. The feature based on `register_shutdown_function` function and init every time when temp file manager is started. For difficult use cases you can turn off auto purging:
+By default, temp files purge automatically. The feature based on `register_shutdown_function(callable $callback, mixed ...$args): void` function and init every time when temp file manager is started. For difficult use cases you can turn off auto purging:
 
 ```php
 <?php
