@@ -7,9 +7,6 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
-/**
- * @requires OS Linux
- */
 final class AsyncProcessor implements ProcessorInterface
 {
     /**

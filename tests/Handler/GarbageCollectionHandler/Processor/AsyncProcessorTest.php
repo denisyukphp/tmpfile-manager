@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem as Fs;
 use TmpFileManager\Handler\GarbageCollectionHandler\Processor\AsyncProcessor;
 
+/**
+ * @requires OS Linux
+ */
 final class AsyncProcessorTest extends TestCase
 {
     public function testSyncProcessor(): void

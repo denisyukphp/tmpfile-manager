@@ -17,6 +17,9 @@ use TmpFileManager\TmpFileManagerBuilder;
 
 final class TmpFileMangerBuilderTest extends TestCase
 {
+    /**
+     * @requires OS Linux
+     */
     public function testBuildWithTmpFileDir(): void
     {
         $tmpFileManager = (new TmpFileManagerBuilder())
@@ -29,6 +32,9 @@ final class TmpFileMangerBuilderTest extends TestCase
         $this->assertStringStartsWith(sys_get_temp_dir(), $tmpFile->getFilename());
     }
 
+    /**
+     * @requires OS Linux
+     */
     public function testBuildWithTmpFilePrefix(): void
     {
         $tmpFileManager = (new TmpFileManagerBuilder())
