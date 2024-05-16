@@ -101,7 +101,7 @@ By default, temp files purge automatically. The feature based on `register_shutd
 use TmpFileManager\TmpFileManagerBuilder;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
-    ->withoutAutoPurge('php')
+    ->withoutAutoPurge()
     ->build()
 ;
 ```
