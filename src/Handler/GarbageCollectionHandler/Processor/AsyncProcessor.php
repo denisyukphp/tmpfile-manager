@@ -7,29 +7,30 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
+/**
+ * @requires OS Linux
+ */
 final class AsyncProcessor implements ProcessorInterface
 {
     /**
-     * @param string[] $extraExecutableCommandDirs
+     * @param string[] $extraDirs
      */
     public function __construct(
-        private bool $isParallelProcess = true,
-        private array $extraExecutableCommandDirs = [],
+        private bool $isParallel = true,
+        private array $extraDirs = [],
     ) {
     }
 
     public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void
     {
-        $executableCommand = (new ExecutableFinder())
-            ->find('find', '/usr/bin/find', $this->extraExecutableCommandDirs)
-        ;
+        $executable = (new ExecutableFinder())->find('find', '/usr/bin/find', $this->extraDirs);
 
-        if (null === $executableCommand) {
-            throw new \RuntimeException('Async process can\'t be run because utility "find" not supported.');
+        if (null === $executable) {
+            throw new \RuntimeException('Async process can\'t be run because utility "find" not supported.'); // @codeCoverageIgnore
         }
 
         $process = new Process([
-            $executableCommand,
+            $executable,
             $tmpFileDir,
             '-name', $tmpFilePrefix.'*',
             '-type', 'f',
@@ -38,10 +39,10 @@ final class AsyncProcessor implements ProcessorInterface
             '-delete',
         ]);
 
-        $process->setOptions([
-            'create_new_console' => $this->isParallelProcess,
-        ]);
-
         $process->start();
+
+        if (!$this->isParallel) {
+            $process->wait();
+        }
     }
 }

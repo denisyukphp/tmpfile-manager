@@ -6,6 +6,9 @@ namespace TmpFileManager\Event;
 
 use TmpFile\TmpFileInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class AbstractTmpFileEvent
 {
     public function __construct(

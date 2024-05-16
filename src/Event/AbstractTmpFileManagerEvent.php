@@ -8,25 +8,28 @@ use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Filesystem\FilesystemInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class AbstractTmpFileManagerEvent
 {
     public function __construct(
-        private TmpFileManagerEventArgs $fileManagerEventArgs,
+        private TmpFileManagerEventArgs $args,
     ) {
     }
 
     public function getConfig(): ConfigInterface
     {
-        return $this->fileManagerEventArgs->getConfig();
+        return $this->args->getConfig();
     }
 
     public function getContainer(): ContainerInterface
     {
-        return $this->fileManagerEventArgs->getContainer();
+        return $this->args->getContainer();
     }
 
     public function getFilesystem(): FilesystemInterface
     {
-        return $this->fileManagerEventArgs->getFilesystem();
+        return $this->args->getFilesystem();
     }
 }

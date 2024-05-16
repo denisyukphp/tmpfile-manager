@@ -6,7 +6,7 @@ namespace TmpFileManager;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Symfony\Component\Filesystem\Filesystem as Fs;
 use TmpFileManager\Config\Config;
 use TmpFileManager\Container\Container;
 use TmpFileManager\Event\TmpFileManagerPostPurge;
@@ -19,16 +19,16 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
 {
     private string $tmpFileDir;
     private string $tmpFilePrefix;
-    private SymfonyFilesystem $symfonyFilesystem;
+    private bool $autoPurge;
+    private Fs $fs;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(
-        SymfonyFilesystem $symfonyFilesystem = null,
-        EventDispatcherInterface $eventDispatcher = null,
-    ) {
+    public function __construct(Fs $fs = null, EventDispatcherInterface $eventDispatcher = null)
+    {
         $this->tmpFileDir = sys_get_temp_dir();
         $this->tmpFilePrefix = 'php';
-        $this->symfonyFilesystem = $symfonyFilesystem ?? new SymfonyFilesystem();
+        $this->autoPurge = true;
+        $this->fs = $fs ?? new Fs();
         $this->eventDispatcher = $eventDispatcher ?? new EventDispatcher();
     }
 
@@ -44,6 +44,14 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
     {
         $self = clone $this;
         $self->tmpFilePrefix = $tmpFilePrefix;
+
+        return $self;
+    }
+
+    public function withoutAutoPurge(): self
+    {
+        $self = clone $this;
+        $self->autoPurge = false;
 
         return $self;
     }
@@ -92,8 +100,9 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
         return new TmpFileManager(
             config: new Config($this->tmpFileDir, $this->tmpFilePrefix),
             container: new Container(),
-            filesystem: new Filesystem($this->symfonyFilesystem),
+            filesystem: new Filesystem($this->fs),
             eventDispatcher: $this->eventDispatcher,
+            autoPurge: $this->autoPurge,
         );
     }
 }

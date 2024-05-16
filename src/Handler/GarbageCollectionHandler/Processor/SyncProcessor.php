@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Symfony\Component\Filesystem\Filesystem as Fs;
 use Symfony\Component\Finder\Finder;
 
 final class SyncProcessor implements ProcessorInterface
 {
-    public function __construct(
-        private SymfonyFilesystem $symfonyFilesystem,
-    ) {
+    private Fs $fs;
+
+    public function __construct(Fs $fs = null)
+    {
+        $this->fs = $fs ?? new Fs();
     }
 
     public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void
@@ -25,7 +27,7 @@ final class SyncProcessor implements ProcessorInterface
         ;
 
         if ($finder->hasResults()) {
-            $this->symfonyFilesystem->remove($finder->getIterator());
+            $this->fs->remove($finder->getIterator());
         }
     }
 }

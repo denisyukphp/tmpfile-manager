@@ -6,6 +6,9 @@ namespace TmpFileManager;
 
 use TmpFile\TmpFileInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class TmpFile implements TmpFileInterface
 {
     public function __construct(

@@ -30,9 +30,13 @@ final class TmpFileManager implements TmpFileManagerInterface
         private ContainerInterface $container,
         private FilesystemInterface $filesystem,
         private EventDispatcherInterface $eventDispatcher,
+        private bool $autoPurge = true,
     ) {
         $this->eventDispatcher->dispatch(new TmpFileManagerOnStart($this->getTmpFileManagerEventArgs()));
-        register_shutdown_function([$this, 'purge']);
+
+        if ($this->autoPurge) {
+            register_shutdown_function([$this, 'purge']);
+        }
     }
 
     private function getTmpFileManagerEventArgs(): TmpFileManagerEventArgs

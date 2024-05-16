@@ -6,6 +6,9 @@ use TmpFileManager\Config\ConfigInterface;
 use TmpFileManager\Container\ContainerInterface;
 use TmpFileManager\Filesystem\FilesystemInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class TmpFileManagerEventArgs
 {
     public function __construct(
