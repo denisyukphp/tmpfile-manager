@@ -5,21 +5,24 @@ declare(strict_types=1);
 namespace TmpFileManager\Handler\UnclosedResourcesHandler;
 
 use TmpFile\TmpFileInterface;
-use TmpFileManager\Container\ContainerInterface;
 
 final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterface
 {
-    public function handle(ContainerInterface $container): void
+    /**
+     * @param TmpFileInterface[] $tmpFiles
+     */
+    public function handle(array $tmpFiles): void
     {
-        $filenames = array_map(function (TmpFileInterface $tmpFile): string {
-            return $tmpFile->getFilename();
-        }, $container->getTmpFiles());
+        if (0 === \count($tmpFiles)) {
+            return; // @codeCoverageIgnore
+        }
 
-        foreach (get_resources('stream') as $resource) {
+        $resources = get_resources('stream');
+        $filenames = array_map(static fn (TmpFileInterface $tmpFile): string => $tmpFile->getFilename(), $tmpFiles);
+
+        foreach ($resources as $resource) {
             if (!stream_is_local($resource)) {
-                // @codeCoverageIgnoreStart
-                continue;
-                // @codeCoverageIgnoreEnd
+                continue; // @codeCoverageIgnore
             }
 
             $metadata = stream_get_meta_data($resource);

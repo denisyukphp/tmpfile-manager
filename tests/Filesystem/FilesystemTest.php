@@ -6,33 +6,37 @@ namespace TmpFileManager\Tests\Filesystem;
 
 use PHPUnit\Framework\TestCase;
 use TmpFileManager\Filesystem\Filesystem;
-use TmpFileManager\TmpFileManager;
 
-class FilesystemTest extends TestCase
+final class FilesystemTest extends TestCase
 {
-    public function testGetTmpFileName(): void
+    public function testCreateTmpFile(): void
     {
         $filesystem = new Filesystem();
-        $filename = $filesystem->getTmpFileName(sys_get_temp_dir(), 'php');
-        $this->assertFileExists($filename);
 
-        unlink($filename);
+        $tmpFile = $filesystem->createTmpFile(sys_get_temp_dir(), 'php');
+
+        $this->assertFileExists($tmpFile->getFilename());
+
+        $filesystem->removeTmpFile($tmpFile);
     }
 
-    public function testExistsTmpFile(): void
+    public function testExistTmpFile(): void
     {
         $filesystem = new Filesystem();
-        $tmpFileManager = new TmpFileManager();
-        $tmpFile = $tmpFileManager->create();
+
+        $tmpFile = $filesystem->createTmpFile(sys_get_temp_dir(), 'php');
 
         $this->assertTrue($filesystem->existsTmpFile($tmpFile));
+
+        $filesystem->removeTmpFile($tmpFile);
     }
 
     public function testRemoveTmpFile(): void
     {
         $filesystem = new Filesystem();
-        $tmpFileManager = new TmpFileManager();
-        $tmpFile = $tmpFileManager->create();
+
+        $tmpFile = $filesystem->createTmpFile(sys_get_temp_dir(), 'php');
+
         $filesystem->removeTmpFile($tmpFile);
 
         $this->assertFileDoesNotExist($tmpFile->getFilename());

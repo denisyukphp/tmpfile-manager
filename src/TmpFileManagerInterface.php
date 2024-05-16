@@ -10,6 +10,8 @@ interface TmpFileManagerInterface
 {
     public function create(): TmpFileInterface;
 
+    public function load(TmpFileInterface ...$tmpFiles): void;
+
     public function isolate(callable $callback): void;
 
     public function remove(TmpFileInterface $tmpFile): void;
