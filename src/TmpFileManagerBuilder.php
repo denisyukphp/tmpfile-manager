@@ -23,7 +23,7 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
     private Fs $fs;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Fs $fs = null, EventDispatcherInterface $eventDispatcher = null)
+    public function __construct(?Fs $fs = null, ?EventDispatcherInterface $eventDispatcher = null)
     {
         $this->tmpFileDir = sys_get_temp_dir();
         $this->tmpFilePrefix = 'php';

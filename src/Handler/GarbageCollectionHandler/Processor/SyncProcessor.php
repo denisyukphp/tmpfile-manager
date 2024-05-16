@@ -11,7 +11,7 @@ final class SyncProcessor implements ProcessorInterface
 {
     private Fs $fs;
 
-    public function __construct(Fs $fs = null)
+    public function __construct(?Fs $fs = null)
     {
         $this->fs = $fs ?? new Fs();
     }

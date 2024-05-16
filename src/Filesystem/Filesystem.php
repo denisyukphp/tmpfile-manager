@@ -12,7 +12,7 @@ final class Filesystem implements FilesystemInterface
 {
     private Fs $fs;
 
-    public function __construct(Fs $fs = null)
+    public function __construct(?Fs $fs = null)
     {
         $this->fs = $fs ?? new Fs();
     }

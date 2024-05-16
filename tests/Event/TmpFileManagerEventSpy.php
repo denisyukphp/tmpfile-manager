@@ -32,7 +32,7 @@ final class TmpFileManagerEventSpy
         $this->tmpFilesCount[$event::class] = $event->getContainer()->count();
     }
 
-    public function getEventsCount(string $className = null): int
+    public function getEventsCount(?string $className = null): int
     {
         if (null === $className) {
             return array_sum($this->eventsCounter);
@@ -45,7 +45,7 @@ final class TmpFileManagerEventSpy
         return $this->eventsCounter[$className];
     }
 
-    public function getTmpFilesCount(string $className = null): int
+    public function getTmpFilesCount(?string $className = null): int
     {
         if (null === $className) {
             return array_sum($this->tmpFilesCount);

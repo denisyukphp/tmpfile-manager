@@ -29,7 +29,7 @@ final class TmpFileEventSpy
         $this->tmpFiles[$event->getTmpFile()->getFilename()] = $event->getTmpFile();
     }
 
-    public function getEventsCount(string $className = null): int
+    public function getEventsCount(?string $className = null): int
     {
         if (null === $className) {
             return array_sum($this->eventsCounter);
