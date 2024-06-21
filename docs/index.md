@@ -152,7 +152,7 @@ use TmpFileManager\TmpFileManagerBuilder;
 $garbageCollectionHandler = new GarbageCollectionHandler(
     probability: 1,
     divisor: 100,
-    lifetime: 3_600,
+    lifetime: 3600,
     processor: new AsyncProcessor(),
 );
 
@@ -230,7 +230,7 @@ use TmpFileManager\Event\TmpFilePostRemove;
 
 $tmpFileManager = (new TmpFileManagerBuilder())
     ->withEventListener(TmpFileOnCreate::class, static fn (TmpFileOnCreate $tmpFileOnCreate) => /* ... */)
-    ->withEventListener(TmpFilePostRemove::class, static fn (TmpFileOnCreate $tmpFileOnCreate) => /* ... */)
+    ->withEventListener(TmpFilePostRemove::class, static fn (TmpFilePostRemove $tmpFilePostRemove) => /* ... */)
     ->build()
 ;
 
