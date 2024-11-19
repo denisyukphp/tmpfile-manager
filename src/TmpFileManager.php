@@ -61,7 +61,7 @@ final class TmpFileManager implements TmpFileManagerInterface
 
         foreach ($tmpFiles as $tmpFile) {
             if (!$this->filesystem->existsTmpFile($tmpFile)) {
-                throw new \InvalidArgumentException(sprintf('Temp file "%s" doesn\'t exist.', $tmpFile->getFilename()));
+                throw new \InvalidArgumentException(\sprintf('Temp file "%s" doesn\'t exist.', $tmpFile->getFilename()));
             }
 
             $this->container->addTmpFile($tmpFile);
@@ -85,11 +85,11 @@ final class TmpFileManager implements TmpFileManagerInterface
     public function remove(TmpFileInterface $tmpFile): void
     {
         if (!$this->filesystem->existsTmpFile($tmpFile)) {
-            throw new \InvalidArgumentException(sprintf('Temp file "%s" has been already removed.', $tmpFile->getFilename()));
+            throw new \InvalidArgumentException(\sprintf('Temp file "%s" has been already removed.', $tmpFile->getFilename()));
         }
 
         if (!$this->container->hasTmpFile($tmpFile)) {
-            throw new \InvalidArgumentException(sprintf('Temp file "%s" wasn\'t create through temp file manager.', $tmpFile->getFilename()));
+            throw new \InvalidArgumentException(\sprintf('Temp file "%s" wasn\'t create through temp file manager.', $tmpFile->getFilename()));
         }
 
         $this->eventDispatcher->dispatch(new TmpFilePreRemove($tmpFile));
