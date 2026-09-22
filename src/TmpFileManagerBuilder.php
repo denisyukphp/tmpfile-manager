@@ -95,6 +95,7 @@ final class TmpFileManagerBuilder implements TmpFileManagerBuilderInterface
         return $self;
     }
 
+    #[\Override]
     public function build(): TmpFileManagerInterface
     {
         return new TmpFileManager(

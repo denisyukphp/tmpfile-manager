@@ -30,11 +30,11 @@ final class TmpFileManager implements TmpFileManagerInterface
         private ContainerInterface $container,
         private FilesystemInterface $filesystem,
         private EventDispatcherInterface $eventDispatcher,
-        private bool $autoPurge = true,
+        bool $autoPurge = true,
     ) {
         $this->eventDispatcher->dispatch(new TmpFileManagerOnStart($this->getTmpFileManagerEventArgs()));
 
-        if ($this->autoPurge) {
+        if ($autoPurge) {
             register_shutdown_function([$this, 'purge']);
         }
     }
@@ -44,6 +44,7 @@ final class TmpFileManager implements TmpFileManagerInterface
         return new TmpFileManagerEventArgs($this->config, $this->container, $this->filesystem);
     }
 
+    #[\Override]
     public function create(): TmpFileInterface
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPreCreate($this->getTmpFileManagerEventArgs()));
@@ -55,6 +56,7 @@ final class TmpFileManager implements TmpFileManagerInterface
         return $tmpFile;
     }
 
+    #[\Override]
     public function load(TmpFileInterface ...$tmpFiles): void
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPreLoad($this->getTmpFileManagerEventArgs()));
@@ -71,6 +73,7 @@ final class TmpFileManager implements TmpFileManagerInterface
         $this->eventDispatcher->dispatch(new TmpFileManagerPostLoad($this->getTmpFileManagerEventArgs()));
     }
 
+    #[\Override]
     public function isolate(callable $callback): void
     {
         $tmpFile = $this->create();
@@ -82,6 +85,7 @@ final class TmpFileManager implements TmpFileManagerInterface
         }
     }
 
+    #[\Override]
     public function remove(TmpFileInterface $tmpFile): void
     {
         if (!$this->filesystem->existsTmpFile($tmpFile)) {
@@ -98,6 +102,7 @@ final class TmpFileManager implements TmpFileManagerInterface
         $this->eventDispatcher->dispatch(new TmpFilePostRemove($tmpFile));
     }
 
+    #[\Override]
     public function purge(): void
     {
         $this->eventDispatcher->dispatch(new TmpFileManagerPrePurge($this->getTmpFileManagerEventArgs()));

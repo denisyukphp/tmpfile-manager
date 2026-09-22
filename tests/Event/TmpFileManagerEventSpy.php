@@ -20,14 +20,8 @@ final class TmpFileManagerEventSpy
 
     public function __invoke(AbstractTmpFileManagerEvent $event): void
     {
-        if (!isset($this->eventsCounter[$event::class])) {
-            $this->eventsCounter[$event::class] = 0;
-        }
-
-        if (!isset($this->tmpFilesCount[$event::class])) {
-            $this->tmpFilesCount[$event::class] = 0;
-        }
-
+        $this->eventsCounter[$event::class] ??= 0;
+        $this->tmpFilesCount[$event::class] ??= 0;
         ++$this->eventsCounter[$event::class];
         $this->tmpFilesCount[$event::class] = $event->getContainer()->count();
     }

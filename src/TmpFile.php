@@ -9,18 +9,20 @@ use TmpFile\TmpFileInterface;
 /**
  * @codeCoverageIgnore
  */
-final class TmpFile implements TmpFileInterface
+final class TmpFile implements \Stringable, TmpFileInterface
 {
     public function __construct(
         private string $filename,
     ) {
     }
 
+    #[\Override]
     public function getFilename(): string
     {
         return $this->filename;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->filename;

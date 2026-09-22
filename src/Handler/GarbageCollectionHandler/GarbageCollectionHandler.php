@@ -16,6 +16,7 @@ final class GarbageCollectionHandler implements GarbageCollectionHandlerInterfac
     ) {
     }
 
+    #[\Override]
     public function handle(string $tmpFileDir, string $tmpFilePrefix): void
     {
         if (mt_rand(1, $this->divisor) <= $this->probability) {
