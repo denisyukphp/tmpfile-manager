@@ -10,7 +10,7 @@ use TmpFileManager\Event\AbstractTmpFileEvent;
 final class TmpFileEventSpy
 {
     /**
-     * @param array<string, int>              $eventsCounter
+     * @param array<string, int> $eventsCounter
      * @param array<string, TmpFileInterface> $tmpFiles
      */
     public function __construct(
@@ -21,10 +21,7 @@ final class TmpFileEventSpy
 
     public function __invoke(AbstractTmpFileEvent $event): void
     {
-        if (!isset($this->eventsCounter[$event::class])) {
-            $this->eventsCounter[$event::class] = 0;
-        }
-
+        $this->eventsCounter[$event::class] ??= 0;
         ++$this->eventsCounter[$event::class];
         $this->tmpFiles[$event->getTmpFile()->getFilename()] = $event->getTmpFile();
     }

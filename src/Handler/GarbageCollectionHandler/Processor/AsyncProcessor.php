@@ -18,6 +18,7 @@ final class AsyncProcessor implements ProcessorInterface
     ) {
     }
 
+    #[\Override]
     public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void
     {
         $executable = (new ExecutableFinder())->find('find', '/usr/bin/find', $this->extraDirs);
@@ -31,8 +32,8 @@ final class AsyncProcessor implements ProcessorInterface
             $tmpFileDir,
             '-name', $tmpFilePrefix.'*',
             '-type', 'f',
-            '-amin', '+'.ceil($lifetime / 60),
-            '-maxdepth', 1,
+            '-amin', \sprintf('+%.0f', ceil($lifetime / 60)),
+            '-maxdepth', '1',
             '-delete',
         ]);
 

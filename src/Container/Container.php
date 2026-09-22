@@ -8,6 +8,9 @@ use TmpFile\TmpFileInterface;
 
 final class Container implements ContainerInterface
 {
+    /**
+     * @var \SplObjectStorage<TmpFileInterface, null>
+     */
     private \SplObjectStorage $tmpFiles;
 
     public function __construct()
@@ -15,29 +18,33 @@ final class Container implements ContainerInterface
         $this->tmpFiles = new \SplObjectStorage();
     }
 
+    #[\Override]
     public function addTmpFile(TmpFileInterface $tmpFile): void
     {
         if ($this->hasTmpFile($tmpFile)) {
             throw new \InvalidArgumentException(\sprintf('Temp file "%s" has been already added.', $tmpFile->getFilename()));
         }
 
-        $this->tmpFiles->attach($tmpFile);
+        $this->tmpFiles->offsetSet($tmpFile);
     }
 
+    #[\Override]
     public function hasTmpFile(TmpFileInterface $tmpFile): bool
     {
-        return $this->tmpFiles->contains($tmpFile);
+        return $this->tmpFiles->offsetExists($tmpFile);
     }
 
+    #[\Override]
     public function removeTmpFile(TmpFileInterface $tmpFile): void
     {
         if (!$this->hasTmpFile($tmpFile)) {
             throw new \InvalidArgumentException(\sprintf('Temp file "%s" hasn\'t been added yet.', $tmpFile->getFilename()));
         }
 
-        $this->tmpFiles->detach($tmpFile);
+        $this->tmpFiles->offsetUnset($tmpFile);
     }
 
+    #[\Override]
     public function clearTmpFiles(): void
     {
         $this->tmpFiles->removeAll($this->tmpFiles);
@@ -46,6 +53,7 @@ final class Container implements ContainerInterface
     /**
      * @return TmpFileInterface[]
      */
+    #[\Override]
     public function getTmpFiles(): array
     {
         if ($this->isEmpty()) {
@@ -55,11 +63,13 @@ final class Container implements ContainerInterface
         return iterator_to_array($this->tmpFiles, false);
     }
 
+    #[\Override]
     public function isEmpty(): bool
     {
         return 0 === $this->count();
     }
 
+    #[\Override]
     public function count(): int
     {
         return \count($this->tmpFiles);

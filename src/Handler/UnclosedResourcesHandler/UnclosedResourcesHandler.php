@@ -11,6 +11,7 @@ final class UnclosedResourcesHandler implements UnclosedResourcesHandlerInterfac
     /**
      * @param TmpFileInterface[] $tmpFiles
      */
+    #[\Override]
     public function handle(array $tmpFiles): void
     {
         if (0 === \count($tmpFiles)) {

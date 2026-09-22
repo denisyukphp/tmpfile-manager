@@ -16,6 +16,7 @@ final class SyncProcessor implements ProcessorInterface
         $this->fs = $fs ?? new Fs();
     }
 
+    #[\Override]
     public function process(string $tmpFileDir, string $tmpFilePrefix, int $lifetime): void
     {
         $finder = (new Finder())

@@ -12,11 +12,13 @@ final class Config implements ConfigInterface
     ) {
     }
 
+    #[\Override]
     public function getTmpFileDir(): string
     {
         return $this->tmpFileDir;
     }
 
+    #[\Override]
     public function getTmpFilePrefix(): string
     {
         return $this->tmpFilePrefix;

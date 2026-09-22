@@ -53,7 +53,7 @@ final class TmpFileMangerBuilderTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
             ->withoutAutoPurge()
-            ->withEventListener(TmpFileManagerPostPurge::class, $spy)
+            ->withEventListener(TmpFileManagerPostPurge::class, [$spy, '__invoke'])
             ->build()
         ;
 
@@ -68,7 +68,7 @@ final class TmpFileMangerBuilderTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
             ->withUnclosedResourcesHandler(new UnclosedResourcesHandler())
-            ->withEventListener(TmpFileManagerPrePurge::class, $spy)
+            ->withEventListener(TmpFileManagerPrePurge::class, [$spy, '__invoke'])
             ->build()
         ;
 
@@ -91,7 +91,7 @@ final class TmpFileMangerBuilderTest extends TestCase
                 lifetime: 3_600,
                 processor: new SyncProcessor(),
             ))
-            ->withEventListener(TmpFileManagerPostPurge::class, $spy)
+            ->withEventListener(TmpFileManagerPostPurge::class, [$spy, '__invoke'])
             ->build()
         ;
 
