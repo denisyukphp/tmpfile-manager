@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem as Fs;
 use TmpFile\TmpFileInterface;
 use TmpFileManager\TmpFile;
 
-final class Filesystem implements FilesystemInterface
+final readonly class Filesystem implements FilesystemInterface
 {
     private Fs $fs;
 

@@ -46,7 +46,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileManagerEventSpy();
         (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerOnStart::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerOnStart::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -57,7 +57,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPreCreate::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPreCreate::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -70,7 +70,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileOnCreate::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileOnCreate::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -83,7 +83,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPostCreate::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostCreate::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -97,7 +97,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $filesystem = new Filesystem();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPreLoad::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPreLoad::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -112,7 +112,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
         $spy = new TmpFileEventSpy();
         $filesystem = new Filesystem();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileOnLoad::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileOnLoad::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -130,7 +130,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $filesystem = new Filesystem();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPostLoad::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostLoad::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -144,7 +144,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFilePreRemove::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFilePreRemove::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -158,7 +158,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFilePostRemove::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFilePostRemove::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -172,7 +172,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPrePurge::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPrePurge::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -185,7 +185,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
     {
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPostPurge::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostPurge::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -199,7 +199,7 @@ final class TmpFileMangerLifecycleTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         (new TmpFileManagerBuilder())
             ->withoutAutoPurge()
-            ->withEventListener(TmpFileManagerOnFinish::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerOnFinish::class, $spy->__invoke(...))
             ->build()
         ;
 

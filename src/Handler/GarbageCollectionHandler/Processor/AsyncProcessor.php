@@ -7,7 +7,7 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 
-final class AsyncProcessor implements ProcessorInterface
+final readonly class AsyncProcessor implements ProcessorInterface
 {
     /**
      * @param string[] $extraDirs

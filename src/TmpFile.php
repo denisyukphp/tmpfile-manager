@@ -9,7 +9,7 @@ use TmpFile\TmpFileInterface;
 /**
  * @codeCoverageIgnore
  */
-final class TmpFile implements \Stringable, TmpFileInterface
+final readonly class TmpFile implements \Stringable, TmpFileInterface
 {
     public function __construct(
         private string $filename,

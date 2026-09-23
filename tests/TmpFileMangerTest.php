@@ -31,7 +31,7 @@ final class TmpFileMangerTest extends TestCase
         $tmpFile = $fs->createTmpFile(sys_get_temp_dir(), 'php');
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFileManagerPostLoad::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostLoad::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -70,7 +70,7 @@ final class TmpFileMangerTest extends TestCase
     {
         $spy = new TmpFileEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withEventListener(TmpFilePostRemove::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFilePostRemove::class, $spy->__invoke(...))
             ->build()
         ;
 

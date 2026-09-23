@@ -23,7 +23,7 @@ use TmpFileManager\Event\TmpFilePostRemove;
 use TmpFileManager\Event\TmpFilePreRemove;
 use TmpFileManager\Filesystem\FilesystemInterface;
 
-final class TmpFileManager implements TmpFileManagerInterface
+final readonly class TmpFileManager implements TmpFileManagerInterface
 {
     public function __construct(
         private ConfigInterface $config,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TmpFileManager\Config;
 
-final class Config implements ConfigInterface
+final readonly class Config implements ConfigInterface
 {
     public function __construct(
         private string $tmpFileDir,

@@ -11,7 +11,7 @@ use TmpFileManager\Filesystem\FilesystemInterface;
 /**
  * @codeCoverageIgnore
  */
-final class TmpFileManagerEventArgs
+final readonly class TmpFileManagerEventArgs
 {
     public function __construct(
         private ConfigInterface $config,

@@ -22,14 +22,19 @@ final class TmpFileMangerBuilderTest extends TestCase
      */
     public function testBuildWithTmpFileDir(): void
     {
+        $tmpFileDir = sys_get_temp_dir();
+        if ('' === $tmpFileDir) {
+            self::fail('The system temporary directory must not be empty.');
+        }
+
         $tmpFileManager = (new TmpFileManagerBuilder())
-            ->withTmpFileDir(sys_get_temp_dir())
+            ->withTmpFileDir($tmpFileDir)
             ->build()
         ;
 
         $tmpFile = $tmpFileManager->create();
 
-        $this->assertStringStartsWith(sys_get_temp_dir(), $tmpFile->getFilename());
+        $this->assertStringStartsWith($tmpFileDir, $tmpFile->getFilename());
     }
 
     /**
@@ -53,7 +58,7 @@ final class TmpFileMangerBuilderTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
             ->withoutAutoPurge()
-            ->withEventListener(TmpFileManagerPostPurge::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostPurge::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -68,7 +73,7 @@ final class TmpFileMangerBuilderTest extends TestCase
         $spy = new TmpFileManagerEventSpy();
         $tmpFileManager = (new TmpFileManagerBuilder())
             ->withUnclosedResourcesHandler(new UnclosedResourcesHandler())
-            ->withEventListener(TmpFileManagerPrePurge::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPrePurge::class, $spy->__invoke(...))
             ->build()
         ;
 
@@ -91,7 +96,7 @@ final class TmpFileMangerBuilderTest extends TestCase
                 lifetime: 3_600,
                 processor: new SyncProcessor(),
             ))
-            ->withEventListener(TmpFileManagerPostPurge::class, [$spy, '__invoke'])
+            ->withEventListener(TmpFileManagerPostPurge::class, $spy->__invoke(...))
             ->build()
         ;
 

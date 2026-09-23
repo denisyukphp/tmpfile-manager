@@ -14,7 +14,7 @@ use TmpFileManager\Filesystem\FilesystemInterface;
 abstract class AbstractTmpFileManagerEvent
 {
     public function __construct(
-        private TmpFileManagerEventArgs $args,
+        private readonly TmpFileManagerEventArgs $args,
     ) {
     }
 

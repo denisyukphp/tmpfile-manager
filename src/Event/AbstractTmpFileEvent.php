@@ -12,7 +12,7 @@ use TmpFile\TmpFileInterface;
 abstract class AbstractTmpFileEvent
 {
     public function __construct(
-        private TmpFileInterface $tmpFile,
+        private readonly TmpFileInterface $tmpFile,
     ) {
     }
 

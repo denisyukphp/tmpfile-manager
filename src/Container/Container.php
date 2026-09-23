@@ -6,7 +6,7 @@ namespace TmpFileManager\Container;
 
 use TmpFile\TmpFileInterface;
 
-final class Container implements ContainerInterface
+final readonly class Container implements ContainerInterface
 {
     /**
      * @var \SplObjectStorage<TmpFileInterface, null>

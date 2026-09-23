@@ -7,7 +7,7 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler\Processor;
 use Symfony\Component\Filesystem\Filesystem as Fs;
 use Symfony\Component\Finder\Finder;
 
-final class SyncProcessor implements ProcessorInterface
+final readonly class SyncProcessor implements ProcessorInterface
 {
     private Fs $fs;
 

@@ -6,7 +6,7 @@ namespace TmpFileManager\Handler\GarbageCollectionHandler;
 
 use TmpFileManager\Handler\GarbageCollectionHandler\Processor\ProcessorInterface;
 
-final class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
+final readonly class GarbageCollectionHandler implements GarbageCollectionHandlerInterface
 {
     public function __construct(
         private int $probability,
